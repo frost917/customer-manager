@@ -7,7 +7,7 @@ class Database:
         host = os.getenv("DB_HOST")
         database = os.getenv("DB_DATABASE")
         # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
-        port = 5432 if os.getenv("DB_PORT") is None else port = os.getenv("DB_PORT")
+        port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
 
         # DB USER
         user = os.getenv("DB_USER")
@@ -27,7 +27,7 @@ class Database:
     # login
 
     # 로그인용 쿼리
-    def userPasswdComp(self, userID, passwd):
+    def userPasswdComp(self, userID):
         try:
             self.cur.execute("""
                 SELECT passwd 

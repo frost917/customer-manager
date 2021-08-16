@@ -1,4 +1,5 @@
 from flask import Flask, session, request, jsonify
+import flask
 from flask.templating import render_template
 import json
 import os
@@ -23,30 +24,23 @@ def login():
         userID = request.form.get('userID')
         password = request.form.get('passwd')
         originPasswordTuple = dbconn.Database.userPasswdComp(
-            userID=userID,
-            passwd=passwd)
+            userID=userID)
         
-        if originPassword is None:
-            loginFailed = jsonify({
-                "failed": [
-                    "location": "body",
-                    "userID": userID,
-                    "error": "NoUser",
-                    "msg": "user not found!"
-                ]
-            })
-            return loginFailed, 404
+        if originPasswordTuple is None:
+            loginFailed = jsonify({"failed": ["location": "body","userID": userID,"error": "NoUser","msg": "user not found!"]})
+            loginReturn = flask.Response(loginFailed, status=400, mimetype="application/json")
+            return loginReturn
         
         uuidTuple = dbconn.Database.getUUID(
-            userID=userID, passwd=passwd)
+            userID=userID, passwd=password)
 
-        if originPassword[1] == password:
+        if originPasswordTuple[1] == password:
              loginSuccessed = jsonify({
                 "userID": userID,
-                "UUID": uuidTuple[2]
-            })
-            return loginSuccessed, 200
-        else
+                "UUID": uuidTuple[2]})
+            loginReturn = flask.Response(loginSuccessed, status=200, mimetype="application/json")
+            return loginReturn
+        elif originPasswordTuple[1] != password:
             loginFailed = jsonify({
                 "failed": [
                     "location": "body",
@@ -58,8 +52,8 @@ def login():
             return loginFailed, 400
 
 # 손님 명단 추출
-@app.route("/customer/<UUID>", method=['POST'])
-def customerList():
+# @app.route("/customer/<UUID>", method=['POST'])
+# def customerList():
     
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
