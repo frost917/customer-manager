@@ -27,7 +27,11 @@ def login():
             userID=userID)
         
         if originPasswordTuple is None:
-            loginFailed = jsonify({"failed": ["location": "body","userID": userID,"error": "NoUser","msg": "user not found!"]})
+            loginFailed = jsonify({
+                "userID": userID,
+                "error": "NoUser",
+                "msg": "user not found!"
+            })
             loginReturn = flask.Response(loginFailed, status=400, mimetype="application/json")
             return loginReturn
         
@@ -35,19 +39,18 @@ def login():
             userID=userID, passwd=password)
 
         if originPasswordTuple[1] == password:
-             loginSuccessed = jsonify({
+            loginSuccessed = jsonify({
                 "userID": userID,
-                "UUID": uuidTuple[2]})
+                "UUID": uuidTuple[2]
+                })
             loginReturn = flask.Response(loginSuccessed, status=200, mimetype="application/json")
             return loginReturn
+            
         elif originPasswordTuple[1] != password:
             loginFailed = jsonify({
-                "failed": [
-                    "location": "body",
-                    "userID": userID,
-                    "error": "PasswordNotMatch",
-                    "msg": "password is not matched!"
-                ]
+                "userID": userID,
+                "error": "PasswordNotMatch",
+                "msg": "password is not matched!"
             })
             return loginFailed, 400
 
