@@ -27,7 +27,7 @@ class Database:
     # login
 
     # 로그인용 쿼리
-    def userPasswdComp(self, userID):
+    def getUserPasswd(self, userID):
         try:
             self.cur.execute("""
                 SELECT passwd 
@@ -207,7 +207,7 @@ class Database:
                 SELECT 
                     jobPrice,
                     jobHistory
-                FROM misc
+                FROM job_history
                 where jobID = %s""",
                 (jobID, jobID,))
         except db.DatabaseError as err:
