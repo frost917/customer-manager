@@ -126,22 +126,29 @@ def login():
     return loginReturn
 
 # 손님 명단 반환하기
-@app.route("/customers", method=['GET', 'POST'])
+@app.route("/customers", method=['GET', 'POST', 'PUT'])
 def customerList():
     import postgresCustom
     # POST로 토큰이 잘 넘어왔는지 확인
-    try:
-        token = request.form.get("token")
-    except:
-        return Response(status=401)
-    
-    # 토큰을 이용해 userID 받아오기
-    import redisCustom
-    UUID = redisCustom.redisToken.getUUID(token=token)
+    if request.method == "GET":
+        pass
+    elif request.method == "POST":
+        try:
+            token = request.form.get("token")
+        except:
+            return Response(status=401)
+        
+        # 토큰을 이용해 userID 받아오기
+        import redisCustom
+        UUID = redisCustom.redisToken.getUUID(token=token)
 
-    database = postgresCustom.PostgresControll
+        database = postgresCustom.PostgresControll
 
-    # UUID를 이용해 고객 명단 불러옴
-    customerTuple = database.getCustomerTuple(uuid=UUID)
-    return Response(jsonify(customerTuple), status=200,mimetype="application/json")
-# if __name__ == "__main__":
+        # UUID를 이용해 고객 명단 불러옴
+        customerTuple = database.getCustomerTuple(uuid=UUID)
+        return Response(jsonify(customerTuple), status=200,mimetype="application/json")
+    elif request.method == "PUT":
+        
+
+if __name__ == "__main__":
+    pass

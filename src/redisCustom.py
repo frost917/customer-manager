@@ -18,6 +18,7 @@ class redisToken:
         from binascii import hexlify
         try:
             # 16자리 토큰은 랜덤 생성
+            ## 나중에 jwt로 교체할 것 ##
             # DB에서 긁어온 id와 UUID는 hash로 저장
             token = hexlify(urandom(16))
             self.redisConn.hset(token, "userID", userID)
