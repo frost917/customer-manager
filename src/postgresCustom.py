@@ -1,7 +1,7 @@
 import psycopg2 as db
 import os
 
-class Database:
+class PostgresControll:
     def __init__(self):
         # DB HOST
         host = os.getenv("DB_HOST")
@@ -56,7 +56,7 @@ class Database:
     def getCustomerTuple(self, uuid):
         try:
             self.cur.execute("""
-                SELECT name,phoneNumber 
+                SELECT customerID,name,phoneNumber 
                 FROM customer
                 WHERE uuid = %s""",
                 (uuid,))
