@@ -11,11 +11,11 @@ class redisToken:
 
         self.redisConn = redis.StrictRedis(host=host, port=port, db=db, password=password)
     
-    def setRefreshToken(self, refreshToken, userID, userUUID):
+    def setRefreshToken(self, refreshToken, userID, UUID):
         try:
             # JWT Refresh Token
             self.redisConn.hset(refreshToken, "userID", userID)
-            self.redisConn.hset(refreshToken, "UUID", userUUID)
+            self.redisConn.hset(refreshToken, "UUID", UUID)
         except redis.RedisError() as err:
             print(err)
             # 레디스 에러나면 False 반환하고 
@@ -36,9 +36,9 @@ class redisToken:
 
     def getUUID(self, token):
         try:
-            userUUID = self.redisConn.hget(token, "UUID")
+            UUID = self.redisConn.hget(token, "UUID")
         except redis.RedisError as err:
             print(err)
             return False
             
-        return userUUID
+        return UUID

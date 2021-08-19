@@ -17,6 +17,8 @@ def createRefreshToken():
     token = jwt.encode({"exp": datetime.now() + timedelta(hours=6)}, key=secret.JWTSecret)
     return token
 
+def tokenAuth():
+
 # return userData
 def decodeToken(token):
     convDict = dict()

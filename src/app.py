@@ -36,7 +36,6 @@ def index():
     helloUser = jsonify(convDict)
     return Response(helloUser, status=200,mimetype="application/json")
 
-# jwt로 싹 갈아엎어야 함
 @app.route("/auth")
 def login():
     userID = request.form.get('userID')
@@ -60,7 +59,7 @@ def login():
         return loginReturn
     
     originPassword = database.getUserPasswd(userID=userID)[0]
-    userUUID = database.getUUID(userID=userID, passwd=password)[0]
+    UUID = database.getUUID(userID=userID, passwd=password)[0]
 
     import bcrypt
     # 비밀번호 비교 / bool
@@ -71,7 +70,7 @@ def login():
         hashed_password=originPassword)
     if passComp:
         from auth.jwtTokenProcess import createAccessToken, createRefreshToken
-        accessToken = createAccessToken(userID=userID, UUID=userUUID)
+        accessToken = createAccessToken(userID=userID, UUID=UUID)
         refreshToken = createRefreshToken()
 
         # 인증 성공시 인증 토큰 반환
@@ -82,7 +81,7 @@ def login():
         convList['refreshToken'] = refreshToken
 
         from redisCustom import redisToken
-        redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID,UUID=userUUID)
+        redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID,UUID=UUID)
 
         loginSuccessed = jsonify(convList)
         loginReturn = Response(response=loginSuccessed, status=200, mimetype="application/json")
