@@ -23,99 +23,53 @@ def index():
         try:
             token = request.form.get('token')
         except:
-            convDict = dict()
             return Response(jsonify(convDict), status=400, mimetype="application/json")
 
-        # 토큰이 redis에 저장되어 있는 경우
-        # userID를 전달
-        import redisCustom
-        userID = redisCustom.redisToken.getUserID(token)
-        if userID == False:
-            # 함수 도입부에 선언했음
-            convDict['error'] = "TokenExpired"
-            convDict['msg'] = "token is expired!"
+        # JWT Decode 결과가 list가 아닌 경우
+        # 토큰이 만료된 것으로 간주
+        from jwtAuth import decodeToken
+        userData = decodeToken(token=token)
+        if userData != list:
+            return Response(jsonify(userData), status=401, mimetype="application/json")
 
-            convList = list()
-            convList["failed"] = convDict
-
-            return Response(jsonify(convList), status=401, mimetype="application/json")
-
-        # 함수 도입부에 선언했음
+        userID = userData['userData']['userID']
         convDict['userID'] = userID
         convDict['msg'] = "Hello, %s".format(userID)
 
         helloUser = jsonify(convDict)
         return Response(helloUser, status=200,mimetype="application/json")
 
-
-@app.route("/login", method=['GET', 'POST'])
+# jwt로 싹 갈아엎어야 함
+@app.route("/auth")
 def login():
-    import postgresCustom
     convList = list()
     convDict = dict()
 
-    if request.method == "GET":
+    userID = request.form.get('userID')
+    password = request.form.get('passwd')
+
+    # 메소드에 상관 없이 id, pw가 없으면 400 반환
+    if userID is None or password is None:
         convList['error'] = "MissingData"
         convList['msg'] = "some data is missing!"
         convDict['failed'] = convList
 
         loginFailed = jsonify(convDict)
         loginReturn = Response(loginFailed, status=400, mimetype="application/json")
+        return loginReturn
 
-        # GET Method 로 들어온 경우 400 에러 반환
-        loginReturn = Response(status=400)
+    from postgresCustom import PostgresControll
+    database = PostgresControll
+    originPasswordTuple = database.getUserPasswd(userID=userID)
 
-    elif request.method == "POST":
-        try:
-            userID = request.form.get('userID')
-            password = request.form.get('passwd')
-        except:
-            # 함수 도입부에 선언했음
-            convList['error'] = "MissingData"
-            convList['msg'] = "some data is missing!"
-
-            # 함수 도입부에 선언했음
-            convDict['failed'] = convList
-
-            loginFailed = jsonify(convDict)
-            loginReturn = Response(loginFailed, status=400, mimetype="application/json")
-            return loginReturn
-
-        database = postgresCustom.PostgresControll
-        originPasswordTuple = database.getUserPasswd(userID=userID)
-
-        # 해당 유저가 있는 경우
-        if originPasswordTuple is not None:
-            originPassword = database.getUserPasswd(userID=userID)[0]
-            UUID = database.getUUID(userID=userID, passwd=password)[0]
-
-            import bcrypt
-            # 비밀번호 비교 / bool
-            # 로그인 성공시 json으로 토큰 넘겨줌
-            # 인증 토큰은 쿠키에 저장
-            passComp = bcrypt.checkpw(
-                password=password.encode('utf-8'),
-                hashed_password=originPassword)
-            if passComp:
-                import redisCustom
-                token = redisCustom.redisToken.setToken(userID, UUID)
-                if token == False:
-                    loginReturn = Response(status=500)
-                    return loginReturn
-
-                # 함수 도입부에 선언했음
-                convList['userID'] = userID
-                convList['token'] = token
-
-                loginSuccessed = jsonify(convList)
-                loginReturn = Response(response=loginSuccessed, status=200, mimetype="application/json")
-
-    # 비밀번호가 일치하지 않거나 계정이 없는경우
-    # JSON 변환용
+    # 해당 유저가 없는 경우
+    if originPasswordTuple is None:
+        # 비밀번호가 일치하지 않거나 계정이 없는경우
+        # JSON 변환용
         # 함수 도입부에 선언했음
         convList['userID'] = userID
-        convList['error'] = "NoUser"
-        convList['msg'] = "user not found!"
+        convList['error'] = "NoData"
+        convList['msg'] = "some data not found!"
 
         # 함수 도입부에 선언했음
         convDict['failed'] = convList
@@ -123,31 +77,64 @@ def login():
         loginFailed = jsonify(convDict)
         loginReturn = Response(response=loginFailed, status=400, mimetype="application/json")
 
-    return loginReturn
+        return loginReturn
+    
+    originPassword = database.getUserPasswd(userID=userID)[0]
+    UUID = database.getUUID(userID=userID, passwd=password)[0]
+
+    import bcrypt
+    # 비밀번호 비교 / bool
+    # 로그인 성공시 json으로 토큰 넘겨줌
+    # 인증 토큰은 쿠키에 저장
+    passComp = bcrypt.checkpw(
+        password=password.encode('utf-8'),
+        hashed_password=originPassword)
+    if passComp:
+        from jwtAuth import createToken
+        token = createToken(userID=userID, UUID=UUID)
+
+        # 인증 성공시 인증 토큰 반환
+        # token을 16자리 랜덤에서 JWT로 바꿀 예정
+        # 함수 도입부에 선언했음
+        convList['userID'] = userID
+        convList['token'] = token
+
+        loginSuccessed = jsonify(convList)
+        loginReturn = Response(response=loginSuccessed, status=200, mimetype="application/json")
+        return loginReturn
+
+    else:
+        convList['userID'] = userID
+        convList['error'] = "AuthFailed"
+        convList['msg'] = "Authentication Failed!"
+
+        convDict['failed'] = convList
+        loginReturn = Response(jsonify(convDict), status=400, mimetype="application/json")
 
 # 손님 명단 반환하기
 @app.route("/customers", method=['GET', 'POST', 'PUT'])
 def customerList():
-    import postgresCustom
-    # POST로 토큰이 잘 넘어왔는지 확인
-    if request.method == "GET":
-        pass
-    elif request.method == "POST":
-        try:
-            token = request.form.get("token")
-        except:
-            return Response(status=401)
+    # 인증토큰이 전송되었는지 확인
+    try:
+        token = request.header.get("token")
+    except:
+        return Response(status=400)
         
-        # 토큰을 이용해 userID 받아오기
-        import redisCustom
-        UUID = redisCustom.redisToken.getUUID(token=token)
+    from jwtAuth import decodeToken
+    userData = decodeToken(token=token)
+    if userData in "failed":
+        return Response(status=401)
 
-        database = postgresCustom.PostgresControll
+    UUID = userData['userData']['UUID']
 
+    import postgresCustom
+    database = postgresCustom.PostgresControll
+    if request.method == "GET":
         # UUID를 이용해 고객 명단 불러옴
         customerTuple = database.getCustomerTuple(uuid=UUID)
         return Response(jsonify(customerTuple), status=200,mimetype="application/json")
-    elif request.method == "PUT":
+
+    if request.method == "PUT":
         
 
 if __name__ == "__main__":

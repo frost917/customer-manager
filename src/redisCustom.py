@@ -1,4 +1,5 @@
-﻿import redis
+﻿# maybe deprecated
+import redis
 
 class redisToken:
     def __init__(self):
