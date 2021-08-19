@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, session, Response
+from flask import Flask, request, jsonify, redirect, Response
+from flask.helpers import make_response
 from flask.templating import render_template
 import os
 
@@ -60,6 +61,7 @@ def login():
     
     originPassword = database.getUserPasswd(userID=userID)[0]
     UUID = database.getUUID(userID=userID, passwd=password)[0]
+    ## 이 위까지가 DB와의 연동 과정
 
     import bcrypt
     # 비밀번호 비교 / bool
@@ -84,12 +86,19 @@ def login():
         redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID,UUID=UUID)
 
         loginSuccessed = jsonify(convList)
-        loginReturn = Response(response=loginSuccessed, status=200, mimetype="application/json")
+
+        loginReturn = make_response(Response(response=loginSuccessed, status=200, mimetype="application/json"))
+        loginReturn.set_cookie('accessToken', accessToken)
+        loginReturn.set_cookie('refreshToken', refreshToken)
         return loginReturn
 
     else:
         from auth.jsonMsg import authFailedJson
         loginReturn = Response(authFailedJson(userID=userID), status=400, mimetype="application/json")
+
+@app.route("/auth/refresh")
+def tokenRefresh():
+    refreshToken = request.cookies.get("refreshToken")
 
 # 손님 명단 반환하기
 @app.route("/customers", method=['GET', 'POST', 'PUT'])
@@ -103,10 +112,10 @@ def customerList():
     # 토큰 전달시 
     from auth.jwtTokenProcess import decodeToken
     userData = decodeToken(token=token)
-    # 디코딩에 실패한다 == 토큰이 잘못되었다
-    if userData in "failed":
-        return Response(status=401)
-
+    # UUID가 None일 경우 토큰이 파기된 것으로 간주
+    # refresh token을 이용한 재인증 시도
+    if userData['userData']['UUID'] is None:
+        return redirect("/auth/refresh", code=302)
     UUID = userData['userData']['UUID']
 
     import postgres.dataQuery

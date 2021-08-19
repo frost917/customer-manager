@@ -18,6 +18,7 @@ def createRefreshToken():
     return token
 
 def tokenAuth():
+    pass
 
 # return userData
 def decodeToken(token):
@@ -28,7 +29,7 @@ def decodeToken(token):
     # 해당 에러에 대응되는 JSON 객체 반환
     try:
         decode = jwt.decode(token, secret.getJWTSecret())
-    except jwt.ExpiredSignatureError as ERR:
+    except jwt.ExpiredSignatureError:
         convDict['error'] = "TokenExpired"
         convDict['msg'] = "token is expired!"
         convList["failed"] = convDict
