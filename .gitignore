@@ -6,4 +6,4 @@ docker/
 hairmgmt/
 
 # 민감한 데이터
-src/secret.py
+src/config/

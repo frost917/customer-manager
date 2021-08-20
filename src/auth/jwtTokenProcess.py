@@ -1,6 +1,7 @@
 ﻿import jwt
-import secret
+from config import secret
 from datetime import datetime, timedelta
+
 # return Access token
 def createAccessToken(userID, UUID):
     payload = dict()
@@ -83,7 +84,7 @@ def decodeToken(token):
     # 토큰 디코딩 후 에러 발생시
     # 해당 에러에 대응되는 JSON 객체 반환
     try:
-        decode = jwt.decode(token, secret.getJWTSecret())
+        decode = jwt.decode(token, secret.JWTSecret)
     except jwt.ExpiredSignatureError:
         convDict['error'] = "TokenExpired"
         convDict['msg'] = "token is expired!"
