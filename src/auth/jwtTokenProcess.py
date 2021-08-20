@@ -17,7 +17,7 @@ def createAccessToken(userID, UUID):
     payload["aud"] = userID
 
     token = jwt.encode(payload=payload, key=secret.JWTSecret)
-    return token
+    return str(token)
 
 # return RefreshToken
 # To save redis
@@ -32,7 +32,7 @@ def createRefreshToken():
     payload["sub"] = "refresh token"
 
     token = jwt.encode(payload=payload, key=secret.JWTSecret)
-    return token
+    return str(token)
 
 # 토큰의 유효성을 검사함.
 # access token이나 refresh token 둘 다 만료되거나
@@ -76,33 +76,25 @@ def isTokenValid(accessToken, refreshToken):
     return resultDict
 
 
-# return userData
-def decodeToken(token):
-    convDict = dict()
-    convList = list()
+# return userID | UUID
+def decodeToken(accessToken, retResource):
 
     # 토큰 디코딩 후 에러 발생시
-    # 해당 에러에 대응되는 JSON 객체 반환
+    # None 반환
     try:
-        decode = jwt.decode(token, secret.JWTSecret)
-    except jwt.ExpiredSignatureError:
-        convDict['error'] = "TokenExpired"
-        convDict['msg'] = "token is expired!"
-        convList["failed"] = convDict
-        return convList
+        decode = jwt.decode(accessToken, secret.JWTSecret)
     except jwt.InvalidSignatureError:
         pass
+    except jwt.ExpiredSignatureError:
+        # TODO 토큰이 파기된 경우 토큰 갱신용 페이지로 이동해야함
+        pass
     except jwt.InvalidTokenError:
-        convDict['error'] = "TokenInvalid"
-        convDict['msg'] = "token is invalid!"
-        convList["failed"] = convDict
-        return convList
+        return None
     
-    UUID = decode.get("UUID")
-    userID = decode.get("userID")
-
-    convDict['userID'] = userID
-    convDict['UUID'] = UUID
-
-    convList['userData'] = convDict
-    return convList
+    # retResource에 따라 반환하는 데이터 변동
+    if retResource == "userID":
+        return str(decode.get("userID"))
+    elif retResource == "UUID":
+        return str(decode.get("UUID"))
+    else:
+        return None
