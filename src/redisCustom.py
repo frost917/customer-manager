@@ -25,19 +25,29 @@ class redisToken:
         # 인증 토큰은 api 응답에 보내야 해서 반환
         return True
     
-    def getUserID(self, token):
+    def delRefreshToken(self, refreshToken):
         try:
-            userID = self.redisConn.hget(token, "userID")
-        except redis.RedisError as err:
+            for hlen in range(self.redisConn.hlen()):
+                self.redisConn.hdel(refreshToken, hlen)
+        except redis.RedisError() as err:
+            print(err)
+            # 레디스 에러나면 False 반환하고 
+            # api 구현에서 500 반환
+            return False
+
+    def getUserID(self, refreshToken):
+        try:
+            userID = self.redisConn.hget(refreshToken, "userID")
+        except redis.RedisError() as err:
             print(err)
             return False
 
         return userID
 
-    def getUUID(self, token):
+    def getUUID(self, refreshToken):
         try:
-            UUID = self.redisConn.hget(token, "UUID")
-        except redis.RedisError as err:
+            UUID = self.redisConn.hget(refreshToken, "UUID")
+        except redis.RedisError() as err:
             print(err)
             return False
             

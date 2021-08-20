@@ -3,6 +3,8 @@ from flask.helpers import make_response
 from flask.templating import render_template
 import os
 
+from auth.jwtTokenProcess import decodeToken
+
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
@@ -76,7 +78,6 @@ def login():
         refreshToken = createRefreshToken()
 
         # 인증 성공시 인증 토큰 반환
-        # token을 16자리 랜덤에서 JWT로 바꿀 예정
         convList = list()
         convList['userID'] = userID
         convList['accessToken'] = accessToken
@@ -88,6 +89,7 @@ def login():
         loginSuccessed = jsonify(convList)
 
         loginReturn = make_response(Response(response=loginSuccessed, status=200, mimetype="application/json"))
+        loginReturn.set_cookie('userID', userID)
         loginReturn.set_cookie('accessToken', accessToken)
         loginReturn.set_cookie('refreshToken', refreshToken)
         return loginReturn
@@ -98,7 +100,41 @@ def login():
 
 @app.route("/auth/refresh")
 def tokenRefresh():
+    accessToken = request.cookies.get("accessToken")
     refreshToken = request.cookies.get("refreshToken")
+    refreshResult = Response()
+
+    from auth.jwtTokenProcess import isTokenValid, createAccessToken, createRefreshToken
+    from redisCustom import redisToken
+    result = isTokenValid(accessToken=accessToken, refreshToken=refreshToken)
+    if result is None:
+        refreshResult = Response(status=401)
+
+    elif result["accessTokenExpired"] and result["refreshTokenExpired"]:
+        refreshResult = Response(status=401)
+
+    elif result["accessTokenExpired"]:
+        userID = redisToken.getUserID(refreshToken=refreshToken)
+        UUID = redisToken.getUUID(refreshToken=refreshToken)
+
+        accessToken = createAccessToken(userID=userID, UUID=UUID)
+        cookies = make_response(Response(status=200))
+        cookies.set_cookie('accessToken', accessToken)
+
+        refreshResult = cookies
+
+    elif result["refreshTokenExpired"]:
+        refreshToken = createRefreshToken()
+        userData = decodeToken(accessToken)
+        userID = userData['userID']
+        UUID = userData['UUID']
+        redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
+
+        cookies = make_response(Response(status=200))
+        cookies.set_cookie('refreshToken', refreshToken)
+        refreshResult = cookies
+
+    return refreshResult
 
 # 손님 명단 반환하기
 @app.route("/customers", method=['GET', 'POST', 'PUT'])
