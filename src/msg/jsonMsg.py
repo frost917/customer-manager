@@ -23,3 +23,14 @@ def dataMissingJson():
 
     body = json.dump(convDict)
     return body
+
+def dataNotJSON():
+    convList = list()
+    convDict = dict()
+
+    convDict['error'] = "DataMustJSON"
+    convDict['msg'] = "data must be JSON object!"
+    convList['failed'] = convDict
+
+    body = json.dump(convDict)
+    return body

@@ -42,7 +42,7 @@ class PostgresControll:
     def getUUID(self, userID, passwd):
         try:
             self.cur.execute("""
-                SELECT uuid 
+                SELECT UUID 
                 FROM login
                 WHERE userID = %s, passwd = %s""",
                 (userID, passwd,))
@@ -53,47 +53,47 @@ class PostgresControll:
     # customer table
 
     # 고객 명단 불러오기
-    def getCustomerTuple(self, uuid):
+    def getCustomerTuple(self, UUID):
         try:
             self.cur.execute("""
                 SELECT customerID,name,phoneNumber 
                 FROM customer
-                WHERE uuid = %s""",
-                (uuid,))
+                WHERE UUID = %s""",
+                (UUID,))
             return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
 
     # 새 고객 추가
-    def setNewCustomer(self, uuid, name, phoneNumber):
+    def addNewCustomer(self, UUID, customerID, name, phoneNumber):
         try:
             self.cur.execute("""
             INSERT INTO
                 customer (
-                    uuid,
+                    UUID,
                     customerID,
                     name,
                     phoneNumber
                 )
             VALUES (
                 %s,
-                uuid_generate_v4(),
+                %s,
                 %s,
                 %s
                 )""",
-            (uuid, name, phoneNumber)
+            (UUID, customerID, name, phoneNumber,)
             )
         except db.DatabaseError as err:
             print(err)
 
     # 고객 ID 불러오기
-    def getCustomerID(self, uuid, name):
+    def getCustomerID(self, UUID, name):
         try:
             self.cur.execute("""
                 SELECT customerID 
                 FROM customer
-                WHERE uuid = %s AND name = %s""",
-                (uuid, name,))
+                WHERE UUID = %s AND name = %s""",
+                (UUID, name,))
             return self.cur.fetchone()
         except db.DatabaseError as err:
             print(err)
@@ -101,7 +101,7 @@ class PostgresControll:
     # when_visited table
 
     # 전체 방문 기록 만 불러오기
-    def getVisitedTuple(self, uuid):
+    def getVisitedTuple(self, UUID):
         try:
             self.cur.execute("""
             SELECT
@@ -109,14 +109,14 @@ class PostgresControll:
                 name,
                 phoneNumber
             FROM customer
-            WHERE uuid = %s
+            WHERE UUID = %s
             UNION ALL
             SELECT
                 customerID,
                 visitDate,
                 jobID
             FROM when_visited""",
-            (uuid,))
+            (UUID,))
         except db.DatabaseError as err:
             print(err)
 
@@ -141,7 +141,7 @@ class PostgresControll:
             print(err)
 
     # 새 방문 기록 추가
-    def addNewVisited(self, customerID):
+    def addNewVisited(self, customerID, jobID):
         try:
             self.cur.execute("""
             INSERT INTO
@@ -154,39 +154,39 @@ class PostgresControll:
             (
                 %s,
                 CURRENT_DATE,
-                uuid_generate_v4())""",
-            (customerID,))
+                %s)""",
+            (customerID, jobID,))
         except db.DatabaseError as err:
             print(err)
 
     # job_list table
 
     # 모든 작업 내역 불러오기
-    def getJobsTuple(self, uuid):
+    def getJobsTuple(self, UUID):
         try:
             self.cur.execute("""
                 SELECT
                     name,
                     phoneNumber
                 FROM customer
-                WHERE uuid = %s
+                WHERE UUID = %s
                 SELECT 
                     jobID,
                     jobs
                 FROM jobs_list
-                where uuid = %s""",
-                (uuid, uuid,))
+                where UUID = %s""",
+                (UUID, UUID,))
         except db.DatabaseError as err:
             print(err)
 
     # 특정 손님의 작업 내역 불러오기
-    def getJobsSpecipic(self, uuid, customerID):
+    def getJobsSpecipic(self, UUID, customerID):
         try:
             self.cur.execute("""
                 SELECT jobID, jobs
                 FROM jobs_list
-                WHERE uuid = %s AND customerID = %s""",
-                (uuid, customerID,))
+                WHERE UUID = %s AND customerID = %s""",
+                (UUID, customerID,))
         except db.DatabaseError as err:
             print(err)
     
@@ -214,24 +214,24 @@ class PostgresControll:
             print(err)
 
     # # 모든 예약 불러오기
-    # def getReserveTuple(self, uuid):
+    # def getReserveTuple(self, UUID):
     #     try:
     #         self.cur.execute("""
     #             SELECT 
     #             SELECT customerID, reservedTime
     #             FROM reserve
-    #             where uuid = %s""",
-    #             (uuid,))
+    #             where UUID = %s""",
+    #             (UUID,))
     #     except db.DatabaseError as err:
     #         print(err)
 
     # # 특정 손님의 예약 불러오기
-    # def getReserveSpecipic(self, uuid):
+    # def getReserveSpecipic(self, UUID):
     #     try:
     #         self.cur.execute("""
     #             SELECT customerID, reservedTime
     #             FROM reserve
-    #             where uuid = %s""",
-    #             (uuid,))
+    #             where UUID = %s""",
+    #             (UUID,))
     #     except db.DatabaseError as err:
     #         print(err)

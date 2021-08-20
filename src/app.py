@@ -15,13 +15,15 @@ app.config['JSON_AS_ASCII'] = False
 #     db = postgresAttach.connect().cursor()
 #     s
 
+# TODO 이거 다 쪼개서 파일 나눌것
+
 # 굳이 필요는 없지만 그냥 한번 만들어봄
 @app.route("/", method=['GET', 'POST'])
 def index():
     try:
         token = request.headers.get('token')
     except:
-        from auth.jsonMsg import dataMissingJson
+        from msg.jsonMsg import dataMissingJson
         return Response(dataMissingJson(), status=400, mimetype="application/json")
 
     # JWT Decode 결과가 list가 아닌 경우
@@ -46,7 +48,7 @@ def login():
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or password is None:
-        from auth.jsonMsg import dataMissingJson
+        from msg.jsonMsg import dataMissingJson
         loginReturn = Response(dataMissingJson(), status=400, mimetype="application/json")
         return loginReturn
 
@@ -56,7 +58,7 @@ def login():
 
     if originPasswordTuple is None:
         # 비밀번호가 일치하지 않거나 계정이 없는경우
-        from auth.jsonMsg import authFailedJson
+        from msg.jsonMsg import authFailedJson
         loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")
 
         return loginReturn
@@ -95,7 +97,7 @@ def login():
         return loginReturn
 
     else:
-        from auth.jsonMsg import authFailedJson
+        from msg.jsonMsg import authFailedJson
         loginReturn = Response(authFailedJson(userID=userID), status=400, mimetype="application/json")
 
 @app.route("/auth/refresh")
@@ -153,6 +155,8 @@ def customerList():
     if userData['userData']['UUID'] is None:
         return redirect("/auth/refresh", code=302)
     UUID = userData['userData']['UUID']
+    convDict = dict()
+    convList = list()
 
     import postgres.dataQuery
     database = postgres.dataQuery.PostgresControll
@@ -161,8 +165,33 @@ def customerList():
         customerTuple = database.getCustomerTuple(uuid=UUID)
         return Response(jsonify(customerTuple), status=200,mimetype="application/json")
 
-    if request.method == "PUT":
+    # 새 손님 생성
+    # TODO 손님 중복 체크 기능 필요함
+    elif request.method == "PUT":
+        # 데이터가 JSON이 아닐 경우 거부
+        if request.is_json == False:
+            from msg.jsonMsg import dataNotJSON
+            return Response(dataNotJSON(), status=400)
+
+        data = request.get_json()
         
+        # 데이터가 없는 경우 None을 반환하므로
+        # 기본값을 설정해둔다
+        name = data["name"] if data["name"] is not None else "이름없음"
+        phoneNumber = data["phoneNumber"] if data["phoneNumber"] is not None else "01000000000"
+
+        import uuid
+        customerID = uuid.uuid4()
+
+        database.addNewCustomer(UUID=UUID, customerID=customerID, name=name, phoneNumber=phoneNumber)
+        convDict['customerID'] = customerID
+
+        return Response(jsonify(convList), status=200)
+
+# TODO customerID로 접근시 데이터 불러오는 기능 추가
+@app.route('/customers/<customerID>')
+
+@app.route('/visit-history')
 
 if __name__ == "__main__":
     pass
