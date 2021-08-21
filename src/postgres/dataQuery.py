@@ -37,6 +37,7 @@ class PostgresControll:
             return self.cur.fetchone()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # UUID 불러오기
     def getUUID(self, userID, passwd):
@@ -49,6 +50,7 @@ class PostgresControll:
             return self.cur.fetchone()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # customer table
 
@@ -63,6 +65,7 @@ class PostgresControll:
             return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # 새 고객 추가
     def addNewCustomer(self, UUID, customerID, name, phoneNumber):
@@ -81,10 +84,11 @@ class PostgresControll:
                 %s,
                 %s
                 )""",
-            (UUID, customerID, name, phoneNumber,)
-            )
+            (UUID, customerID, name, phoneNumber,))
+            return True
         except db.DatabaseError as err:
             print(err)
+            return False
 
     # 고객 ID 불러오기
     def getCustomerID(self, UUID, name):
@@ -97,6 +101,7 @@ class PostgresControll:
             return self.cur.fetchone()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # when_visited table
 
@@ -117,8 +122,10 @@ class PostgresControll:
                 jobID
             FROM when_visited""",
             (UUID,))
+            return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # 특정 손님 방문 기록 불러오기
     def getVisitedTuple(self, customerID):
@@ -137,8 +144,10 @@ class PostgresControll:
             FROM when_visited
             WHERE customerID = %s""",
             (customerID, customerID,))
+            return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # 새 방문 기록 추가
     def addNewVisited(self, customerID, jobID):
@@ -156,8 +165,10 @@ class PostgresControll:
                 CURRENT_DATE,
                 %s)""",
             (customerID, jobID,))
+            return True
         except db.DatabaseError as err:
             print(err)
+            return False
 
     # job_list table
 
@@ -176,8 +187,10 @@ class PostgresControll:
                 FROM jobs_list
                 where UUID = %s""",
                 (UUID, UUID,))
+            return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # 특정 손님의 작업 내역 불러오기
     def getJobsSpecipic(self, UUID, customerID):
@@ -187,8 +200,10 @@ class PostgresControll:
                 FROM jobs_list
                 WHERE UUID = %s AND customerID = %s""",
                 (UUID, customerID,))
+            return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
     
     # 작업 기록 불러오기
     def getJobHistory(self, jobID):
@@ -210,8 +225,10 @@ class PostgresControll:
                 FROM job_history
                 where jobID = %s""",
                 (jobID, jobID,))
+            return self.cur.fetchall()
         except db.DatabaseError as err:
             print(err)
+            return None
 
     # # 모든 예약 불러오기
     # def getReserveTuple(self, UUID):

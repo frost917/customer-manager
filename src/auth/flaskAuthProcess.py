@@ -94,10 +94,9 @@ def tokenRefresh():
         # access token을 이용해 접속자 정보 받아옴
         from jwtTokenProcess import decodeToken
         refreshToken = createRefreshToken()
-        userData = decodeToken(accessToken)
 
-        userID = userData['userID']
-        UUID = userData['UUID']
+        userID = decodeToken(accessToken, "userID")
+        UUID = decodeToken(accessToken, "UUID")
         redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
 
         cookies = make_response(Response(status=200))

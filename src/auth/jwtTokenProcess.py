@@ -37,21 +37,20 @@ def createRefreshToken():
 # 토큰의 유효성을 검사함.
 # access token이나 refresh token 둘 다 만료되거나
 # refresh token이 위변조되었을 경우 토큰을 파기함 
-def isTokenValid(accessToken, refreshToken):
-    resultDict = dict()
+def isAccessTokenValid(accessToken):
     isAccesTokenExpired = False
-    isRefreshTokenExpired = False
 
     try:
-        jwt.decode(accessToken, secret.JWTSecret)  
-    except jwt.InvalidSignatureError:
-        return None
-    except jwt.InvalidTokenError:
-        return None
+        jwt.decode(accessToken, secret.JWTSecret)
     except jwt.ExpiredSignatureError:
         isAccesTokenExpired = True
     except jwt.DecodeError():
-        pass
+        return None
+
+    return isAccesTokenExpired
+
+def isRefreshTokenValid(refreshToken):
+    isRefreshTokenExpired = False
 
     try:
         jwt.decode(refreshToken, secret.JWTSecret)
@@ -70,31 +69,35 @@ def isTokenValid(accessToken, refreshToken):
     except jwt.DecodeError():
         pass
 
-    resultDict["accessTokenExpired"] = isAccesTokenExpired
-    resultDict["refreshTokenExpired"] = isRefreshTokenExpired
+    return isRefreshTokenExpired
 
-    return resultDict
-
-
-# return userID | UUID
-def decodeToken(accessToken, retResource):
-
-    # 토큰 디코딩 후 에러 발생시
-    # None 반환
-    try:
-        decode = jwt.decode(accessToken, secret.JWTSecret)
-    except jwt.InvalidSignatureError:
-        pass
-    except jwt.ExpiredSignatureError:
-        # TODO 토큰이 파기된 경우 토큰 갱신용 페이지로 이동해야함
-        pass
-    except jwt.InvalidTokenError:
-        return None
+# flaskAuthVerify에 대신할 기능 추가
+# 혹시 몰라서 남겨둠
+# def tokenGetUserID(accessToken):
+#     # 토큰 디코딩 후 에러 발생시
+#     # None 반환
+#     try:
+#         decode = jwt.decode(accessToken, secret.JWTSecret)
+#     except jwt.InvalidSignatureError:
+#         return None
+#     except jwt.ExpiredSignatureError:
+#         return None
+#     except jwt.InvalidTokenError:
+#         return None
     
-    # retResource에 따라 반환하는 데이터 변동
-    if retResource == "userID":
-        return str(decode.get("userID"))
-    elif retResource == "UUID":
-        return str(decode.get("UUID"))
-    else:
-        return None
+#     return str(decode.get("UUID"))
+# # return userID | UUID
+# def tokenGetUUID(accessToken):
+
+#     # 토큰 디코딩 후 에러 발생시
+#     # None 반환
+#     try:
+#         decode = jwt.decode(accessToken, secret.JWTSecret)
+#     except jwt.InvalidSignatureError:
+#         return None
+#     except jwt.ExpiredSignatureError:
+#         return None
+#     except jwt.InvalidTokenError:
+#         return None
+    
+#     return str(decode.get("UUID"))

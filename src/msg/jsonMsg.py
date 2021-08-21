@@ -1,10 +1,9 @@
 ﻿import json
 # Dict in List
-def authFailedJson(userID):
+def authFailedJson():
     convList = list()
     convDict = dict()
 
-    convDict['userID'] = userID
     convDict['error'] = "AuthFailed"
     convDict['msg'] = "Authentication Failed!"
 
@@ -40,6 +39,17 @@ def tokenInvalid():
 
     convDict['error'] = "TokenInvalid"
     convDict['msg'] = "token is invalid!"
+
+    convList['failed'] = convDict
+
+    return json.dumps(convList)
+
+def databaseQeuryFailed():
+    convList = list()
+    convDict = dict()
+
+    convDict['error'] = "DatabaseQueryFailed"
+    convDict['msg'] = "database querying failed!"
 
     convList['failed'] = convDict
 

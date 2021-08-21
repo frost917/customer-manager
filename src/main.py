@@ -18,7 +18,7 @@ app.config['SERVER_NAME'] = "0.0.0.0:5000"
 @app.route("/", method=['GET', 'POST'])
 def index():
     try:
-        token = request.headers.get('token')
+        token = request.headers.get('Authorization')
     except:
         from msg.jsonMsg import dataMissingJson
         return Response(dataMissingJson(), status=400, mimetype="application/json")
@@ -42,4 +42,5 @@ def index():
 # @app.route('/visit-history')
 
 if __name__ == "__main__":
-    pass
+    app.debug = True
+    app.run(host='0.0.0.0:5000')
