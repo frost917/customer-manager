@@ -71,33 +71,32 @@ def isRefreshTokenValid(refreshToken):
 
     return isRefreshTokenExpired
 
-# flaskAuthVerify에 대신할 기능 추가
-# 혹시 몰라서 남겨둠
-# def tokenGetUserID(accessToken):
-#     # 토큰 디코딩 후 에러 발생시
-#     # None 반환
-#     try:
-#         decode = jwt.decode(accessToken, secret.JWTSecret)
-#     except jwt.InvalidSignatureError:
-#         return None
-#     except jwt.ExpiredSignatureError:
-#         return None
-#     except jwt.InvalidTokenError:
-#         return None
+# refresh token 갱신에 필요함
+def tokenGetUserID(accessToken):
+    # 토큰 디코딩 후 에러 발생시
+    # None 반환
+    try:
+        decode = jwt.decode(accessToken, secret.JWTSecret)
+    except jwt.InvalidSignatureError:
+        return None
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
     
-#     return str(decode.get("UUID"))
-# # return userID | UUID
-# def tokenGetUUID(accessToken):
+    return str(decode.get("UUID"))
+# return userID | UUID
+def tokenGetUUID(accessToken):
 
-#     # 토큰 디코딩 후 에러 발생시
-#     # None 반환
-#     try:
-#         decode = jwt.decode(accessToken, secret.JWTSecret)
-#     except jwt.InvalidSignatureError:
-#         return None
-#     except jwt.ExpiredSignatureError:
-#         return None
-#     except jwt.InvalidTokenError:
-#         return None
+    # 토큰 디코딩 후 에러 발생시
+    # None 반환
+    try:
+        decode = jwt.decode(accessToken, secret.JWTSecret)
+    except jwt.InvalidSignatureError:
+        return None
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
     
-#     return str(decode.get("UUID"))
+    return str(decode.get("UUID"))

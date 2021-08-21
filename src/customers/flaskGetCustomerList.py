@@ -6,7 +6,7 @@ from json import dumps
 @tokenVerify
 def getCustomerList():
     import postgres.dataQuery
-    database = postgres.dataQuery.PostgresControll
+    database = postgres.dataQuery.PostgresControll()
 
     # UUID를 이용해 고객 명단 불러옴
     customerTuple = tuple(database.getCustomerTuple(UUID=g.get("UUID")))

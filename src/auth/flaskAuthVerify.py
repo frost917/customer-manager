@@ -1,5 +1,5 @@
 ﻿from functools import wraps
-from flask import request, g, Response
+from flask import request, g, Response, redirect
 import jwt
 
 # 로그인 여부 확인하는 함수
@@ -14,7 +14,8 @@ def tokenVerify(func):
             except jwt.InvalidSignatureError:
                 decode = None
             except jwt.ExpiredSignatureError:
-                decode = None
+                # 토큰이 파기된 경우 재발급 받으러
+                return redirect("/auth/refresh")
             except jwt.InvalidTokenError:
                 decode = None
 
