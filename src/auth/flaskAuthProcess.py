@@ -62,6 +62,7 @@ def login():
         from msg.jsonMsg import authFailedJson
         loginReturn = Response(authFailedJson(userID=userID), status=400, mimetype="application/json")
 
+# TODO 파일 flaskAuthRefresh.py로 분리할 것
 @app.route("/auth/refresh")
 def tokenRefresh():
     accessToken = request.cookies.get("accessToken")

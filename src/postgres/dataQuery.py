@@ -1,5 +1,6 @@
 import psycopg2 as db
 import os
+# TODO 얘도 가능하면 함수 다 분리해놓을 것
 
 class PostgresControll:
     def __init__(self):

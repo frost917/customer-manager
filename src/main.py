@@ -7,6 +7,8 @@ from auth.flaskAuthVerify import tokenVerify
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
+# TODO jsonify는 다 json.dumps로 교체할 것
+
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
 app.config['SERVER_NAME'] = "0.0.0.0:5000"
