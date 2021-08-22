@@ -8,8 +8,8 @@ def getCustomerList():
     convDict = dict()
     convList = list()
 
-    import postgres.dataQuery
-    database = postgres.dataQuery.PostgresControll()
+    import postgres.databaseConnection
+    database = postgres.databaseConnection.PostgresControll()
     # 데이터가 JSON이 아닐 경우 거부
     if request.is_json == False:
         from msg.jsonMsg import dataNotJSON

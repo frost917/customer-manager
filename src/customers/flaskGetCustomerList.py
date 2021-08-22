@@ -2,11 +2,12 @@
 from flask import Flask, request, g, jsonify, redirect, Response
 from auth.flaskAuthVerify import tokenVerify
 from json import dumps
+
 @app.route("/customers", method=['GET'])
 @tokenVerify
 def getCustomerList():
-    import postgres.dataQuery
-    database = postgres.dataQuery.PostgresControll()
+    import postgres.databaseConnection
+    database = postgres.databaseConnection.PostgresControll()
 
     # UUID를 이용해 고객 명단 불러옴
     customerTuple = tuple(database.getCustomerTuple(UUID=g.get("UUID")))
