@@ -64,8 +64,6 @@ def isRefreshTokenValid(refreshToken):
         return None
     except jwt.ExpiredSignatureError:
         isRefreshTokenExpired = True
-        from redisCustom import redisToken
-        redisToken.delRefreshToken(refreshToken=refreshToken)
     except jwt.DecodeError():
         pass
 
