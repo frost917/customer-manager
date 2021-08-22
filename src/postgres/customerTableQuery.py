@@ -14,6 +14,18 @@ def getCustomerTuple(self, UUID):
         print(err)
         return None
 
+def getCustomerInfo(self, UUID, customerID):
+    try:
+        self.cur.execute("""
+            SELECT name,phone_number 
+            FROM customer
+            WHERE UUID = %s AND customer_id = %s""",
+            (UUID, customerID,))
+        return tuple(self.cur.fetchone())
+    except db.DatabaseError as err:
+        print(err)
+        return None
+
 # 새 고객 추가
 def addNewCustomer(self, UUID, customerID, name, phoneNumber):
     try:
@@ -50,3 +62,18 @@ def getCustomerID(self, UUID, name):
         print(err)
         return None
 
+def updateCustomerInfo(self, UUID, customerData):
+    customerID = customerData["customerID"]
+    name = customerData["name"]
+    phoneNumber = customerData["phoneNumber"]
+
+    try:
+        self.cur.execute("""
+            SELECT customer_id 
+            FROM customer
+            WHERE UUID = %s AND name = %s""",
+            (name, phoneNumber, UUID,))
+        return self.cur.fetchone()
+    except db.DatabaseError as err:
+        print(err)
+        return False

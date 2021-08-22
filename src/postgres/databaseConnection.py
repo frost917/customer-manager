@@ -24,7 +24,7 @@ class PostgresControll:
             print(err)
 
     # customer table
-    from customerTableQuery import getCustomerTuple, getCustomerID, addNewCustomer 
+    from customerTableQuery import getCustomerTuple, getCustomerID, addNewCustomer, getCustomerInfo
 
     # login table
     from loginTableQuery import getUserPasswd, getUUID

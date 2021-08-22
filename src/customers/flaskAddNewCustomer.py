@@ -3,7 +3,7 @@ from main import app
 from flask import Flask, g, request, Response
 from auth.flaskAuthVerify import tokenVerify
 
-@app.route("/customers", method=['PUT'])
+@app.route("/customers", method=['POST'])
 @tokenVerify
 def addNewCustomer():
     convDict = dict()
