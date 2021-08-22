@@ -40,7 +40,7 @@ class redisToken:
             userID = self.redisConn.hget(refreshToken, "userID")
         except redis.RedisError() as err:
             print(err)
-            return False
+            return None
 
         return userID
 
@@ -49,6 +49,6 @@ class redisToken:
             UUID = self.redisConn.hget(refreshToken, "UUID")
         except redis.RedisError() as err:
             print(err)
-            return False
+            return None
             
         return UUID

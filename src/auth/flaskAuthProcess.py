@@ -55,7 +55,12 @@ def login():
         convList['refreshToken'] = refreshToken
 
         from redisCustom import redisToken
-        redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID,UUID=UUID)
+        redisData = redisToken()
+        result = redisData.setRefreshToken(refreshToken=refreshToken, userID=userID,UUID=UUID)
+
+        # 토큰 설정에 실패한 경우(redis가 죽어서)
+        if result == False:
+            loginReturn = Response(status=500)
 
         import json
         loginSuccessed = json.dumps(convList)
@@ -64,8 +69,9 @@ def login():
         loginReturn.set_cookie('userID', userID)
         loginReturn.set_cookie('accessToken', accessToken)
         loginReturn.set_cookie('refreshToken', refreshToken)
-        return loginReturn
 
     else:
         from msg.jsonMsg import authFailedJson
         loginReturn = Response(authFailedJson(), status=400, mimetype="application/json")
+
+    return loginReturn

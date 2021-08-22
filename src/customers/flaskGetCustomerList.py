@@ -1,5 +1,5 @@
 ﻿from main import app
-from flask import Flask, request, g, jsonify, redirect, Response
+from flask import Flask, request, g, redirect, Response
 from auth.flaskAuthVerify import tokenVerify
 from json import dumps
 

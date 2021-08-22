@@ -2,7 +2,6 @@
 from flask import request, Response, make_response
 from json import dumps
 
-# TODO 파일 flaskAuthRefresh.py로 분리할 것
 @app.route("/auth/refresh")
 def tokenRefresh():
     accessToken = request.cookies.get("accessToken")
@@ -11,7 +10,7 @@ def tokenRefresh():
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import isAccessTokenValid,isAccessTokenValid, createAccessToken, createRefreshToken
-    from redisCustom import redisToken
+    
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isAccessTokenValid(refreshToken=refreshToken)
 
@@ -29,8 +28,10 @@ def tokenRefresh():
         # access token이 파기된 경우
         # redis에서 refresh token을 이용해
         # 정보를 받아와서 새 access token을 전달
-        userID = redisToken.getUserID(refreshToken=refreshToken)
-        UUID = redisToken.getUUID(refreshToken=refreshToken)
+        from redisCustom import redisToken
+        redisData = redisToken()
+        userID = redisData.getUserID(refreshToken=refreshToken)
+        UUID = redisData.getUUID(refreshToken=refreshToken)
 
         accessToken = createAccessToken(userID=userID, UUID=UUID)
         cookies = make_response(Response(status=200))
@@ -43,8 +44,12 @@ def tokenRefresh():
     elif isRefreshTokenExpired:
         # refresh token 삭제
         from redisCustom import redisToken
-        refreshTokenRedis = redisToken()
-        refreshTokenRedis.delRefreshToken(refreshToken=refreshToken)
+        redisData = redisToken()
+        result = redisData.delRefreshToken(refreshToken=refreshToken)
+        # 토큰 설정에 실패한 경우(redis가 죽어서)
+        if result == False:
+            refreshResult = Response(status=500)
+
         refreshToken = createRefreshToken()
 
         # access token을 이용해 접속자 정보 받아옴
@@ -53,7 +58,11 @@ def tokenRefresh():
         # 이곳에서 redis에 저장된 데이터를 처리
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
-        redisToken.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
+        result = redisData.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
+
+        # 토큰 설정에 실패한 경우(redis가 죽어서)
+        if result == False:
+            refreshResult = Response(status=500)
 
         cookies = make_response(Response(status=200))
         cookies.set_cookie('refreshToken', refreshToken)
