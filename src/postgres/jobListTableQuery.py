@@ -12,7 +12,7 @@ def getJobsTuple(self, UUID):
             WHERE UUID = %s
             SELECT 
                 job_id,
-                jobs
+                jobs_finish
             FROM job_list
             where UUID = %s""",
             (UUID, UUID,))

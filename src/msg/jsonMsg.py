@@ -44,12 +44,12 @@ def tokenInvalid():
 
     return json.dumps(convList)
 
-def databaseQeuryFailed():
+def databaseIsGone():
     convList = list()
     convDict = dict()
 
-    convDict['error'] = "DatabaseQueryFailed"
-    convDict['msg'] = "database querying failed!"
+    convDict['error'] = "DatabaseIsGone"
+    convDict['msg'] = "database is dead!"
 
     convList['failed'] = convDict
 

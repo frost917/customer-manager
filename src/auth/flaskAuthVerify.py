@@ -26,8 +26,8 @@ def tokenVerify(func):
             userID = str(decode.get("userID"))
             UUID = str(decode.get("UUID"))
 
-            g.userID = userID if userID is not None else "EMPTY"
-            g.UUID = UUID if UUID is not None else "EMPTY"
+            g.userID = userID if userID is not None else ""
+            g.UUID = UUID if UUID is not None else ""
 
         else:
             from msg.jsonMsg import dataMissingJson

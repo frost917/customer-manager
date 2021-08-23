@@ -1,10 +1,12 @@
 ﻿from main import app
 from flask import Flask, request, g, redirect, Response
 from auth.flaskAuthVerify import tokenVerify
+from dataProcess import dataParsing
 from json import dumps
 
 @app.route("/customers", method=['GET'])
 @tokenVerify
+@dataParsing
 def getCustomerList():
     import postgres.databaseConnection
     database = postgres.databaseConnection.PostgresControll()

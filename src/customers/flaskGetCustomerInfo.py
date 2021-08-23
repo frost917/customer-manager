@@ -1,24 +1,33 @@
-﻿from main import app
+﻿from datetime import datetime
+from main import app
 from flask import Response, g, request
 from auth.flaskAuthVerify import tokenVerify
+from dataProcess import dataParsing
 
 @app.route("/customers/<customerID>", method=['GET'])
 @tokenVerify
+@dataParsing
 def getCustomerInfo():
+    UUID = g["UUID"]
+    customerID = g["customerID"]
+
+    userData = dict()
+    userData["UUID"] = UUID
+    userData["customerID"] = customerID
+
     import postgres.databaseConnection
     database = postgres.databaseConnection.PostgresControll()
-    # 데이터가 JSON이 아닐 경우 거부
-    if request.is_json == False:
-        from msg.jsonMsg import dataNotJSON
-        return Response(dataNotJSON(), status=400)
 
-    data = request.get_json()
-    
-    tmpID = data["customerID"]
-    customerID = tmpID if tmpID is not None else "None"
-    UUID = g["UUID"]
+    result = database.getCustomerInfo(userData=userData)
 
-    result = database.getCustomerInfo(UUID=UUID, customerID=customerID)
+    if result is None:
+        from msg.jsonMsg import databaseIsGone
+        return Response(databaseIsGone(), status=500)
+
+    customerInfo = dict()
+    customerInfo["name"] = result[0]
+    customerInfo["phoneNumber"] = result[1]
+    customerInfo["queryDate"] = datetime.now()
 
     import json
     return Response(json.dumps(result), status=200)
