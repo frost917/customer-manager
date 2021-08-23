@@ -15,7 +15,7 @@ def getCustomerData():
     customerData = dict()
     customerData["UUID"] = g.get("UUID")
     customerData["customerID"] = g.get("customerID")
-    customerData["name"] = g.get("name")
+    customerData["customerName"] = g.get("customerName")
     customerData["phoneNumber"] = g.get("phoneNumber")
 
     database = PostgresControll()

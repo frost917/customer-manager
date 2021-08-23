@@ -11,13 +11,13 @@ from postgres.databaseConnection import PostgresControll
 @tokenVerify
 @dataParsing
 def updateCustomerData():
-    name = g["name"]
+    customerName = g["customerName"]
     phoneNumber = g["phoneNumber"]
     customerID = g["customerID"]
 
     customerData = dict()
     customerData["customerID"] = customerID
-    customerData["name"] = name
+    customerData["customerName"] = customerName
     customerData["phoneNumber"] = phoneNumber
 
     database = PostgresControll()

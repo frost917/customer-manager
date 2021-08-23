@@ -8,7 +8,7 @@ def getVisitHistoryDict(self, UUID):
         self.cur.execute("""
         SELECT
             customer_id,
-            name,
+            customer_name,
             phone_number
         FROM customer
         WHERE UUID = %s
@@ -29,7 +29,7 @@ def getVisitHistory(self, customerID):
     try:
         self.cur.execute(
         # SELECT
-        #     name,
+        #     customer_name,
         #     phoneNumber
         # FROM customer
         # WHERE customerID = %s

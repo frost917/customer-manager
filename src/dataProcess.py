@@ -14,14 +14,14 @@ def dataParsing(func):
         data = request.get_json()
 
         # 손님 정보 파싱
-        tmpName = data.get("info").get("name")
+        tmpCustomerName = data.get("info").get("customerName")
         tmpPhoneNumber = data.get("info").get("phoneNumber")
         tmpCustomerID = data.get("customerID")
 
         # 작업 관련 파싱
         tmpPrice = data.get("job").get("price")
 
-        g.name = str(tmpName) if str(tmpName) is not None else ""
+        g.customerName = str(tmpCustomerName) if str(tmpCustomerName) is not None else ""
         g.phoneNumber = str(tmpPhoneNumber) if str(tmpPhoneNumber) is not None else ""
         g.customerID = str(tmpCustomerID) if str(tmpCustomerID) is not None else ""
 

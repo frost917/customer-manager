@@ -25,8 +25,8 @@ def getCustomerData():
         result =  Response(databaseIsGone(), status=500)
 
     customerData = dict()   
-    customerData["name"] = queryResult.get("name")
-    customerData["phoneNumber"] = queryResult.get("phone_number")
+    customerData["customerName"] = queryResult.get("customerName")
+    customerData["phoneNumber"] = queryResult.get("phoneNumber")
     customerData["queryDate"] = datetime.now()
 
     import json

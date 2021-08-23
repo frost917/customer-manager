@@ -15,13 +15,13 @@ def addNewCustomer():
     convList = list()
 
     UUID = g["UUID"]
-    name = g["name"]
+    customerName = g["customerName"]
     phoneNumber = g["phoneNumber"]
     import uuid
     customerID = uuid.uuid4()
 
     convDict['UUID'] = UUID
-    convDict['name'] = name
+    convDict['customerName'] = customerName
     convDict['phoneNumber'] = phoneNumber
     convDict['customerID'] = customerID
     convDict['addDate'] = datetime.now()

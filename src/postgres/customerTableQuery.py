@@ -6,7 +6,7 @@
 def getCustomerDict(self, UUID):
     try:
         self.cur.execute("""
-            SELECT customer_id,name,phone_number 
+            SELECT customer_id,customer_name,phone_number 
             FROM customer
             WHERE user_id = %s""",
             (UUID,))
@@ -21,7 +21,7 @@ def getCustomerData(self, userData):
 
     try:
         self.cur.execute("""
-            SELECT name,phone_number 
+            SELECT customer_name,phone_number 
             FROM customer
             WHERE user_id = %s AND customer_id = %s""",
             (UUID, customerID,))
@@ -34,7 +34,7 @@ def getCustomerData(self, userData):
 def addNewCustomer(self, userData):
     UUID = userData["UUID"]
     customerID = userData["customerID"]
-    name = userData["name"]
+    customerName = userData["customerName"]
     phoneNumber = userData["phoneNumber"]
 
     try:
@@ -43,7 +43,7 @@ def addNewCustomer(self, userData):
             customer (
                 user_id,
                 customer_id,
-                name,
+                customer_name,
                 phone_number
             )
         VALUES (
@@ -52,7 +52,7 @@ def addNewCustomer(self, userData):
             %s,
             %s
             )""",
-        (UUID, customerID, name, phoneNumber,))
+        (UUID, customerID, customerName, phoneNumber,))
         return True
     except db.DatabaseError as err:
         print(err)
@@ -61,15 +61,15 @@ def addNewCustomer(self, userData):
 # 고객 ID 불러오기
 def getCustomerID(self, userData):
     UUID = userData["UUID"]
-    name = userData["name"]
+    customerName = userData["customerName"]
     phoneNumber = userData["phoneNumber"]
 
     try:
         self.cur.execute("""
             SELECT customer_id 
             FROM customer
-            WHERE user_id = %s AND name = %s AND phone_number = %s""",
-            (UUID, name, phoneNumber,))
+            WHERE user_id = %s AND customer_name = %s AND phone_number = %s""",
+            (UUID, customerName, phoneNumber,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
@@ -77,7 +77,7 @@ def getCustomerID(self, userData):
 
 def updateCustomerData(self, customerData):
     customerID = customerData["customerID"]
-    name = customerData["name"]
+    customerName = customerData["customerName"]
     phoneNumber = customerData["phoneNumber"]
 
     try:
@@ -85,10 +85,10 @@ def updateCustomerData(self, customerData):
             UPDATE 
                 customer 
             SET
-                name = %s,
+                customer_name = %s,
                 phone_number = %s
             WHERE customer_id = %s""",
-            (name, phoneNumber, customerID,))
+            (customerName, phoneNumber, customerID,))
         return True
     except db.DatabaseError as err:
         print(err)
@@ -96,7 +96,7 @@ def updateCustomerData(self, customerData):
 
 def deleteCustomerData(self, customerData):
     customerID = customerData["customerID"]
-    name = customerData["name"]
+    customerName = customerData["customerName"]
     phoneNumber = customerData["phoneNumber"]
 
     try:
@@ -105,10 +105,10 @@ def deleteCustomerData(self, customerData):
             FROM
                 customer
             WHERE
-                name = %s,
+                customer_name = %s,
                 phone_number = %s,
                 customer_id = %s""",
-            (name, phoneNumber, customerID,))
+            (customerName, phoneNumber, customerID,))
         return True
     except db.DatabaseError as err:
         print(err)

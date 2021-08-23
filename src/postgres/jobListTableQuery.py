@@ -7,7 +7,7 @@ def getJobsDict(self, UUID):
     try:
         self.cur.execute("""
             SELECT
-                name,
+                customer_name,
                 phone_number
             FROM customer
             WHERE user_id = %s
@@ -40,7 +40,7 @@ def getJobHistory(self, jobID):
     try:
         self.cur.execute("""
             SELECT
-                name,
+                customer_name,
                 phone_number
             FROM customer
             WHERE customer_id IN (
