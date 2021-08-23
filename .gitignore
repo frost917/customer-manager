@@ -4,6 +4,7 @@ docker/
 
 # venv는 제외
 hairmgmt/
+src/.devenv
 
 # 민감한 데이터
 src/config/

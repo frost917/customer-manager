@@ -2,16 +2,33 @@ import os
 
 from flask import Flask, Response, g
 
+import auth.flaskAuthProcess
+import auth.flaskAuthRefresh
+import customers.flaskAddNewCustomer
+import customers.flaskDeleteCustomer
+import customers.flaskGetCustomerData
+import customers.flaskGetCustomerList
+import customers.flaskUpdateCustomerInfo
 from auth.flaskAuthVerify import tokenVerify
 
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
+# auth
+app.register_blueprint(auth.flaskAuthProcess.manager)
+app.register_blueprint(auth.flaskAuthRefresh.manager)
+
+# customers
+app.register_blueprint(customers.flaskAddNewCustomer.manager)
+app.register_blueprint(customers.flaskDeleteCustomer.manager)
+app.register_blueprint(customers.flaskGetCustomerData.manager)
+app.register_blueprint(customers.flaskGetCustomerList.manager)
+app.register_blueprint(customers.flaskUpdateCustomerInfo.manager)
+
 # TODO jsonify는 다 json.dumps로 교체할 것
 
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
-app.config['SERVER_NAME'] = "0.0.0.0:5000"
 # @app.route("/install")
 # def install():
 #     db = postgresAttach.connect().cursor()

@@ -2,12 +2,12 @@
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from flask import Response, g
-from main import app
+from flask import Response, g, Blueprint
 from postgres.databaseConnection import PostgresControll
 
+manager = Blueprint("addNewCustomer", __name__)
 
-@app.route("/customers", method=['POST'])
+@manager.route("/customers", methods=['POST'])
 @tokenVerify
 @dataParsing
 def addNewCustomer():

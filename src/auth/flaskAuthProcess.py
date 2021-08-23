@@ -1,9 +1,9 @@
-﻿from flask import Response, request
+﻿from flask import Response, request, Blueprint
 from flask.helpers import make_response
-from main import app
 
+manager = Blueprint("auth", __name__)
 
-@app.route("/auth")
+@manager.route("/auth")
 def login():
     userID = request.form.get('userID')
     passwd = request.form.get('passwd')

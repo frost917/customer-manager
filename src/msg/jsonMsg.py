@@ -1,56 +1,56 @@
 ﻿import json
 # Dict in List
 def authFailedJson():
-    convList = list()
+    payload = dict()
     convDict = dict()
 
     convDict['error'] = "AuthFailed"
     convDict['msg'] = "Authentication Failed!"
 
-    convList['failed'] = convDict
+    payload['failed'] = convDict
 
-    return json.dumps(convList)
+    return json.dumps(payload)
 
 def dataMissingJson():
-    convList = list()
+    payload = dict()
     convDict = dict()
 
     convDict['error'] = "MissingData"
     convDict['msg'] = "some data is missing!"
 
-    convList['failed'] = convDict
+    payload['failed'] = convDict
 
-    return json.dumps(convList)
+    return json.dumps(payload)
 
 def dataNotJSON():
-    convList = list()
+    payload = dict()
     convDict = dict()
 
     convDict['error'] = "DataMustJSON"
     convDict['msg'] = "data must be JSON object!"
 
-    convList['failed'] = convDict
+    payload['failed'] = convDict
 
-    return json.dumps(convList)
+    return json.dumps(payload)
 
 def tokenInvalid():
-    convList = list()
+    payload = dict()
     convDict = dict()
 
     convDict['error'] = "TokenInvalid"
     convDict['msg'] = "token is invalid!"
 
-    convList['failed'] = convDict
+    payload['failed'] = convDict
 
-    return json.dumps(convList)
+    return json.dumps(payload)
 
 def databaseIsGone():
-    convList = list()
+    payload = dict()
     convDict = dict()
 
     convDict['error'] = "DatabaseIsGone"
     convDict['msg'] = "database is dead!"
 
-    convList['failed'] = convDict
+    payload['failed'] = convDict
 
-    return json.dumps(convList)
+    return json.dumps(payload)

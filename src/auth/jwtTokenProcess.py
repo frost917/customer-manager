@@ -46,7 +46,7 @@ def isAccessTokenValid(accessToken):
         jwt.decode(accessToken, secret.JWTSecret)
     except jwt.ExpiredSignatureError:
         isAccesTokenExpired = True
-    except jwt.DecodeError():
+    except jwt.DecodeError:
         return None
 
     return isAccesTokenExpired
@@ -66,7 +66,7 @@ def isRefreshTokenValid(refreshToken):
         return None
     except jwt.ExpiredSignatureError:
         isRefreshTokenExpired = True
-    except jwt.DecodeError():
+    except jwt.DecodeError:
         pass
 
     return isRefreshTokenExpired

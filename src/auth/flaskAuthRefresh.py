@@ -1,10 +1,8 @@
-﻿from json import dumps
+﻿from flask import Blueprint, Response, make_response, request
 
-from flask import Response, make_response, request
-from main import app
+manager = Blueprint("refresh", __name__)
 
-
-@app.route("/auth/refresh")
+@manager.route("/auth/refresh")
 def tokenRefresh():
     accessToken = request.cookies.get("accessToken")
     refreshToken = request.cookies.get("refreshToken")
@@ -12,10 +10,10 @@ def tokenRefresh():
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
-                                      isAccessTokenValid)
+                                      isAccessTokenValid, isRefreshTokenValid)
     
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
-    isRefreshTokenExpired = isAccessTokenValid(refreshToken=refreshToken)
+    isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
 
     from msg.jsonMsg import tokenInvalid
 
