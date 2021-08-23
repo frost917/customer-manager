@@ -1,18 +1,18 @@
-﻿from main import app
-from flask import Flask, request, g, redirect, Response
+﻿from json import dumps
+
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from json import dumps
+from flask import Response, g, redirect
+from main import app
+from postgres.databaseConnection import PostgresControll
+
 
 @app.route("/customers", method=['GET'])
 @tokenVerify
 @dataParsing
 def getCustomerList():
-    import postgres.databaseConnection
-    database = postgres.databaseConnection.PostgresControll()
-
     # UUID를 이용해 고객 명단 불러옴
-    customerDict = database.getCustomerDict(UUID=g.get("UUID"))
+    customerDict = PostgresControll().getCustomerDict(UUID=g.get("UUID"))
 
     # DB 에러인 경우에만 None 반환하므로
     # None인 경우 DB에러로 간주

@@ -1,6 +1,8 @@
 ﻿from functools import wraps
-from flask import request, g, Response, redirect
+
 import jwt
+from flask import Response, g, redirect, request
+
 
 # 로그인 여부 확인하는 함수
 def tokenVerify(func):

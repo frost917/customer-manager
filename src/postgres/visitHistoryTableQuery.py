@@ -1,4 +1,5 @@
 ﻿import psycopg2 as db
+
 # visit_history table
 
 # 전체 방문 기록 만 불러오기

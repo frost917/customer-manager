@@ -1,8 +1,11 @@
 ﻿from datetime import datetime
-from main import app
-from flask import Response, g, request
+
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
+from flask import Response, g
+from main import app
+from postgres.databaseConnection import PostgresControll
+
 
 @app.route("/customers/<customerID>", method=['GET'])
 @tokenVerify
@@ -15,10 +18,7 @@ def getCustomerData():
     userData["UUID"] = UUID
     userData["customerID"] = customerID
 
-    import postgres.databaseConnection
-    database = postgres.databaseConnection.PostgresControll()
-
-    queryResult = database.getCustomerData(userData=userData)
+    queryResult = PostgresControll().getCustomerData(userData=userData)
 
     if queryResult is None:
         from msg.jsonMsg import databaseIsGone

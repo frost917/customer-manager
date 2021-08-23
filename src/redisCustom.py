@@ -1,6 +1,7 @@
 ﻿# refresh token 저장용으로 사용
 import redis
 
+
 class redisToken:
     def __init__(self):
         from os import getenv

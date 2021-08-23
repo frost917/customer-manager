@@ -1,7 +1,7 @@
-﻿from main import app
-
-from flask import request, Response
+﻿from flask import Response, request
 from flask.helpers import make_response
+from main import app
+
 
 @app.route("/auth")
 def login():
@@ -32,6 +32,7 @@ def login():
         loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")
 
     import bcrypt
+
     # 비밀번호 비교 / bool
     # 로그인 성공시 json으로 토큰 넘겨줌
     # 인증 토큰은 쿠키에 저장

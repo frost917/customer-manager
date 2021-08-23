@@ -1,8 +1,11 @@
 ﻿from datetime import datetime
-from main import app
-from flask import Flask, g, request, Response
+
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
+from flask import Response, g
+from main import app
+from postgres.databaseConnection import PostgresControll
+
 
 @app.route("/customers", method=['POST'])
 @tokenVerify
@@ -17,15 +20,13 @@ def addNewCustomer():
     import uuid
     customerID = uuid.uuid4()
 
-    import postgres.databaseConnection
-    database = postgres.databaseConnection.PostgresControll()
-
     convDict['UUID'] = UUID
     convDict['name'] = name
     convDict['phoneNumber'] = phoneNumber
     convDict['customerID'] = customerID
     convDict['addDate'] = datetime.now()
 
+    database = PostgresControll()
     queryResult = database.addNewCustomer(userData=convDict)
     if queryResult is True:
         from json import dumps

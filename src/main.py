@@ -1,5 +1,7 @@
-from flask import Flask, g, Response
 import os
+
+from flask import Flask, Response, g
+
 from auth.flaskAuthVerify import tokenVerify
 
 app = Flask(__name__)

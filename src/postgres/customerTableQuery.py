@@ -1,8 +1,9 @@
 ﻿import psycopg2 as db
+
 # customer table
 
 # 고객 명단 불러오기
-def getCustomerTuple(self, UUID):
+def getCustomerDict(self, UUID):
     try:
         self.cur.execute("""
             SELECT customer_id,name,phone_number 

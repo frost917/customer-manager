@@ -1,6 +1,8 @@
-﻿from main import app
-from flask import request, Response, make_response
-from json import dumps
+﻿from json import dumps
+
+from flask import Response, make_response, request
+from main import app
+
 
 @app.route("/auth/refresh")
 def tokenRefresh():
@@ -9,12 +11,14 @@ def tokenRefresh():
     refreshResult = Response()
 
     # 각각 토큰이 멀쩡한지 검사함
-    from auth.jwtTokenProcess import isAccessTokenValid,isAccessTokenValid, createAccessToken, createRefreshToken
+    from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
+                                      isAccessTokenValid)
     
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isAccessTokenValid(refreshToken=refreshToken)
 
     from msg.jsonMsg import tokenInvalid
+
     # 토큰이 잘못된 경우
     if isAccessTokenExpired is None or isRefreshTokenExpired is None:
         refreshResult = Response(tokenInvalid(), status=400)
@@ -54,6 +58,7 @@ def tokenRefresh():
 
         # access token을 이용해 접속자 정보 받아옴
         from auth.jwtTokenProcess import tokenGetUserID, tokenGetUUID
+
         # refresh token이 파기되었을 경우
         # 이곳에서 redis에 저장된 데이터를 처리
         userID = tokenGetUserID(accessToken=accessToken)

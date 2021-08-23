@@ -1,5 +1,7 @@
 ﻿from functools import wraps
-from flask import request, g, Response
+
+from flask import Response, g, request
+
 
 # 로그인 여부 확인하는 함수
 def dataParsing(func):

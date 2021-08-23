@@ -1,4 +1,5 @@
 ﻿import psycopg2 as db
+
 # job_list table
 
 # 모든 작업 내역 불러오기

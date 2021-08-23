@@ -1,9 +1,11 @@
-﻿from main import app
-from flask import Response, g
+﻿from json import dumps
+
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from json import dumps
+from flask import Response, g
+from main import app
 from postgres.databaseConnection import PostgresControll
+
 
 @app.route("/customers/<customerID>", method=['PUT'])
 @tokenVerify

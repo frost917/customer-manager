@@ -1,6 +1,8 @@
-﻿import jwt
+﻿from datetime import datetime, timedelta
+
+import jwt
 from config import secret
-from datetime import datetime, timedelta
+
 
 # return Access token
 def createAccessToken(userID, UUID):

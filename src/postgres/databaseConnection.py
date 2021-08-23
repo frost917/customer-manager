@@ -1,6 +1,9 @@
-﻿import psycopg2
+﻿import os
+
+import psycopg2
 import psycopg2.extras
-import os
+
+
 class PostgresControll:
     def __init__(self):
         # DB HOST
@@ -25,18 +28,17 @@ class PostgresControll:
             print(err)
 
     # customer table
-    from customerTableQuery import getCustomerDict, getCustomerID, addNewCustomer
     # customer info
-    from customerTableQuery import getCustomerData, updateCustomerData, deleteCustomerData
-
+    from customerTableQuery import (addNewCustomer, deleteCustomerData,
+                                    getCustomerData, getCustomerDict,
+                                    getCustomerID, updateCustomerData)
+    # job_list table
+    from jobListTableQuery import getJobHistory, getJobsDict, getJobsSpecipic
     # login table
     from loginTableQuery import getUserPasswd, getUUID
-
     # visit_history table
-    from visitHistoryTableQuery import getVisitHistoryDict, getVisitHistory, addNewVisited 
-
-    # job_list table
-    from jobListTableQuery import getJobHistory, getJobsSpecipic, getJobsDict
+    from visitHistoryTableQuery import (addNewVisited, getVisitHistory,
+                                        getVisitHistoryDict)
 
     # # 모든 예약 불러오기
     # def getReserveDict(self, UUID):
@@ -49,7 +51,6 @@ class PostgresControll:
     #             (UUID,))
     #     except db.DatabaseError as err:
     #         print(err)
-
     # # 특정 손님의 예약 불러오기
     # def getReserveSpecipic(self, UUID):
     #     try:
