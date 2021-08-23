@@ -10,12 +10,12 @@ def getJobsDict(self, UUID):
                 name,
                 phone_number
             FROM customer
-            WHERE UUID = %s
+            WHERE user_id = %s
             SELECT 
                 job_id,
                 jobs_finish
             FROM job_list
-            where UUID = %s""",
+            where user_id = %s""",
             (UUID, UUID,))
         return dict(self.cur.fetchall())
     except db.DatabaseError as err:
@@ -28,7 +28,7 @@ def getJobsSpecipic(self, UUID, customerID):
         self.cur.execute("""
             SELECT job_id, jobs
             FROM job_list
-            WHERE UUID = %s AND customer_id = %s""",
+            WHERE user_id = %s AND customer_id = %s""",
             (UUID, customerID,))
         return dict(self.cur.fetchall())
     except db.DatabaseError as err:

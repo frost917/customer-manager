@@ -8,7 +8,7 @@ def getCustomerDict(self, UUID):
         self.cur.execute("""
             SELECT customer_id,name,phone_number 
             FROM customer
-            WHERE UUID = %s""",
+            WHERE user_id = %s""",
             (UUID,))
         return dict(self.cur.fetchall())
     except db.DatabaseError as err:
@@ -23,7 +23,7 @@ def getCustomerData(self, userData):
         self.cur.execute("""
             SELECT name,phone_number 
             FROM customer
-            WHERE UUID = %s AND customer_id = %s""",
+            WHERE user_id = %s AND customer_id = %s""",
             (UUID, customerID,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
@@ -41,7 +41,7 @@ def addNewCustomer(self, userData):
         self.cur.execute("""
         INSERT INTO
             customer (
-                UUID,
+                user_id,
                 customer_id,
                 name,
                 phone_number
@@ -68,7 +68,7 @@ def getCustomerID(self, userData):
         self.cur.execute("""
             SELECT customer_id 
             FROM customer
-            WHERE UUID = %s AND name = %s AND phone_number = %s""",
+            WHERE user_id = %s AND name = %s AND phone_number = %s""",
             (UUID, name, phoneNumber,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:

@@ -1,5 +1,7 @@
 import psycopg2 as db
 
+# UUID는 user_id로 대체
+# 기존 user_id는 username으로
 # login
 
 # 로그인용 쿼리
@@ -8,7 +10,7 @@ def getUserPasswd(self, userID):
         self.cur.execute("""
             SELECT passwd 
             FROM login
-            WHERE userID = %s""",
+            WHERE username = %s""",
             (userID,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
@@ -21,9 +23,9 @@ def getUUID(self, userData):
     passwd = userData.get("passwd")
     try:
         self.cur.execute("""
-            SELECT UUID 
+            SELECT user_id 
             FROM login
-            WHERE user_id = %s, passwd = %s""",
+            WHERE username = %s, passwd = %s""",
             (userID, passwd,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
