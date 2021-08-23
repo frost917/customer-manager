@@ -1,6 +1,4 @@
-from flask import Flask, request, g, redirect, Response
-from flask.helpers import make_response
-from flask.templating import render_template
+from flask import Flask, g, Response
 import os
 from auth.flaskAuthVerify import tokenVerify
 
@@ -8,6 +6,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
 # TODO jsonify는 다 json.dumps로 교체할 것
+# TODO 튜플형 전부 딕셔너리로 변경
 
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False

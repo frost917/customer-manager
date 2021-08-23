@@ -2,6 +2,7 @@
 from flask import Response, g, request
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
+from json import dumps
 
 @app.route("/customers/<customerID>", method=['PUT'])
 @tokenVerify
@@ -20,7 +21,12 @@ def updateCustomerInfo():
     customerData["name"] = name
     customerData["phoneNumber"] = phoneNumber
 
-    result = database.getCustomerInfo(UUID=UUID, customerID=customerID)
+    queryResult = database.getCustomerInfo(UUID=UUID, customerID=customerID)
 
-    import json
-    return Response(json.dumps(result), status=200)
+    if queryResult is None:
+        from msg.jsonMsg import databaseIsGone
+        result = Response(databaseIsGone(), status=500,mimetype="application/json")
+    else:
+        result = Response(dumps(queryResult), status=200, mimetype="application/json")
+
+    return result

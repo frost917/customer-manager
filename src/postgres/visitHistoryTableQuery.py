@@ -2,7 +2,7 @@
 # visit_history table
 
 # 전체 방문 기록 만 불러오기
-def getVisitHistoryTuple(self, UUID):
+def getVisitHistoryDict(self, UUID):
     try:
         self.cur.execute("""
         SELECT

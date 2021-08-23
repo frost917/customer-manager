@@ -1,4 +1,5 @@
-﻿import psycopg2 as db
+﻿import psycopg2
+import psycopg2.extras
 import os
 class PostgresControll:
     def __init__(self):
@@ -12,19 +13,19 @@ class PostgresControll:
         user = os.getenv("DB_USER")
         passwd = os.getenv("DB_PASSWD")
         try:
-            self.dbconn = db.connect(
+            self.dbconn = psycopg2.connect(
                 database=database, 
                 host=host, 
                 port=port, 
                 user=user, 
                 passwd=passwd)
             self.dbconn.autocommit = True
-            self.cur = self.dbconn.cursor()
-        except db.DatabaseError as err:
+            self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        except psycopg2.DatabaseError as err:
             print(err)
 
     # customer table
-    from customerTableQuery import getCustomerTuple, getCustomerID, addNewCustomer
+    from customerTableQuery import getCustomerDict, getCustomerID, addNewCustomer
     # customer info
     from customerTableQuery import getCustomerInfo, updateCustomerInfo
 
@@ -32,13 +33,13 @@ class PostgresControll:
     from loginTableQuery import getUserPasswd, getUUID
 
     # visit_history table
-    from visitHistoryTableQuery import getVisitHistoryTuple, getVisitHistory, addNewVisited 
+    from visitHistoryTableQuery import getVisitHistoryDict, getVisitHistory, addNewVisited 
 
     # job_list table
-    from jobListTableQuery import getJobHistory, getJobsSpecipic, getJobsTuple
+    from jobListTableQuery import getJobHistory, getJobsSpecipic, getJobsDict
 
     # # 모든 예약 불러오기
-    # def getReserveTuple(self, UUID):
+    # def getReserveDict(self, UUID):
     #     try:
     #         self.cur.execute("""
     #             SELECT 

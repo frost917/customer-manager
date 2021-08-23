@@ -18,16 +18,18 @@ def getCustomerInfo():
     import postgres.databaseConnection
     database = postgres.databaseConnection.PostgresControll()
 
-    result = database.getCustomerInfo(userData=userData)
+    queryResult = database.getCustomerInfo(userData=userData)
 
-    if result is None:
+    if queryResult is None:
         from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500)
+        result =  Response(databaseIsGone(), status=500)
 
-    customerInfo = dict()
-    customerInfo["name"] = result[0]
-    customerInfo["phoneNumber"] = result[1]
+    customerInfo = dict()   
+    customerInfo["name"] = queryResult.get("name")
+    customerInfo["phoneNumber"] = queryResult.get("phone_number")
     customerInfo["queryDate"] = datetime.now()
 
     import json
-    return Response(json.dumps(result), status=200)
+    result = Response(json.dumps(result), status=200)
+
+    return resultz

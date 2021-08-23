@@ -16,18 +16,18 @@ def login():
 
     from postgres.databaseConnection import PostgresControll
     database = PostgresControll()
-    originPasswordTuple = database.getUserPasswd(userID=userID)
-    UUIDTuple = database.getUUID(userID=userID, passwd=password)[0]
+    originPasswordDict = database.getUserPasswd(userID=userID)
+    UUIDDict = database.getUUID(userID=userID, passwd=password)[0]
 
     # db가 죽은 경우
-    if originPasswordTuple is None or UUIDTuple is None:
+    if originPasswordDict is None or UUIDDict is None:
         loginReturn = Response(status=500, mimetype="application/json")
 
         return loginReturn
 
     # 튜플 길이가 둘 다 0인 경우
     # 해당 데이터가 없는 것으로 판단
-    elif len(originPasswordTuple) * len(UUIDTuple) == 0:
+    elif len(originPasswordDict) * len(UUIDDict) == 0:
         # 비밀번호가 일치하지 않거나 계정이 없는경우
         from msg.jsonMsg import authFailedJson
         loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")

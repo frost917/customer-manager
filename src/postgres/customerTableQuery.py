@@ -2,14 +2,14 @@
 # customer table
 
 # 고객 명단 불러오기
-def getCustomerTuple(self, UUID):
+def getCustomerDict(self, UUID):
     try:
         self.cur.execute("""
             SELECT customer_id,name,phone_number 
             FROM customer
             WHERE UUID = %s""",
             (UUID,))
-        return self.cur.fetchall()
+        return dict(self.cur.fetchall())
     except db.DatabaseError as err:
         print(err)
         return None
@@ -24,7 +24,7 @@ def getCustomerInfo(self, userData):
             FROM customer
             WHERE UUID = %s AND customer_id = %s""",
             (UUID, customerID,))
-        return tuple(self.cur.fetchone())
+        return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
         return None
@@ -69,7 +69,7 @@ def getCustomerID(self, userData):
             FROM customer
             WHERE UUID = %s AND name = %s AND phone_number = %s""",
             (UUID, name, phoneNumber,))
-        return self.cur.fetchone()
+        return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
         return None
@@ -85,7 +85,7 @@ def updateCustomerInfo(self, UUID, customerData):
             FROM customer
             WHERE UUID = %s AND name = %s""",
             (name, phoneNumber, UUID,))
-        return self.cur.fetchone()
+        return True
     except db.DatabaseError as err:
         print(err)
         return False

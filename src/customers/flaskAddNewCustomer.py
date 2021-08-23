@@ -26,12 +26,15 @@ def addNewCustomer():
     convDict['customerID'] = customerID
     convDict['addDate'] = datetime.now()
 
-    result = database.addNewCustomer(userData=convDict)
-    if result is True:
+    queryResult = database.addNewCustomer(userData=convDict)
+    if queryResult is True:
         from json import dumps
-        convList['successed'] = convList
+        convList['successed'] = queryResult
 
-        return Response(dumps(convList), status=200, mimetype="application/json")
+        result = Response(dumps(convList), status=200, mimetype="application/json")
 
     else:
-        return Response(status=500)
+        from msg.jsonMsg import databaseIsGone
+        result = Response(databaseIsGone(), status=500,mimetype="application/json")
+
+    return result

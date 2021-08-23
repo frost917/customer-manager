@@ -2,7 +2,7 @@
 # job_list table
 
 # 모든 작업 내역 불러오기
-def getJobsTuple(self, UUID):
+def getJobsDict(self, UUID):
     try:
         self.cur.execute("""
             SELECT
