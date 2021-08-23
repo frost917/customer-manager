@@ -2,7 +2,7 @@
 # customer table
 
 # 고객 명단 불러오기
-def getCustomerDict(self, UUID):
+def getCustomerTuple(self, UUID):
     try:
         self.cur.execute("""
             SELECT customer_id,name,phone_number 
@@ -74,17 +74,40 @@ def getCustomerID(self, userData):
         print(err)
         return None
 
-def updateCustomerInfo(self, UUID, customerData):
+def updateCustomerInfo(self, customerData):
     customerID = customerData["customerID"]
     name = customerData["name"]
     phoneNumber = customerData["phoneNumber"]
 
     try:
         self.cur.execute("""
-            SELECT customer_id 
-            FROM customer
-            WHERE UUID = %s AND name = %s""",
-            (name, phoneNumber, UUID,))
+            UPDATE 
+                customer 
+            SET
+                name = %s,
+                phone_number = %s
+            WHERE customer_id = %s""",
+            (name, phoneNumber, customerID,))
+        return True
+    except db.DatabaseError as err:
+        print(err)
+        return False
+
+def deleteCustomerInfo(self, customerData):
+    customerID = customerData["customerID"]
+    name = customerData["name"]
+    phoneNumber = customerData["phoneNumber"]
+
+    try:
+        self.cur.execute("""
+            DELETE 
+            FROM
+                customer
+            WHERE
+                name = %s,
+                phone_number = %s,
+                customer_id = %s""",
+            (name, phoneNumber, customerID,))
         return True
     except db.DatabaseError as err:
         print(err)

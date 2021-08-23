@@ -11,10 +11,19 @@ def dataParsing(func):
 
         data = request.get_json()
 
-        g.name = str(data["name"]) if str(data["name"]) is not None else ""
-        g.phoneNumber = str(data["phoneNumber"]) if str(data["phoneNumber"]) is not None else ""
-        g.customerID = str(data["customerID"]) if str(data["customerID"]) is not None else ""
-        g.price = int(data["customerID"]) if int(data["customerID"]) is not None else 0
+        # 손님 정보 파싱
+        tmpName = data.get("info").get("name")
+        tmpPhoneNumber = data.get("info").get("phoneNumber")
+        tmpCustomerID = data.get("customerID")
+
+        # 작업 관련 파싱
+        tmpPrice = data.get("job").get("price")
+
+        g.name = str(tmpName) if str(tmpName) is not None else ""
+        g.phoneNumber = str(tmpPhoneNumber) if str(tmpPhoneNumber) is not None else ""
+        g.customerID = str(tmpCustomerID) if str(tmpCustomerID) is not None else ""
+
+        g.price = int(tmpPrice) if int(tmpPrice) is not None else 0
         
         return func(*args, **kwargs)
     return wrapper

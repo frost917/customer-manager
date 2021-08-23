@@ -27,7 +27,7 @@ class PostgresControll:
     # customer table
     from customerTableQuery import getCustomerDict, getCustomerID, addNewCustomer
     # customer info
-    from customerTableQuery import getCustomerInfo, updateCustomerInfo
+    from customerTableQuery import getCustomerInfo, updateCustomerInfo, deleteCustomerInfo
 
     # login table
     from loginTableQuery import getUserPasswd, getUUID

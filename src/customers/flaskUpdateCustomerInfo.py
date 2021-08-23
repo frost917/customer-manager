@@ -1,32 +1,30 @@
 ﻿from main import app
-from flask import Response, g, request
+from flask import Response, g
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 from json import dumps
+from postgres.databaseConnection import PostgresControll
 
 @app.route("/customers/<customerID>", method=['PUT'])
 @tokenVerify
 @dataParsing
 def updateCustomerInfo():
-    import postgres.databaseConnection
-    database = postgres.databaseConnection.PostgresControll()
-
     name = g["name"]
     phoneNumber = g["phoneNumber"]
     customerID = g["customerID"]
-    UUID = g["UUID"]
 
     customerData = dict()
     customerData["customerID"] = customerID
     customerData["name"] = name
     customerData["phoneNumber"] = phoneNumber
 
-    queryResult = database.getCustomerInfo(UUID=UUID, customerID=customerID)
+    database = PostgresControll()
+    queryResult = database.updateCustomerInfo(customerData=customerData)
 
-    if queryResult is None:
+    if queryResult is False:
         from msg.jsonMsg import databaseIsGone
         result = Response(databaseIsGone(), status=500,mimetype="application/json")
     else:
-        result = Response(dumps(queryResult), status=200, mimetype="application/json")
+        result = Response(dumps(customerData), status=200, mimetype="application/json")
 
     return result
