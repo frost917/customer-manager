@@ -8,7 +8,7 @@ from postgres.databaseConnection import PostgresControll
 @app.route("/customers/<customerID>", method=['PUT'])
 @tokenVerify
 @dataParsing
-def updateCustomerInfo():
+def updateCustomerData():
     name = g["name"]
     phoneNumber = g["phoneNumber"]
     customerID = g["customerID"]
@@ -19,7 +19,7 @@ def updateCustomerInfo():
     customerData["phoneNumber"] = phoneNumber
 
     database = PostgresControll()
-    queryResult = database.updateCustomerInfo(customerData=customerData)
+    queryResult = database.updateCustomerData(customerData=customerData)
 
     if queryResult is False:
         from msg.jsonMsg import databaseIsGone

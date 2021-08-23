@@ -8,7 +8,7 @@ from postgres.databaseConnection import PostgresControll
 @app.route("/customers/<customerID>", method=['DELETE'])
 @tokenVerify
 @dataParsing
-def getCustomerInfo():
+def getCustomerData():
     UUID = g["UUID"]
     customerID = g["customerID"]
 
@@ -20,7 +20,7 @@ def getCustomerInfo():
     customerData["phoneNumber"] = g.get("phoneNumber")
 
     database = PostgresControll()
-    queryResult = database.deleteCustomerInfo(customerData=customerData)
+    queryResult = database.deleteCustomerData(customerData=customerData)
 
     if queryResult is False:
         from msg.jsonMsg import databaseIsGone

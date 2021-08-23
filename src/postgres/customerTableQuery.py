@@ -14,7 +14,7 @@ def getCustomerTuple(self, UUID):
         print(err)
         return None
 
-def getCustomerInfo(self, userData):
+def getCustomerData(self, userData):
     UUID = userData["UUID"]
     customerID = userData["customerID"]
 
@@ -74,7 +74,7 @@ def getCustomerID(self, userData):
         print(err)
         return None
 
-def updateCustomerInfo(self, customerData):
+def updateCustomerData(self, customerData):
     customerID = customerData["customerID"]
     name = customerData["name"]
     phoneNumber = customerData["phoneNumber"]
@@ -93,7 +93,7 @@ def updateCustomerInfo(self, customerData):
         print(err)
         return False
 
-def deleteCustomerInfo(self, customerData):
+def deleteCustomerData(self, customerData):
     customerID = customerData["customerID"]
     name = customerData["name"]
     phoneNumber = customerData["phoneNumber"]
