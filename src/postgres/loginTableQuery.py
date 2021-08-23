@@ -9,20 +9,22 @@ def getUserPasswd(self, userID):
             FROM login
             WHERE userID = %s""",
             (userID,))
-        return tuple(self.cur.fetchone())
+        return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
         return None
 
 # UUID 불러오기
-def getUUID(self, userID, passwd):
+def getUUID(self, userData):
+    userID = userData.get("userID")
+    passwd = userData.get("passwd")
     try:
         self.cur.execute("""
             SELECT UUID 
             FROM login
             WHERE user_id = %s, passwd = %s""",
             (userID, passwd,))
-        return self.cur.fetchone()
+        return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
         return None

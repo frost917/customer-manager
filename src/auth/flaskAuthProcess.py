@@ -1,49 +1,48 @@
 ﻿from main import app
 
-from flask import Flask, request,  redirect, Response
+from flask import request, Response
 from flask.helpers import make_response
 
 @app.route("/auth")
 def login():
     userID = request.form.get('userID')
-    password = request.form.get('passwd')
+    passwd = request.form.get('passwd')
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
-    if userID is None or password is None:
+    if userID is None or passwd is None:
         from msg.jsonMsg import dataMissingJson
         loginReturn = Response(dataMissingJson(), status=400, mimetype="application/json")
         return loginReturn
 
     from postgres.databaseConnection import PostgresControll
     database = PostgresControll()
+
     originPasswordDict = database.getUserPasswd(userID=userID)
-    UUIDDict = database.getUUID(userID=userID, passwd=password)[0]
 
     # db가 죽은 경우
-    if originPasswordDict is None or UUIDDict is None:
+    if originPasswordDict is None:
         loginReturn = Response(status=500, mimetype="application/json")
-
         return loginReturn
 
-    # 튜플 길이가 둘 다 0인 경우
-    # 해당 데이터가 없는 것으로 판단
-    elif len(originPasswordDict) * len(UUIDDict) == 0:
-        # 비밀번호가 일치하지 않거나 계정이 없는경우
+    originPassword = originPasswordDict.get("passwd")
+
+    # 쿼리한 비밀번호 값이 없을 경우 로그인 실패
+    if originPassword is None:
         from msg.jsonMsg import authFailedJson
         loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")
-
-    originPassword = database.getUserPasswd(userID=userID)[0]
-    UUID = database.getUUID(userID=userID, passwd=password)[0]
-    ## 이 위까지가 DB와의 연동 과정
 
     import bcrypt
     # 비밀번호 비교 / bool
     # 로그인 성공시 json으로 토큰 넘겨줌
     # 인증 토큰은 쿠키에 저장
-    passComp = bcrypt.checkpw(
-        password=password.encode('utf-8'),
-        hashed_password=originPassword)
+    passComp = bcrypt.checkpw(password=passwd.encode('utf-8'), hashed_password=originPassword)
     if passComp:
+        userData = dict()
+        userData["user_id"] = userID
+        userData["passwd"] = originPassword
+
+        UUID = database.getUUID(userData=userData)
+
         from auth.jwtTokenProcess import createAccessToken, createRefreshToken
         accessToken = createAccessToken(userID=userID, UUID=UUID)
         refreshToken = createRefreshToken()

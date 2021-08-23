@@ -16,7 +16,7 @@ def getJobsDict(self, UUID):
             FROM job_list
             where UUID = %s""",
             (UUID, UUID,))
-        return self.cur.fetchall()
+        return dict(self.cur.fetchall())
     except db.DatabaseError as err:
         print(err)
         return None
@@ -29,7 +29,7 @@ def getJobsSpecipic(self, UUID, customerID):
             FROM job_list
             WHERE UUID = %s AND customer_id = %s""",
             (UUID, customerID,))
-        return self.cur.fetchall()
+        return dict(self.cur.fetchall())
     except db.DatabaseError as err:
         print(err)
         return None
@@ -54,7 +54,7 @@ def getJobHistory(self, jobID):
             FROM job_history
             where job_id = %s""",
             (jobID, jobID,))
-        return self.cur.fetchall()
+        return dict(self.cur.fetchall())
     except db.DatabaseError as err:
         print(err)
         return None

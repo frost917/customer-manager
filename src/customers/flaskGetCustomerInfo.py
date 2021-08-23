@@ -32,4 +32,4 @@ def getCustomerInfo():
     import json
     result = Response(json.dumps(result), status=200)
 
-    return resultz
+    return result
