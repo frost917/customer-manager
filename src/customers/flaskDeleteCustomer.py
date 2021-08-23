@@ -9,13 +9,10 @@ from postgres.databaseConnection import PostgresControll
 @tokenVerify
 @dataParsing
 def getCustomerData():
-    UUID = g["UUID"]
-    customerID = g["customerID"]
 
     customerData = dict()
     customerData["UUID"] = g.get("UUID")
     customerData["customerID"] = g.get("customerID")
-
     customerData["name"] = g.get("name")
     customerData["phoneNumber"] = g.get("phoneNumber")
 
