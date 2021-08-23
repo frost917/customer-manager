@@ -24,7 +24,7 @@ def login():
         loginReturn = Response(status=500, mimetype="application/json")
         return loginReturn
 
-    originPassword = originPasswordDict.get("passwd")
+    originPassword = str(originPasswordDict.get("passwd"))
 
     # 쿼리한 비밀번호 값이 없을 경우 로그인 실패
     if originPassword is None:
@@ -32,14 +32,13 @@ def login():
         loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")
 
     import bcrypt
-
     # 비밀번호 비교 / bool
     # 로그인 성공시 json으로 토큰 넘겨줌
     # 인증 토큰은 쿠키에 저장
-    passComp = bcrypt.checkpw(password=passwd.encode('utf-8'), hashed_password=originPassword)
+    passComp = bcrypt.checkpw(password=passwd.encode('utf-8'), hashed_password=originPassword.encode('utf-8'))
     if passComp:
         userData = dict()
-        userData["user_id"] = userID
+        userData["userID"] = userID
         userData["passwd"] = originPassword
 
         UUID = database.getUUID(userData=userData)

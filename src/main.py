@@ -18,7 +18,7 @@ app.config['SERVER_NAME'] = "0.0.0.0:5000"
 #     s
 
 # 굳이 필요는 없지만 그냥 한번 만들어봄
-@app.route("/", method=['GET', 'POST'])
+@app.route("/")
 @tokenVerify
 def index():
     userID = g.get("userID")
@@ -35,4 +35,4 @@ def index():
 
 if __name__ == "__main__":
     app.debug = True
-    app.run(host='0.0.0.0:5000')
+    app.run(host="0.0.0.0", port=5000)

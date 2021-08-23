@@ -7,37 +7,43 @@ import psycopg2.extras
 class PostgresControll:
     def __init__(self):
         # DB HOST
-        host = os.getenv("DB_HOST")
-        database = os.getenv("DB_DATABASE")
-        # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
-        port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
+        # host = os.getenv("DB_HOST")
+        # database = os.getenv("DB_DATABASE")
+        # # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
+        # port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
 
-        # DB USER
-        user = os.getenv("DB_USER")
-        passwd = os.getenv("DB_PASSWD")
+        # # DB USER
+        # user = os.getenv("DB_USER")
+        # passwd = os.getenv("DB_PASSWD")
+        from config.secret import dbData
+
         try:
             self.dbconn = psycopg2.connect(
-                database=database, 
-                host=host, 
-                port=port, 
-                user=user, 
-                passwd=passwd)
+                database=dbData["DB_DATABASE"], 
+                host=dbData["DB_HOST"], 
+                port=dbData["DB_PORT"], 
+                user=dbData["DB_USER"], 
+                password=dbData["DB_PASSWD"])
             self.dbconn.autocommit = True
             self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except psycopg2.DatabaseError as err:
             print(err)
 
+    def __del__(self):
+        self.dbconn.close()
+        self.cur.close()
+
     # customer table
     # customer info
-    from customerTableQuery import (addNewCustomer, deleteCustomerData,
+    from postgres.customerTableQuery import (addNewCustomer, deleteCustomerData,
                                     getCustomerData, getCustomerDict,
                                     getCustomerID, updateCustomerData)
     # job_list table
-    from jobListTableQuery import getJobHistory, getJobsDict, getJobsSpecipic
+    from postgres.jobListTableQuery import getJobHistory, getJobsDict, getJobsSpecipic
     # login table
-    from loginTableQuery import getUserPasswd, getUUID
+    from postgres.loginTableQuery import getUserPasswd, getUUID, addNewUser
     # visit_history table
-    from visitHistoryTableQuery import (addNewVisited, getVisitHistory,
+    from postgres.visitHistoryTableQuery import (addNewVisited, getVisitHistory,
                                         getVisitHistoryDict)
 
     # # 모든 예약 불러오기
