@@ -27,15 +27,16 @@ def getVisitHistoryDict(self, UUID):
 # 특정 손님 방문 기록 불러오기
 def getVisitHistory(self, customerID):
     try:
-        self.cur.execute(
-        # SELECT
-        #     customer_name,
-        #     phoneNumber
-        # FROM customer
-        # WHERE customerID = %s
-        # UNION
-        """
+        self.cur.execute("""
         SELECT
+            customer_id
+            customer_name,
+            phoneNumber
+        FROM customer
+        WHERE customerID = %s
+        UNION ALL
+        SELECT
+            customer_id
             visit_date,
             job_id
         FROM when_visited
@@ -47,7 +48,11 @@ def getVisitHistory(self, customerID):
         return None
 
 # 새 방문 기록 추가
-def addNewVisited(self, customerID, jobID):
+def addNewVisited(self, historyData: dict):
+    customerID = historyData['customerID']
+    visitDate = historyData['visitDate']
+    jobID = historyData['jobID']
+
     try:
         self.cur.execute("""
         INSERT INTO
@@ -59,9 +64,9 @@ def addNewVisited(self, customerID, jobID):
         VALUES
         (
             %s,
-            CURRENT_DATE,
+            %s,
             %s)""",
-        (customerID, jobID,))
+        (customerID, visitDate, jobID,))
         return True
     except db.DatabaseError as err:
         print(err)

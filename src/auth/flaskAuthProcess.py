@@ -3,16 +3,21 @@ from flask.helpers import make_response
 
 manager = Blueprint("auth", __name__)
 
-@manager.route("/auth")
+@manager.route("/auth", methods=['POST'])
 def login():
-    userID = request.form.get('userID')
-    passwd = request.form.get('passwd')
+    if request.is_json == False:
+        from msg.jsonMsg import dataNotJSON
+        return Response(dataNotJSON(), status=400, mimetype="application/json")
+
+    data = request.get_json()
+
+    userID = data['userID']
+    passwd = data['passwd']
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or passwd is None:
         from msg.jsonMsg import dataMissingJson
-        loginReturn = Response(dataMissingJson(), status=400, mimetype="application/json")
-        return loginReturn
+        return Response(dataMissingJson(), status=400, mimetype="application/json")
 
     from postgres.databaseConnection import PostgresControll
     database = PostgresControll()
@@ -21,8 +26,7 @@ def login():
 
     # db가 죽은 경우
     if originPasswordDict is None:
-        loginReturn = Response(status=500, mimetype="application/json")
-        return loginReturn
+        return Response(status=500, mimetype="application/json")
 
     originPassword = str(originPasswordDict.get("passwd"))
 
@@ -48,10 +52,10 @@ def login():
         refreshToken = createRefreshToken()
 
         # 인증 성공시 인증 토큰 반환
-        convList = list()
-        convList['userID'] = userID
-        convList['accessToken'] = accessToken
-        convList['refreshToken'] = refreshToken
+        payload = dict()
+        payload['userID'] = userID
+        payload['accessToken'] = accessToken
+        payload['refreshToken'] = refreshToken
 
         from redisCustom import redisToken
         redisData = redisToken()
@@ -62,7 +66,7 @@ def login():
             loginReturn = Response(status=500)
 
         import json
-        loginSuccessed = json.dumps(convList)
+        loginSuccessed = json.dumps(payload)
 
         loginReturn = make_response(Response(response=loginSuccessed, status=200, mimetype="application/json"))
         loginReturn.set_cookie('userID', userID)

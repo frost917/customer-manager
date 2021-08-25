@@ -10,15 +10,12 @@ manager = Blueprint("updateCustomerData", __name__)
 @manager.route("/customers/<customerID>", methods=['PUT'])
 @tokenVerify
 @dataParsing
-def updateCustomerData():
-    customerName = g["customerName"]
-    phoneNumber = g["phoneNumber"]
-    customerID = g["customerID"]
+def updateCustomerData(customerID):
 
     customerData = dict()
     customerData["customerID"] = customerID
-    customerData["customerName"] = customerName
-    customerData["phoneNumber"] = phoneNumber
+    customerData["customerName"] = g["customerName"]
+    customerData["phoneNumber"] = g["phoneNumber"]
 
     database = PostgresControll()
     queryResult = database.updateCustomerData(customerData=customerData)

@@ -1,4 +1,5 @@
 ﻿import json
+from datetime import datetime
 # Dict in List
 def authFailedJson():
     payload = dict()
@@ -50,7 +51,11 @@ def databaseIsGone():
 
     convDict['error'] = "DatabaseIsGone"
     convDict['msg'] = "database is dead!"
+    convDict['queryDate'] = datetime.now()
 
     payload['failed'] = convDict
 
     return json.dumps(payload)
+
+def queryingResult(data: dict):
+    payload = dict()
