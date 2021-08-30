@@ -59,3 +59,35 @@ def getJobHistory(self, jobID):
     except db.DatabaseError as err:
         print(err)
         return None
+
+# 작업 기록 추가
+def addNewJob(self, jobData: dict):
+    customerID = jobData['customerID']
+    jobID = jobData['jobID']
+    jobFinished = jobData['jobFinished']
+    jobPrice = jobData['jobPrice']
+    jobDescription = jobData['jobDescription']
+
+    try:
+        # 작업 기록 생성시 한번에 2개의 테이블 참조할 필요 있음
+        # 데이터 연결 => job_list.job_id -> job_history.job_id
+
+        self.cur.execute("""
+        INSERT INTO job_list ( 
+            customer_id, job_id, visit_date )
+        VALUE (
+            %s, %s, CURRENT_DATE 
+        )""",
+        (customerID, jobID,))
+
+        self.cur.execute("""
+            INSERT INTO job_history 
+            ( job_id, job_finished, job_price, job_description )
+            VALUE (
+                %s, %s, %s, %s
+            )""",
+            (jobID, jobFinished, jobPrice, jobDescription,))
+        return True
+    except db.DatabaseError as err:
+        print(err)
+        return False
