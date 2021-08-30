@@ -1,10 +1,17 @@
-﻿import os
-
-import psycopg2
+﻿import psycopg2
 import psycopg2.extras
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        else:
+            cls._instances[cls].__init__(*args, **kwargs)
+ 
+        return cls._instances[cls]
 
-class PostgresControll:
+class PostgresControll(metaclass=Singleton):
     def __init__(self):
         # DB HOST
         # host = os.getenv("DB_HOST")
@@ -45,6 +52,9 @@ class PostgresControll:
     # visit_history table
     from postgres.visitHistoryTableQuery import (addNewVisited, getVisitHistory,
                                         getVisitHistoryDict)
+
+    # related jobs history
+    from postgres.getAllJobs import getJobsDict
 
     # # 모든 예약 불러오기
     # def getReserveDict(self, UUID):

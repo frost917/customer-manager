@@ -11,8 +11,8 @@ def login():
 
     data = request.get_json()
 
-    userID = data['userID']
-    passwd = data['passwd']
+    userID = str(data['userID'])
+    passwd = str(data['passwd'])
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or passwd is None:
@@ -42,10 +42,10 @@ def login():
     passComp = bcrypt.checkpw(password=passwd.encode('utf-8'), hashed_password=originPassword.encode('utf-8'))
     if passComp:
         userData = dict()
-        userData["userID"] = userID
-        userData["passwd"] = originPassword
+        userData["userID"] = str(userID)
+        userData["passwd"] = str(originPassword)
 
-        UUID = database.getUUID(userData=userData)
+        UUID = database.getUUID(userData=userData).get('user_id')
 
         from auth.jwtTokenProcess import createAccessToken, createRefreshToken
         accessToken = createAccessToken(userID=userID, UUID=UUID)

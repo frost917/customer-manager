@@ -3,9 +3,9 @@ from dataProcess import dataParsing
 from auth.flaskAuthVerify import tokenVerify
 from json import dumps 
 from datetime import datetime
-manager = Blueprint("getAllVisitHistory", __name__)
+manager = Blueprint("getAllVisitHistory", __name__, url_prefix='/visit-history')
 
-@manager.route('/visit-history', methods=['GET'])
+@manager.route('/', methods=['GET'])
 @tokenVerify
 @dataParsing
 def getAllVisitHistory():
@@ -13,6 +13,7 @@ def getAllVisitHistory():
     database = PostgresControll()
 
     result = database.getVisitHistoryDict(UUID=g['UUID'])
+
     if result is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json')
