@@ -1,8 +1,17 @@
 ﻿# refresh token 저장용으로 사용
 import redis
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        else:
+            cls._instances[cls].__init__(*args, **kwargs)
+ 
+        return cls._instances[cls]
 
-class redisToken:
+class redisToken(metaclass=Singleton):
     def __init__(self):
         from os import getenv
         # from config.secret import redisData
