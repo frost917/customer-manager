@@ -1,14 +1,12 @@
 ﻿from datetime import datetime
 
-from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 from flask import Response, g, Blueprint
 from postgres.databaseConnection import PostgresControll
 
-manager = Blueprint('deleteCustomer', __name__)
+manager = Blueprint('deleteCustomer', __name__, url_prefix='/customers')
 
-@manager.route('/customers/<customerID>', methods=['DELETE'])
-@tokenVerify
+@manager.route('/<customerID>', methods=['DELETE'])
 @dataParsing
 def deleteCustomer(customerID):
     customerData = dict()

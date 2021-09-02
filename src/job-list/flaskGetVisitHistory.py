@@ -1,12 +1,10 @@
 ﻿from flask import Flask, Blueprint, request, g, Response
 from dataProcess import dataParsing
-from auth.flaskAuthVerify import tokenVerify
 from json import dumps 
 from datetime import datetime
 manager = Blueprint("getAllVisitHistory", __name__, url_prefix='/visit-history')
 
 @manager.route('/<customerID>', methods=['GET'])
-@tokenVerify
 @dataParsing
 def getAllVisitHistory(customerID):
     from postgres.databaseConnection import PostgresControll

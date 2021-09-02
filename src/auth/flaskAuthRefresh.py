@@ -1,8 +1,8 @@
 ﻿from flask import Blueprint, Response, make_response, request
 
-manager = Blueprint("refresh", __name__)
+manager = Blueprint("refresh", __name__, url_prefix='/auth')
 
-@manager.route("/auth/refresh")
+@manager.route("/refresh")
 def tokenRefresh():
     accessToken = request.cookies.get("accessToken")
     refreshToken = request.cookies.get("refreshToken")

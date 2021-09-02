@@ -1,5 +1,4 @@
 ﻿from flask import g, Response, Blueprint
-from auth import flaskAuthProcess
 from dataProcess import dataParsing
 import json
 from postgres.databaseConnection import PostgresControll
@@ -7,7 +6,6 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
 @manager.route('/', methods=['GET'])
-@flaskAuthProcess
 @dataParsing
 def getAllJobHistory():
     database = PostgresControll()

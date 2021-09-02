@@ -1,17 +1,15 @@
 ﻿from datetime import datetime
 
-from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 from flask import Response, g, Blueprint
 from postgres.databaseConnection import PostgresControll
 
-manager = Blueprint("addNewCustomer", __name__)
+manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 
-@manager.route("/customers", methods=['POST'])
-@tokenVerify
+@manager.route("/", methods=['POST'])
 @dataParsing
 def addNewCustomer():
-    convDict = dict()
+    customerData = dict()
     convList = list()
 
     UUID = g["UUID"]
@@ -20,19 +18,21 @@ def addNewCustomer():
     import uuid
     customerID = uuid.uuid4()
 
-    convDict['UUID'] = UUID
-    convDict['customerName'] = customerName
-    convDict['phoneNumber'] = phoneNumber
-    convDict['customerID'] = customerID
-    convDict['addDate'] = datetime.now()
+    customerData['UUID'] = UUID
+    customerData['customerName'] = customerName
+    customerData['phoneNumber'] = phoneNumber
+    customerData['customerID'] = customerID
+    customerData['addDate'] = datetime.now()
 
     database = PostgresControll()
-    queryResult = database.addNewCustomer(userData=convDict)
+    queryResult = database.addNewCustomer(userData=customerData)
     if queryResult is True:
         from json import dumps
-        convList['successed'] = queryResult
+        convList = queryResult
+        convDict = dict()
+        convDict['successed'] = convList
 
-        result = Response(dumps(convList), status=200, mimetype="application/json")
+        result = Response(dumps(convDict), status=200, mimetype="application/json")
 
     else:
         from msg.jsonMsg import databaseIsGone

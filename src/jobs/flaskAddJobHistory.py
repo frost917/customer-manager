@@ -1,7 +1,6 @@
 ﻿from _typeshed import ReadableBuffer
 from datetime import datetime
 from flask import Blueprint, g, Response
-from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 import uuid
 import json
@@ -11,7 +10,6 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('addJobHistory', __name__, url_prefix='/jobs')
 
 @manager.route('/', methods=['POST'])
-@tokenVerify
 @dataParsing
 def addJobHistory():
     # 받아오는 데이터: 손님 id, 작업 비용, 작업 기록, 작업 목록
