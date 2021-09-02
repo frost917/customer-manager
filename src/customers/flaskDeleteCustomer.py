@@ -20,11 +20,8 @@ def deleteCustomer(customerID):
 
     if queryResult is False:
         from msg.jsonMsg import databaseIsGone
-        result =  Response(databaseIsGone(), status=500)
+        return Response(databaseIsGone(), status=500)
 
-    customerData['queryDate'] = datetime.now()
-
-    import json
-    result = Response(json.dumps(result), status=200)
+    result = Response(status=200)
 
     return result

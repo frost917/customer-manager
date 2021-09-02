@@ -8,7 +8,7 @@ def authFailedJson():
 
     convDict['error'] = "AuthFailed"
     convDict['msg'] = "Authentication Failed!"
-    convList = convDict
+    convList.append(convDict)
 
     payload['failed'] = convList
 
@@ -21,7 +21,7 @@ def dataMissingJson():
 
     convDict['error'] = "MissingData"
     convDict['msg'] = "some data is missing!"
-    convList = convDict
+    convList.append(convDict)
 
     payload['failed'] = convList
 
@@ -34,7 +34,7 @@ def dataNotJSON():
 
     convDict['error'] = "DataMustJSON"
     convDict['msg'] = "data must be JSON object!"
-    convList = convDict
+    convList.append(convDict)
 
     payload['failed'] = convList
 
@@ -47,7 +47,7 @@ def tokenInvalid():
 
     convDict['error'] = "TokenInvalid"
     convDict['msg'] = "token is invalid!"
-    convList = convDict
+    convList.append(convDict)
 
     payload['failed'] = convList
 
@@ -61,7 +61,7 @@ def databaseIsGone():
     convDict['error'] = "DatabaseIsGone"
     convDict['msg'] = "database is dead!"
     convDict['queryDate'] = datetime.now()
-    convList = convDict
+    convList.append(convDict)
 
     payload['failed'] = convList
 

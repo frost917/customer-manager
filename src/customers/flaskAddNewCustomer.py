@@ -28,7 +28,7 @@ def addNewCustomer():
     queryResult = database.addNewCustomer(userData=customerData)
     if queryResult is True:
         from json import dumps
-        convList = queryResult
+        convList.append(queryResult)
         convDict = dict()
         convDict['successed'] = convList
 

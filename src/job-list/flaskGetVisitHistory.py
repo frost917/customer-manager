@@ -17,7 +17,9 @@ def getAllVisitHistory(customerID):
 
     else:
         payload = dict()
+        convList = list()
         payload['UUID'] = g['UUID']
         payload['queryDate'] = datetime.now()
-        payload['data'] = result
+        convList.append(result)
+        payload['data'] = convList
         return Response(dumps(payload), status=200, mimetype='application/json')

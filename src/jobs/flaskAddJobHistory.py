@@ -29,11 +29,16 @@ def addJobHistory():
 
     jobID = jobData['jobID']
 
-    returnData = dict()
-    returnData['jobID'] = jobData   
-    returnData[jobID]['customerID'] = g['customerID']
-    returnData[jobID]['jobPrice'] = jobData['jobPrice']
-    returnData[jobID]['jobDate'] = str(datetime.now())
-    returnData[jobID]['jobDescribe'] = jobData['jobDescribe']
+    temp = dict()
+    temp['customerID'] = g['customerID']
+    temp['jobPrice'] = jobData['jobPrice']
+    temp['jobDate'] = str(datetime.now())
+    temp['jobDescribe'] = jobData['jobDescribe']
 
-    return Response(json.dumps(returnData), status=200, mimetype='application/json')
+    convList = list()
+    convList.append(temp)
+
+    returnData = dict()
+    returnData[jobID] = convList
+
+    return Response(json.dumps(temp), status=200, mimetype='application/json')
