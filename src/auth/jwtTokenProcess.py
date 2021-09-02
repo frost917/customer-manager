@@ -1,8 +1,8 @@
 ﻿from datetime import datetime, timedelta
 
 import jwt
-from config import secret
-
+import os
+JWTSecret = os.getenv('secret')
 
 # return Access token
 def createAccessToken(userID, UUID):
@@ -18,7 +18,7 @@ def createAccessToken(userID, UUID):
     payload["sub"] = "access token"
     payload["aud"] = userID
 
-    token = jwt.encode(payload=payload, key=secret.JWTSecret)
+    token = jwt.encode(payload=payload, key=JWTSecret)
     return str(token)
 
 # return RefreshToken
@@ -33,7 +33,7 @@ def createRefreshToken():
     payload["iat"] = refTime
     payload["sub"] = "refresh token"
 
-    token = jwt.encode(payload=payload, key=secret.JWTSecret)
+    token = jwt.encode(payload=payload, key=JWTSecret)
     return str(token)
 
 # 토큰의 유효성을 검사함.
@@ -43,7 +43,7 @@ def isAccessTokenValid(accessToken):
     isAccesTokenExpired = False
 
     try:
-        jwt.decode(accessToken, secret.JWTSecret)
+        jwt.decode(accessToken, JWTSecret)
     except jwt.ExpiredSignatureError:
         isAccesTokenExpired = True
     except jwt.DecodeError:
@@ -55,7 +55,7 @@ def isRefreshTokenValid(refreshToken):
     isRefreshTokenExpired = False
 
     try:
-        jwt.decode(refreshToken, secret.JWTSecret)
+        jwt.decode(refreshToken, JWTSecret)
     except jwt.InvalidTokenError:
         return None
     except jwt.InvalidSignatureError:
@@ -76,7 +76,7 @@ def tokenGetUserID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
-        decode = jwt.decode(accessToken, secret.JWTSecret)
+        decode = jwt.decode(accessToken, JWTSecret)
     except jwt.InvalidSignatureError:
         return None
     except jwt.ExpiredSignatureError:
@@ -91,7 +91,7 @@ def tokenGetUUID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
-        decode = jwt.decode(accessToken, secret.JWTSecret)
+        decode = jwt.decode(accessToken, JWTSecret)
     except jwt.InvalidSignatureError:
         return None
     except jwt.ExpiredSignatureError:

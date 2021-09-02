@@ -2,7 +2,8 @@
 
 import jwt
 from flask import Response, g, redirect, request
-
+import os
+JWTSecret = os.getenv('secret')
 
 # 로그인 여부 확인하는 함수
 def tokenVerify(func):
@@ -10,7 +11,6 @@ def tokenVerify(func):
     def verification(*args, **kwargs):
         accessToken = request.headers.get('Authorization')
         if accessToken is not None:
-            from config.secret import JWTSecret
             try:
                 decode = jwt.decode(accessToken, JWTSecret)
             except jwt.InvalidSignatureError:
