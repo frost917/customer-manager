@@ -43,33 +43,19 @@ def addNewCustomer(self, userData):
         self.cur.execute("""
         WITH data (
             user_id, customer_id, customer_name, phone_number
-        ) AS ( VALUES ( %s, %s, %s, %s )),
-        WITH step_one AS (
+        ) AS ( VALUES ( 
+			uuid(%s), 
+			uuid(%s), 
+			%s, 
+			%s) ), 
+        step_one AS (
             INSERT INTO customer ( user_id, customer_id )
-            SELECT user_id, customer_id FROM data
-        ),
-        INSERT INTO customer_data ( 
-            customer_id, customer_name, phone_number )
-        SELECT customer_id, customer_name, phone_number
-        FROM data
-        
-        WITH data (
-            user_id, customer_id, customer_name, phone_number
-        ) AS ( 
-			VALUES ( 
-			uuid_generate_v4(), 
-			uuid_generate_v4(), 
-			'홍길동', 
-			'01000000000') 
-			 ), step_one AS (
-					INSERT INTO customer ( user_id, customer_id )
-					SELECT data.user_id, data.customer_id FROM data )
+            SELECT data.user_id, data.customer_id FROM data )
         INSERT INTO customer_data ( customer_id, customer_name, phone_number )
         SELECT data.customer_id, data.customer_name, data.phone_number
         FROM data
-        
         """,
-        (UUID, customerID, customerID, customerName, phoneNumber,))
+        (UUID, customerID, customerName, phoneNumber,))
         return True
     except db.DatabaseError as err:
         print(err)
@@ -111,21 +97,37 @@ def updateCustomerData(self, customerData):
         print(err)
         return False
 
+# customer table의 is_deleted 항목을 True로 변경
 def deleteCustomerData(self, customerData):
     customerID = customerData["customerID"]
-    customerName = customerData["customerName"]
-    phoneNumber = customerData["phoneNumber"]
-
     try:
         self.cur.execute("""
-            DELETE 
-            FROM
-                customer
-            WHERE
-                customer_name = %s,
-                phone_number = %s,
-                customer_id = %s""",
-            (customerName, phoneNumber, customerID,))
+        UPDATE
+            customer
+        SET
+            is_deleted = True
+        WHERE customer_id = %s""",
+        (customerID,))
+        return True
+    except db.DatabaseError as err:
+        print(err)
+        return False
+
+# 손님 데이터를 진짜로 삭제함
+def removeCustomerData(self, customerData):
+    customerID = customerData["customerID"]
+    try:
+        self.cur.execute("""
+        WITH data (
+            customer_id
+        ) AS ( VALUES ( uuid(%s) ) ), 
+        step_one AS (
+            DELETE FROM customer_data
+            WHERE customer_id IN (SELECT data.customer_id FROM data)
+        )
+        DELETE FROM customer
+        WHERE customer_id IN (SELECT data.customer_id FROM data)""",
+        (customerID,))
         return True
     except db.DatabaseError as err:
         print(err)
