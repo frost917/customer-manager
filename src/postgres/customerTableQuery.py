@@ -21,9 +21,11 @@ def getCustomerData(self, userData):
 
     try:
         self.cur.execute("""
-            SELECT customer_name,phone_number 
-            FROM customer
-            WHERE user_id = %s AND customer_id = %s""",
+            SELECT 
+                customer_name,
+                phone_number 
+            FROM customer_data
+            WHERE customer_id = %s""",
             (UUID, customerID,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
@@ -39,20 +41,35 @@ def addNewCustomer(self, userData):
 
     try:
         self.cur.execute("""
-        INSERT INTO
-            customer (
-                user_id,
-                customer_id,
-                customer_name,
-                phone_number
-            )
-        VALUES (
-            %s,
-            %s,
-            %s,
-            %s
-            )""",
-        (UUID, customerID, customerName, phoneNumber,))
+        WITH data (
+            user_id, customer_id, customer_name, phone_number
+        ) AS ( VALUES ( %s, %s, %s, %s )),
+        WITH step_one AS (
+            INSERT INTO customer ( user_id, customer_id )
+            SELECT user_id, customer_id FROM data
+        ),
+        INSERT INTO customer_data ( 
+            customer_id, customer_name, phone_number )
+        SELECT customer_id, customer_name, phone_number
+        FROM data
+        
+        WITH data (
+            user_id, customer_id, customer_name, phone_number
+        ) AS ( 
+			VALUES ( 
+			uuid_generate_v4(), 
+			uuid_generate_v4(), 
+			'홍길동', 
+			'01000000000') 
+			 ), step_one AS (
+					INSERT INTO customer ( user_id, customer_id )
+					SELECT data.user_id, data.customer_id FROM data )
+        INSERT INTO customer_data ( customer_id, customer_name, phone_number )
+        SELECT data.customer_id, data.customer_name, data.phone_number
+        FROM data
+        
+        """,
+        (UUID, customerID, customerID, customerName, phoneNumber,))
         return True
     except db.DatabaseError as err:
         print(err)
