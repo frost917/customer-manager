@@ -24,7 +24,7 @@ def getJobsDict(self, UUID):
     ON ( job_finished.job_id = job_list.job_id )
     INNER JOIN job_type
     ON ( job_finished.job_type = job_type.job_type )
-    WHERE customer.is_deleted = False AND customer.user_id = %s
+    WHERE customer.is_deleted = False AND customer.user_id = uuid(%s)
     """, (UUID,))
         return dict(self.cur.fetchall())
     except:
@@ -91,45 +91,36 @@ def getJobHistory(self, jobID):
 # 작업 기록 추가
 def addNewJob(self, jobData: dict):
     customerID = jobData['customerID']
+    visitDate = jobData['visitDate']
     jobID = jobData['jobID']
     jobFinished = jobData['jobFinished']
     jobPrice = jobData['jobPrice']
     jobDescription = jobData['jobDescription']
 
+    # 작업 기록 생성시 작업 타입이 리스트로 들어오기 때문에
+    # 이거 하나하나 분리해서 작업할 필요가 있음
     try:
-        # 작업 기록 생성시 한번에 2개의 테이블 참조할 필요 있음
-        # 데이터 연결 => job_list.job_id -> job_history.job_id
-
         self.cur.execute("""
         WITH data (
-            user_id, customer_id, customer_name, phone_number
+            customer_id, job_id, visit_date, job_price, job_description
         ) AS ( VALUES ( 
-			uuid(%s), 
-			uuid(%s), 
-			%s, 
-			%s) ), 
-        step_one AS (
-            INSERT INTO customer ( user_id, customer_id )
-            SELECT data.user_id, data.customer_id FROM data )
-        INSERT INTO customer_data ( customer_id, customer_name, phone_number )
-        SELECT data.customer_id, data.customer_name, data.phone_number
-        FROM data
+			uuid(%s), uuid(%s), 
+            to_timestamp(%s, 'YYYY-MM-DD HH:MI:SS'), %s, %s) 
+        ), create_jobid AS (
+            INSERT INTO job_list ( customer_id, job_id, visit_date )
+            SELECT customer_id, job_id visit_date FROM data 
+        )
+        INSERT INTO job_history ( job_id, job_price, job_description )
+        SELECT job_id, job_price, job_description FROM data""",
+        (customerID, jobID, visitDate, jobPrice, jobDescription, ))
 
-
-        INSERT INTO job_list ( 
-            customer_id, job_id, visit_date )
-        VALUE (
-            %s, %s, CURRENT_DATE 
-        )""",
-        (customerID, jobID,))
-
-        self.cur.execute("""
-            INSERT INTO job_history 
-            ( job_id, job_finished, job_price, job_description )
+        for jobType in jobFinished:
+            self.cur.execute("""
+            INSERT INTO job_finished
+            ( job_id, job_type )
             VALUE (
-                %s, %s, %s, %s
-            )""",
-            (jobID, jobFinished, jobPrice, jobDescription,))
+                uuid(%s), CAST( %s AS INTEGER )
+            )""", (jobID, jobType,))
         return True
     except db.DatabaseError as err:
         print(err)

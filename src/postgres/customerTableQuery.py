@@ -43,11 +43,7 @@ def addNewCustomer(self, userData):
         self.cur.execute("""
         WITH data (
             user_id, customer_id, customer_name, phone_number
-        ) AS ( VALUES ( 
-			uuid(%s), 
-			uuid(%s), 
-			%s, 
-			%s) ), 
+        ) AS ( VALUES ( uuid(%s), uuid(%s), %s, %s) ), 
         step_one AS (
             INSERT INTO customer ( user_id, customer_id )
             SELECT data.user_id, data.customer_id FROM data )

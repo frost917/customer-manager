@@ -32,7 +32,7 @@ def addJobHistory():
     temp = dict()
     temp['customerID'] = g['customerID']
     temp['jobPrice'] = jobData['jobPrice']
-    temp['jobDate'] = str(datetime.now())
+    temp['jobDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     temp['jobDescribe'] = jobData['jobDescribe']
 
     convList = list()

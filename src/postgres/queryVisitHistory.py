@@ -6,18 +6,17 @@
 def getVisitHistoryDict(self, UUID):
     try:
         self.cur.execute("""
-        SELECT
-            customer_id,
-            customer_name,
-            phone_number
+        SELECT 
+            customer.customer_id,
+            customer_data.customer_name,
+            customer_data.phone_number, 
+            job_list.visit_date
         FROM customer
-        WHERE UUID = %s
-        UNION ALL
-        SELECT
-            customer_id,
-            visit_date,
-            job_id
-        FROM when_visited""",
+        INNER JOIN customer_data
+        ON ( customer_data.customer_id = customer.customer_id)
+        INNER JOIN job_list
+        ON ( job_list.customer_id = customer.customer_id )
+        WHERE customer.user_id = uuid(%s)""",
         (UUID,))
         return dict(self.cur.fetchall())
     except db.DatabaseError as err:
