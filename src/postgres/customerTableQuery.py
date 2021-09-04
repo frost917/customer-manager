@@ -8,13 +8,31 @@ def getCustomerDict(self, UUID):
         self.cur.execute("""
             SELECT customer_id,customer_name,phone_number 
             FROM customer
-            WHERE user_id = %s""",
+            WHERE user_id = %s AND is_deleted = NULL""",
             (UUID,))
         return dict(self.cur.fetchall())
     except db.DatabaseError as err:
         print(err)
         return None
 
+# 고객 ID 불러오기
+def getCustomerID(self, userData):
+    UUID = userData["UUID"]
+    customerName = userData["customerName"]
+    phoneNumber = userData["phoneNumber"]
+
+    try:
+        self.cur.execute("""
+            SELECT customer_id 
+            FROM customer
+            WHERE user_id = %s AND customer_name = %s AND phone_number = %s AND is_deleted = NULL""",
+            (UUID, customerName, phoneNumber,))
+        return dict(self.cur.fetchone())
+    except db.DatabaseError as err:
+        print(err)
+        return None
+
+# 고객 정보 불러오기
 def getCustomerData(self, userData):
     UUID = userData["UUID"]
     customerID = userData["customerID"]
@@ -25,7 +43,7 @@ def getCustomerData(self, userData):
                 customer_name,
                 phone_number 
             FROM customer_data
-            WHERE customer_id = %s""",
+            WHERE customer_id = %s AND is_deleted = NULL""",
             (UUID, customerID,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
@@ -57,23 +75,6 @@ def addNewCustomer(self, userData):
         print(err)
         return False
 
-# 고객 ID 불러오기
-def getCustomerID(self, userData):
-    UUID = userData["UUID"]
-    customerName = userData["customerName"]
-    phoneNumber = userData["phoneNumber"]
-
-    try:
-        self.cur.execute("""
-            SELECT customer_id 
-            FROM customer
-            WHERE user_id = %s AND customer_name = %s AND phone_number = %s""",
-            (UUID, customerName, phoneNumber,))
-        return dict(self.cur.fetchone())
-    except db.DatabaseError as err:
-        print(err)
-        return None
-
 def updateCustomerData(self, customerData):
     customerID = customerData["customerID"]
     customerName = customerData["customerName"]
@@ -82,7 +83,7 @@ def updateCustomerData(self, customerData):
     try:
         self.cur.execute("""
             UPDATE 
-                customer 
+                customer_data
             SET
                 customer_name = %s,
                 phone_number = %s

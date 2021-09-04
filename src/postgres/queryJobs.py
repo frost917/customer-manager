@@ -60,33 +60,34 @@ def getJobsSpecipic(self, customerID):
         return None
 
 # 작업 기록 불러오기
-def getJobHistory(self, jobID):
-    try:
-        self.cur.execute("""
-    SELECT 
-        customer.customer_id,
-        customer_data.customer_name,
-        customer_data.phone_number,
-        job_list.visit_date,
-        job_finished.job_type,
-        job_type.job_name,
-        job_history.job_price,
-        job_history.job_description
-    FROM customer
-    INNER JOIN job_list
-    ON ( job_list.customer_id = customer.customer_id )
-    INNER JOIN job_history
-    ON ( job_history.job_id = job_list.job_id )
-    INNER JOIN job_finished
-    ON ( job_finished.job_id = job_list.job_id )
-    INNER JOIN job_type
-    ON ( job_finished.job_type = job_type.job_type )
-    WHERE customer.is_deleted = False AND customer.customer_id = %s""",
-            (jobID, jobID,))
-        return dict(self.cur.fetchall())
-    except db.DatabaseError as err:
-        print(err)
-        return None
+# 용도 불명
+# def getJobHistory(self, jobID):
+#     try:
+#         self.cur.execute("""
+#     SELECT 
+#         customer.customer_id,
+#         customer_data.customer_name,
+#         customer_data.phone_number,
+#         job_list.visit_date,
+#         job_finished.job_type,
+#         job_type.job_name,
+#         job_history.job_price,
+#         job_history.job_description
+#     FROM customer
+#     INNER JOIN job_list
+#     ON ( job_list.customer_id = customer.customer_id )
+#     INNER JOIN job_history
+#     ON ( job_history.job_id = job_list.job_id )
+#     INNER JOIN job_finished
+#     ON ( job_finished.job_id = job_list.job_id )
+#     INNER JOIN job_type
+#     ON ( job_finished.job_type = job_type.job_type )
+#     WHERE customer.is_deleted = False AND customer.customer_id = %s""",
+#             (jobID, jobID,))
+#         return dict(self.cur.fetchall())
+#     except db.DatabaseError as err:
+#         print(err)
+#         return None
 
 # 작업 기록 추가
 def addNewJob(self, jobData: dict):
