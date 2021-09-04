@@ -3,6 +3,7 @@
 # job_list table
 
 # 모든 작업 내역 불러오기
+# flaskGetAllJobHistory
 def getJobsDict(self, UUID):
     try:
         self.cur.execute("""
@@ -31,6 +32,7 @@ def getJobsDict(self, UUID):
         return None
 
 # 특정 손님의 작업 내역 불러오기
+# flaskGetSpecJobHistory
 def getJobsSpecipic(self, customerID):
     try:
         self.cur.execute("""
@@ -60,36 +62,37 @@ def getJobsSpecipic(self, customerID):
         return None
 
 # 작업 기록 불러오기
-# 용도 불명
-# def getJobHistory(self, jobID):
-#     try:
-#         self.cur.execute("""
-#     SELECT 
-#         customer.customer_id,
-#         customer_data.customer_name,
-#         customer_data.phone_number,
-#         job_list.visit_date,
-#         job_finished.job_type,
-#         job_type.job_name,
-#         job_history.job_price,
-#         job_history.job_description
-#     FROM customer
-#     INNER JOIN job_list
-#     ON ( job_list.customer_id = customer.customer_id )
-#     INNER JOIN job_history
-#     ON ( job_history.job_id = job_list.job_id )
-#     INNER JOIN job_finished
-#     ON ( job_finished.job_id = job_list.job_id )
-#     INNER JOIN job_type
-#     ON ( job_finished.job_type = job_type.job_type )
-#     WHERE customer.is_deleted = False AND customer.customer_id = %s""",
-#             (jobID, jobID,))
-#         return dict(self.cur.fetchall())
-#     except db.DatabaseError as err:
-#         print(err)
-#         return None
+# flaskGetJobHistory
+def getJobHistory(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT 
+        customer_data.customer_id,
+        customer_data.customer_name,
+        customer_data.phone_number,
+        job_list.visit_date,
+        job_finished.job_type,
+        job_type.job_name,
+        job_history.job_price,
+        job_history.job_description
+    FROM job_history
+    INNER JOIN customer_data
+    ON ( customer_data.customer_id = job_list.customer_id )
+    INNER JOIN job_list
+    ON ( job_list.job_id = job_history.job_id )
+    INNER JOIN job_finished
+    ON ( job_finished.job_id = job_history.job_id )
+    INNER JOIN job_type
+    ON ( job_finished.job_type = job_type.job_type )
+    WHERE customer.is_deleted = False AND job_history.job_id = uuid(%s)""",
+            (jobID,))
+        return dict(self.cur.fetchone())
+    except db.DatabaseError as err:
+        print(err)
+        return None
 
 # 작업 기록 추가
+# flaskAddJobHistory
 def addNewJob(self, jobData: dict):
     customerID = jobData['customerID']
     visitDate = jobData['visitDate']
@@ -106,7 +109,7 @@ def addNewJob(self, jobData: dict):
             customer_id, job_id, visit_date, job_price, job_description
         ) AS ( VALUES ( 
 			uuid(%s), uuid(%s), 
-            to_timestamp(%s, 'YYYY-MM-DD HH:MI:SS'), %s, %s) 
+            to_timestamp(%s, 'YYYY-MM-DD HH:MI:SS'), CAST(%s AS INTEGER, %s) 
         ), create_jobid AS (
             INSERT INTO job_list ( customer_id, job_id, visit_date )
             SELECT customer_id, job_id visit_date FROM data 

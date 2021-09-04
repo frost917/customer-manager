@@ -1,5 +1,4 @@
-﻿from _typeshed import ReadableBuffer
-from datetime import datetime
+﻿from datetime import datetime
 from flask import Blueprint, g, Response
 from dataProcess import dataParsing
 import uuid
@@ -18,26 +17,28 @@ def addJobHistory():
     jobData = dict(g['jobData'])
     jobData['jobID'] = str(uuid.uuid4())
     jobData['customerID'] = g['customerID']
+    jobData['visitDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    jobData['jobFinished'] = g['jobFinished']
+    jobData['jobPrice'] = g['jobPrice']
+    jobData['jobDescription'] = g['jobDescription']
 
     database = PostgresControll()
-    
     result = database.addNewJob(jobData=g['jobData'])
 
     if result is False:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json')
 
-    jobID = jobData['jobID']
-
     temp = dict()
     temp['customerID'] = g['customerID']
     temp['jobPrice'] = jobData['jobPrice']
     temp['jobDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    temp['jobDescribe'] = jobData['jobDescribe']
+    temp['jobDescription'] = jobData['jobDescription']
 
     convList = list()
     convList.append(temp)
 
+    jobID = jobData['jobID']
     returnData = dict()
     returnData[jobID] = convList
 

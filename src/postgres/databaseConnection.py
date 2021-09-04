@@ -1,6 +1,7 @@
 ﻿import psycopg2
 import psycopg2.extras
 
+
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -14,6 +15,7 @@ class Singleton(type):
 class PostgresControll(metaclass=Singleton):
     def __init__(self):
         import os
+
         # DB HOST
         host = os.getenv("DB_HOST")
         database = os.getenv("DB_DATABASE")
@@ -42,21 +44,17 @@ class PostgresControll(metaclass=Singleton):
 
     # customer table
     # customer info
-    from postgres.customerTableQuery import (addNewCustomer, deleteCustomerData,
-                                    getCustomerData, getCustomerDict,
-                                    getCustomerID, updateCustomerData)
-    # job_list table
-    from postgres.jobListTableQuery import getJobHistory, getJobsDict, getJobsSpecipic, addNewJob
-
+    from postgres.queryCustomerData import (addNewCustomer,
+                                             deleteCustomerData,
+                                             getCustomerData, getCustomerDict,
+                                             getCustomerID, updateCustomerData)
+    
     # login table
-    from postgres.loginTableQuery import getUserPasswd, getUUID, addNewUser
-
+    from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
+    # job_list table
+    from postgres.queryJobs import addNewJob, getJobsDict, getJobsSpecipic
     # visit_history table
-    from postgres.visitHistoryTableQuery import (addNewVisited, getVisitHistory,
-                                        getVisitHistoryDict)
-
-    # related jobs history
-    from postgres.getAllJobs import getJobsDict
+    from postgres.queryVisitHistory import getVisitHistory, getVisitHistoryDict
 
     # # 모든 예약 불러오기
     # def getReserveDict(self, UUID):
