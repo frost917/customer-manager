@@ -12,7 +12,7 @@ def authFailedJson():
 
     payload['failed'] = convList
 
-    return json.dumps(payload)
+    return str(json.dumps(payload))
 
 def dataMissingJson():
     payload = dict()
@@ -25,7 +25,7 @@ def dataMissingJson():
 
     payload['failed'] = convList
 
-    return json.dumps(payload)
+    return str(json.dumps(payload))
 
 def dataNotJSON():
     payload = dict()
@@ -38,7 +38,7 @@ def dataNotJSON():
 
     payload['failed'] = convList
 
-    return json.dumps(payload)
+    return str(json.dumps(payload))
 
 def tokenInvalid():
     payload = dict()

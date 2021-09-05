@@ -12,15 +12,15 @@ def tokenVerify(func):
         accessToken = request.headers.get('Authorization')
 
         if accessToken is None:
-            from msg.jsonMsg import dataMissingJson
-            return Response(dataMissingJson(), status=400)
+            import json
+            return Response(json.dumps('Unauthorized'), status=401)
 
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
 
         if type(userID) is str or type(UUID) is str:
-            g['userID'] = userID
-            g['UUID'] = UUID
+            g.userID = userID
+            g.UUID = UUID
         elif userID is Response or UUID is Response:
             return redirect('/auth/refresh')
         elif userID is None or UUID is None:

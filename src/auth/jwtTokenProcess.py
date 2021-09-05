@@ -17,7 +17,7 @@ def createAccessToken(userID, UUID):
     payload["exp"] = refTime + timedelta(hours=3)
     payload["iat"] = refTime
     payload["sub"] = "access token"
-    payload["aud"] = userID
+    # payload["aud"] = userID
 
     token = jwt.encode(payload=payload, key=JWTSecret)
     return str(token)
@@ -44,7 +44,7 @@ def isAccessTokenValid(accessToken):
     isAccesTokenExpired = False
 
     try:
-        jwt.decode(accessToken, JWTSecret)
+        jwt.decode(accessToken, JWTSecret, algorithms=['HS256'])
     except jwt.ExpiredSignatureError:
         isAccesTokenExpired = True
     except jwt.DecodeError:
@@ -56,7 +56,7 @@ def isRefreshTokenValid(refreshToken):
     isRefreshTokenExpired = False
 
     try:
-        jwt.decode(refreshToken, JWTSecret)
+        jwt.decode(refreshToken, JWTSecret, algorithms=['HS256'])
     except jwt.InvalidTokenError:
         return None
     except jwt.InvalidSignatureError:
@@ -77,7 +77,7 @@ def tokenGetUserID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
-        decode = jwt.decode(jwt=accessToken, key=JWTSecret)
+        decode = jwt.decode(jwt=accessToken, key=JWTSecret, algorithms=['HS256'])
     # except jwt.InvalidSignatureError:
     #     return None
     except jwt.ExpiredSignatureError:
@@ -93,7 +93,7 @@ def tokenGetUUID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
-        decode = jwt.decode(accessToken, JWTSecret)
+        decode = jwt.decode(jwt=accessToken, key=JWTSecret, algorithms=['HS256'])
     # except jwt.InvalidSignatureError:
     #     return None
     except jwt.ExpiredSignatureError:

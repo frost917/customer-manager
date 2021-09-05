@@ -9,7 +9,11 @@ def login():
         from msg.jsonMsg import dataNotJSON
         return Response(dataNotJSON(), status=400, mimetype="application/json")
 
-    data = request.get_json()
+    try:
+        data = request.get_json()
+    except:
+        from msg.jsonMsg import dataMissingJson
+        return Response(dataMissingJson(), status=400, mimetype="application/json")
 
     userID = str(data['userID'])
     passwd = str(data['passwd'])
