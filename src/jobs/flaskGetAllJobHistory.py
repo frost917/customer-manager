@@ -7,7 +7,7 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
-@manager.route('/', methods=['GET'])
+@manager.route('', methods=['GET'])
 @tokenVerify
 @dataParsing
 def getAllJobHistory():

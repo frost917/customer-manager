@@ -7,7 +7,7 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 
-@manager.route("/", methods=['POST'])
+@manager.route("", methods=['POST'])
 @tokenVerify
 @dataParsing
 def addNewCustomer():

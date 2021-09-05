@@ -3,7 +3,7 @@ from flask.helpers import make_response
 
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 
-@manager.route("/", methods=['POST'])
+@manager.route("", methods=['POST'])
 def login():
     if request.is_json == False:
         from msg.jsonMsg import dataNotJSON

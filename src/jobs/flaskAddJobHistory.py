@@ -9,7 +9,7 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('addJobHistory', __name__, url_prefix='/jobs')
 
-@manager.route('/', methods=['POST'])
+@manager.route('', methods=['POST'])
 @tokenVerify
 @dataParsing
 def addJobHistory():

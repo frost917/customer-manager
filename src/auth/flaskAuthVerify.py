@@ -10,6 +10,11 @@ def tokenVerify(func):
     @wraps(func)
     def verification(*args, **kwargs):
         accessToken = request.headers.get('Authorization')
+
+        if accessToken is None:
+            from msg.jsonMsg import dataMissingJson
+            return Response(dataMissingJson(), status=400)
+
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
 
@@ -21,9 +26,6 @@ def tokenVerify(func):
         elif userID is None or UUID is None:
             from msg.jsonMsg import authFailedJson
             return Response(authFailedJson(), status=401)
-        else:
-            from msg.jsonMsg import dataMissingJson
-            return Response(dataMissingJson(), status=400)
         
         return func(*args, **kwargs)
     return verification
