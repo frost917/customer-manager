@@ -13,7 +13,7 @@ WORKDIR /customer-manager
 VOLUME [ "/customer-manager" ]
 
 RUN git clone https://github.com/frost917/customer-manager.git /customer-manager \
-    && git checkout dev \
+    && git checkout debugging \
     && pip install --no-cache-dir -r requirements.txt
 
 CMD tail -f /dev/null
