@@ -3,3 +3,7 @@ psycopg2-binary
 bcrypt
 redis
 PyJWT
+python-dateutil
+
+# debug
+requests

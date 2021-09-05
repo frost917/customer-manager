@@ -1,4 +1,5 @@
 ﻿from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 import jwt
 import os
@@ -29,7 +30,7 @@ def createRefreshToken():
     # 토큰 생성의 기준이 되는 시간
     refTime = datetime.now()
 
-    payload["exp"] = refTime + timedelta(hours=3)
+    payload["exp"] = refTime - relativedelta(months=3)
     payload["iat"] = refTime
     payload["sub"] = "refresh token"
 
