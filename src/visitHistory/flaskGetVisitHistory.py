@@ -5,12 +5,12 @@ from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 from flask import Blueprint, Flask, Response, g, request
 
-manager = Blueprint("getAllVisitHistory", __name__, url_prefix='/visit-history')
+manager = Blueprint("getSpecVisitHistory", __name__, url_prefix='/visit-history')
 
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
 @dataParsing
-def getAllVisitHistory(customerID):
+def getSpecVisitHistory(customerID):
     from postgres.databaseConnection import PostgresControll
     database = PostgresControll()
 
