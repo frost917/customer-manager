@@ -45,9 +45,6 @@ import visitHistory.flaskGetVisitHistory
 app.register_blueprint(visitHistory.flaskGetAllVisitHistory.manager)
 app.register_blueprint(visitHistory.flaskGetVisitHistory.manager)
 
-
-# TODO jsonify는 다 json.dumps로 교체할 것
-
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
 # @app.route("/install")
@@ -55,15 +52,17 @@ app.config['JSON_AS_ASCII'] = False
 #     db = postgresAttach.connect().cursor()
 #     s
 
+from auth.flaskAuthVerify import tokenVerify
+from dataProcess import dataParsing
+
 # 굳이 필요는 없지만 그냥 한번 만들어봄
 @app.route("/")
 @tokenVerify
+@dataParsing
 def index():
-    userID = g.get("userID")
-
     convDict = dict()
-    convDict['userID'] = userID
-    convDict['msg'] = "Hello, %s".format(userID)
+    convDict['userID'] = g['userID']
+    convDict['msg'] = "Hello, %s".format(g['userID'])
 
     from json import dumps
     helloUser = dumps(convDict)

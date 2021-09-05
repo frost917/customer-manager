@@ -1,12 +1,14 @@
 ﻿from json import dumps
 
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from flask import Response, g, Blueprint
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("updateCustomerData", __name__, url_prefix='/customers')
 
 @manager.route("/<customerID>", methods=['PUT'])
+@tokenVerify
 @dataParsing
 def updateCustomerData(customerID):
 

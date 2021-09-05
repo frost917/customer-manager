@@ -1,12 +1,15 @@
-﻿from flask import g, Response, Blueprint
+﻿import json
+
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-import json
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 
 # 특정 작업 id의 데이터를 불러옴
 @manager.route('/<customerID>/<jobID>', methods=['GET'])
+@tokenVerify
 @dataParsing
 def getJobHistory(jobID):
     database = PostgresControll()

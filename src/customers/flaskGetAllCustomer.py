@@ -1,12 +1,14 @@
 ﻿from json import dumps
 
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from flask import Response, g, Blueprint
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("getCustomerList", __name__, url_prefix='/customers')
 
 @manager.route("/", methods=['GET'])
+@tokenVerify
 @dataParsing
 def getCustomerList():
     # UUID를 이용해 고객 명단 불러옴

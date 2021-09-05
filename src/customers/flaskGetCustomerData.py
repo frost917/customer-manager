@@ -1,12 +1,14 @@
 ﻿from datetime import datetime
 
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from flask import Response, g, Blueprint
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['GET'])
+@tokenVerify
 @dataParsing
 def getCustomerData(customerID):
     UUID = g['UUID']

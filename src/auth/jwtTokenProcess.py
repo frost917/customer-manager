@@ -73,6 +73,7 @@ def isRefreshTokenValid(refreshToken):
 
 # refresh token 갱신에 필요함
 def tokenGetUserID(accessToken):
+    from flask import Response
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
@@ -80,14 +81,14 @@ def tokenGetUserID(accessToken):
     except jwt.InvalidSignatureError:
         return None
     except jwt.ExpiredSignatureError:
-        return None
+        return Response
     except jwt.InvalidTokenError:
         return None
     
     return str(decode.get("UUID"))
 # return userID | UUID
 def tokenGetUUID(accessToken):
-
+    from flask import Response
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
@@ -95,7 +96,7 @@ def tokenGetUUID(accessToken):
     except jwt.InvalidSignatureError:
         return None
     except jwt.ExpiredSignatureError:
-        return None
+        return Response
     except jwt.InvalidTokenError:
         return None
     

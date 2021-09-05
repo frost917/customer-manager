@@ -1,10 +1,10 @@
-﻿from functools import wraps
-from auth.flaskAuthVerify import tokenVerify
+﻿import json
+from functools import wraps
+
 from flask import Response, g, request
-import json
+
 
 # 로그인 여부 확인하는 함수
-@tokenVerify
 def dataParsing(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

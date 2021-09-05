@@ -1,12 +1,14 @@
 ﻿from datetime import datetime
 
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-from flask import Response, g, Blueprint
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 
 @manager.route("/", methods=['POST'])
+@tokenVerify
 @dataParsing
 def addNewCustomer():
     customerData = dict()

@@ -1,11 +1,14 @@
-﻿from flask import g, Response, Blueprint
+﻿import json
+
+from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
-import json
+from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
 @manager.route('/', methods=['GET'])
+@tokenVerify
 @dataParsing
 def getAllJobHistory():
     database = PostgresControll()
