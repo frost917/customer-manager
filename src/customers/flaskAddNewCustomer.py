@@ -1,4 +1,5 @@
 ﻿from datetime import datetime
+from json import dumps
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
@@ -11,33 +12,31 @@ manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 @tokenVerify
 @dataParsing
 def addNewCustomer():
-    customerData = dict()
-    convList = list()
+    successedList = list()
+    failedList = list()
 
     UUID = g["UUID"]
-    customerName = g["customerName"]
-    phoneNumber = g["phoneNumber"]
+
     import uuid
-    customerID = uuid.uuid4()
-
-    customerData['UUID'] = UUID
-    customerData['customerName'] = customerName
-    customerData['phoneNumber'] = phoneNumber
-    customerData['customerID'] = customerID
-    customerData['addDate'] = datetime.now()
-
     database = PostgresControll()
-    queryResult = database.addNewCustomer(userData=customerData)
-    if queryResult is True:
-        from json import dumps
-        convList.append(queryResult)
-        convDict = dict()
-        convDict['successed'] = convList
+    for data in g.customers:
+        customerData = dict()
+        customerData['customerName'] = data.get('customerName')
+        customerData['phoneNumber'] = data.get('phoneNumber')
+        customerData['customerID'] = uuid.uuid4()
 
-        result = Response(dumps(convDict), status=200, mimetype="application/json")
+        if database.addNewCustomer(UUID = UUID, customerData=customerData) is True:
+            successedList.append(customerData)
+        else:
+            failedList.append(customerData)
 
-    else:
-        from msg.jsonMsg import databaseIsGone
-        result = Response(databaseIsGone(), status=500,mimetype="application/json")
+    tasks = dict()
 
-    return result
+    tasks['UUID'] = UUID
+    tasks['addDate'] = datetime.now()
+    if successedList.count() != 0:
+        tasks['successed'] = successedList
+    if failedList.count() != 0:
+        tasks['failed'] = failedList
+
+    return Response(dumps(tasks), status=200)

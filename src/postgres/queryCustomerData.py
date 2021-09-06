@@ -51,11 +51,10 @@ def getCustomerData(self, userData):
         return None
 
 # 새 고객 추가
-def addNewCustomer(self, userData):
-    UUID = userData["UUID"]
-    customerID = userData["customerID"]
-    customerName = userData["customerName"]
-    phoneNumber = userData["phoneNumber"]
+def addNewCustomer(self, UUID,customerData):
+    customerID = customerData["customerID"]
+    customerName = customerData["customerName"]
+    phoneNumber = customerData["phoneNumber"]
 
     try:
         self.cur.execute("""
