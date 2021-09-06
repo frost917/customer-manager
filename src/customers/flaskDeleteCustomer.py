@@ -9,21 +9,16 @@ manager = Blueprint('deleteCustomer', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['DELETE'])
 @tokenVerify
-@dataParsing
 def deleteCustomer(customerID):
-    customerData = dict()
-    customerData['UUID'] = g['UUID']
-    customerData['customerID'] = customerID
-    customerData['customerName'] = g['customerName']
-    customerData['phoneNumber'] = g['phoneNumber']
-
+    UUID = g.get('UUID')
     database = PostgresControll()
-    queryResult = database.deleteCustomerData(customerData=customerData)
 
-    if queryResult is False:
+    result = database.deleteCustomerData(customerID=customerID)
+
+    from json import dumps
+    if result == True:
+        return Response(dumps({'UUID': UUID, 'customerID': customerID, 'status': 'successed'}), status=200, mimetype="application/json")
+    else:
         from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500)
-
-    result = Response(status=200)
-
-    return result
+        return Response(databaseIsGone(), status=500, mimetype="application/json")
+    

@@ -1,5 +1,4 @@
 ﻿from datetime import datetime
-from json import dumps
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
@@ -25,6 +24,7 @@ def addNewCustomer():
         customerData['phoneNumber'] = data.get('phoneNumber')
         customerData['customerID'] = uuid.uuid4()
 
+        # 작업에 성공한 경우와 실패한 경우를 따로 나누어 json으로 반환
         if database.addNewCustomer(UUID = UUID, customerData=customerData) is True:
             successedList.append(customerData)
         else:
@@ -39,4 +39,5 @@ def addNewCustomer():
     if failedList.count() != 0:
         tasks['failed'] = failedList
 
-    return Response(dumps(tasks), status=200)
+    from json import dumps
+    return Response(dumps(tasks), status=200, mimetype="application/json")

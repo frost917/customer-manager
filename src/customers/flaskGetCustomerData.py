@@ -11,24 +11,24 @@ manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 @tokenVerify
 @dataParsing
 def getCustomerData(customerID):
-    UUID = g['UUID']
+    UUID = g.get('UUID')
 
-    userData = dict()
-    userData['UUID'] = UUID
-    userData['customerID'] = customerID
+    database = PostgresControll()
+    queryResult = database.getCustomerData(customerID=customerID)
 
-    queryResult = PostgresControll().getCustomerData(userData=userData)
-
-    if queryResult is None:
+    if queryResult is False:
         from msg.jsonMsg import databaseIsGone
         result =  Response(databaseIsGone(), status=500)
 
-    customerData = dict()   
+    customerData = dict()
     customerData['customerName'] = queryResult.get('customerName')
     customerData['phoneNumber'] = queryResult.get('phoneNumber')
     customerData['queryDate'] = datetime.now()
 
-    import json
-    result = Response(json.dumps(result), status=200)
+    temp = list()
+    temp.append(customerData)
+
+    from json import dumps
+    result = Response(dumps({'UUID': UUID, 'customerData': temp}), status=200, mimetype="application/json")
 
     return result

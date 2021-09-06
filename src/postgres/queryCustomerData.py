@@ -16,27 +16,25 @@ def getCustomerDict(self, UUID):
         return None
 
 # 고객 ID 불러오기
-def getCustomerID(self, userData):
-    UUID = userData["UUID"]
-    customerName = userData["customerName"]
-    phoneNumber = userData["phoneNumber"]
+# 용도 불명
+# def getCustomerID(self, userData):
+#     UUID = userData["UUID"]
+#     customerName = userData["customerName"]
+#     phoneNumber = userData["phoneNumber"]
 
-    try:
-        self.cur.execute("""
-            SELECT customer_id 
-            FROM customer
-            WHERE user_id = %s AND customer_name = %s AND phone_number = %s AND is_deleted = NULL""",
-            (UUID, customerName, phoneNumber,))
-        return dict(self.cur.fetchone())
-    except db.DatabaseError as err:
-        print(err)
-        return None
+#     try:
+#         self.cur.execute("""
+#             SELECT customer_id 
+#             FROM customer_data
+#             WHERE user_id = %s AND customer_name = %s AND phone_number = %s AND is_deleted = NULL""",
+#             (UUID, customerName, phoneNumber,))
+#         return dict(self.cur.fetchone())
+#     except db.DatabaseError as err:
+#         print(err)
+#         return False
 
 # 고객 정보 불러오기
-def getCustomerData(self, userData):
-    UUID = userData["UUID"]
-    customerID = userData["customerID"]
-
+def getCustomerData(self, customerID):
     try:
         self.cur.execute("""
             SELECT 
@@ -44,11 +42,11 @@ def getCustomerData(self, userData):
                 phone_number 
             FROM customer_data
             WHERE customer_id = %s AND is_deleted = NULL""",
-            (UUID, customerID,))
+            (customerID,))
         return dict(self.cur.fetchone())
     except db.DatabaseError as err:
         print(err)
-        return None
+        return False
 
 # 새 고객 추가
 def addNewCustomer(self, UUID,customerData):
@@ -94,8 +92,7 @@ def updateCustomerData(self, customerData):
         return False
 
 # customer table의 is_deleted 항목을 True로 변경
-def deleteCustomerData(self, customerData):
-    customerID = customerData["customerID"]
+def deleteCustomerData(self, customerID):
     try:
         self.cur.execute("""
         UPDATE
