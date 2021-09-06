@@ -1,11 +1,23 @@
-﻿from flask import Blueprint, Response, make_response, request
+﻿from os import access
+from flask import Blueprint, Response, make_response, request
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')
 
 @manager.route("/refresh")
 def tokenRefresh():
-    accessToken = request.cookies.get("accessToken")
-    refreshToken = request.cookies.get("refreshToken")
+    print(len(request.cookies))
+    print(len(request.headers))
+
+    if len(request.cookies) != 0:
+        accessToken = request.cookies.get("accessToken")
+        refreshToken = request.cookies.get("refreshToken")
+    elif len(request.headers) != 0:
+        accessToken = request.headers.get("accessToken")
+        refreshToken = request.headers.get("refreshToken")
+    else:
+        from msg.jsonMsg import dataMissingJson
+        Response(dataMissingJson(), status=400)
+
     refreshResult = Response()
 
     # 각각 토큰이 멀쩡한지 검사함
@@ -35,8 +47,9 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
+        import json
         accessToken = createAccessToken(userID=userID, UUID=UUID)
-        cookies = make_response(Response(status=200))
+        cookies = make_response(Response(json.dumps({'accessToken': accessToken}), status=200))
         cookies.set_cookie('accessToken', accessToken)
 
         # 새로 생성된 토큰은 쿠키로도 전달

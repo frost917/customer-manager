@@ -18,14 +18,15 @@ def tokenVerify(func):
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
 
-        if type(userID) is str or type(UUID) is str:
+        if type(userID) is str and type(UUID) is str:
             g.userID = userID
             g.UUID = UUID
         elif userID is Response or UUID is Response:
             return redirect('/auth/refresh')
         elif userID is None or UUID is None:
-            from msg.jsonMsg import authFailedJson
-            return Response(authFailedJson(), status=401)
-        
+            return Response(status=401)
+
+        print('{userID} is logined'.format(userID=userID))
+
         return func(*args, **kwargs)
     return verification

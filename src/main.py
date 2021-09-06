@@ -58,11 +58,11 @@ from dataProcess import dataParsing
 # 굳이 필요는 없지만 그냥 한번 만들어봄
 @app.route("/")
 @tokenVerify
-@dataParsing
 def index():
+    userID = g.get('userID')
     convDict = dict()
-    convDict['userID'] = g['userID']
-    convDict['msg'] = "Hello, %s".format(g['userID'])
+    convDict['userID'] = userID
+    convDict['msg'] = "Hello, {userID}".format(userID=userID)
 
     from json import dumps
     helloUser = dumps(convDict)

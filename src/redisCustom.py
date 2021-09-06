@@ -36,7 +36,7 @@ class redisToken(metaclass=Singleton):
             # JWT Refresh Token
             self.redisConn.hset(refreshToken, "userID", userID)
             self.redisConn.hset(refreshToken, "UUID", UUID)
-            self.redisConn.expire(refreshToken, datetime.today() - relativedelta(months=3)  )
+            self.redisConn.expire(refreshToken, datetime.today() + relativedelta(months=3)  )
         except redis.RedisError as err:
             print(err)
             # 레디스 에러나면 False 반환하고 

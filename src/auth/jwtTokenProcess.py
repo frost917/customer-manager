@@ -6,7 +6,7 @@ import os
 JWTSecret = os.getenv('secret')
 
 # return Access token
-def createAccessToken(userID, UUID):
+def createAccessToken(userID: str, UUID: str):
     payload = dict()
     payload['userID'] = userID
     payload['UUID'] = UUID
@@ -30,7 +30,7 @@ def createRefreshToken():
     # 토큰 생성의 기준이 되는 시간
     refTime = datetime.now()
 
-    payload["exp"] = refTime - relativedelta(months=3)
+    payload["exp"] = refTime + relativedelta(months=3)
     payload["iat"] = refTime
     payload["sub"] = "refresh token"
 
@@ -48,7 +48,7 @@ def isAccessTokenValid(accessToken):
     except jwt.ExpiredSignatureError:
         isAccesTokenExpired = True
     except jwt.DecodeError:
-        return None
+        pass
 
     return isAccesTokenExpired
 
@@ -74,18 +74,19 @@ def isRefreshTokenValid(refreshToken):
 
 def tokenGetUserID(accessToken):
     from flask import Response
+    import json
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
         decode = jwt.decode(jwt=accessToken, key=JWTSecret, algorithms=['HS256'])
-    # except jwt.InvalidSignatureError:
-    #     return None
+    except jwt.InvalidSignatureError:
+        return None
     except jwt.ExpiredSignatureError:
         return Response
-    # except jwt.InvalidTokenError:
-    #     return None
+    except jwt.InvalidTokenError:
+        return None
     
-    return str(decode.get("userID"))
+    return decode.get("userID")
 
 # return UUID
 def tokenGetUUID(accessToken):
@@ -93,12 +94,13 @@ def tokenGetUUID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
+        print('try get uuid')
         decode = jwt.decode(jwt=accessToken, key=JWTSecret, algorithms=['HS256'])
-    # except jwt.InvalidSignatureError:
-    #     return None
+    except jwt.InvalidSignatureError:
+        return None
     except jwt.ExpiredSignatureError:
         return Response
-    # except jwt.InvalidTokenError:
-    #     return None
+    except jwt.InvalidTokenError:
+        return None
     
-    return str(decode.get("UUID"))
+    return decode.get("UUID")

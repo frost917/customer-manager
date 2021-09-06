@@ -12,7 +12,7 @@ def dataParsing(func):
             from msg.jsonMsg import dataNotJSON
             return Response(dataNotJSON(), status=400)
 
-        data = dict(json.loads(request.get_json()))
+        data = request.get_json()
 
         # 손님 정보 파싱
         tmpCustomerName = str(data['customerData']['customerName'])
