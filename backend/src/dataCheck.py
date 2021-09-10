@@ -17,9 +17,15 @@ def customerDataCheck(func):
 
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
-        customerQuery = database.getCustomerData(customerID=customers.get('customerID'))
 
-        if len(customerQuery) == 0:
+        # 손님 데이터가 db에 존재하는지 확인
+        customerQueryDict = dict()
+        for customer in customers:
+            customerID = customer.get('customerID')
+            customerQueryDict[customerID] = database.getCustomerData(customerID=customerID)
+
+        # 손님 데이터가 db에 없는 경우 에러
+        if len(customerQueryDict) == 0:
             convDict = dict()
             convDict['error'] = 'CustomerNotFound'
             convDict['msg'] = 'customer is not found!'
@@ -46,9 +52,15 @@ def jobDataCheck(func):
 
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
-        jobQuery = database.getJobHistory(jobs.get('jobID'))
 
-        if len(jobQuery) == 0:
+        # 작업 기록이 db에 있는지 확인
+        jobQueryDict = dict()
+        for job in jobs:
+            jobID = job.get('jobID')
+            jobQueryDict[jobID] = database.getJobHistory(jobID=jobID)
+
+        # 단 하나도 없으면 에러
+        if len(jobQueryDict) == 0:
             convDict = dict()
             convDict['error'] = 'CustomerNotFound'
             convDict['msg'] = 'customer is not found!'

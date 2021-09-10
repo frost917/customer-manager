@@ -20,10 +20,10 @@ def dataParsing(func):
             from msg.jsonMsg import dataNotJSON
             return Response(dataNotJSON(), status=400)
 
-        # 손님 정보 파싱
+        # 손님 리스트
         g.customers = data.get('customerData')
 
-        # 작업 기록 딕셔너리
+        # 작업 리스트
         g.jobs = data.get('jobData')
 
         # 방문 기록 파싱
