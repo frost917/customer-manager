@@ -52,7 +52,7 @@ class PostgresControll(metaclass=Singleton):
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
     # job_list table
-    from postgres.queryJobs import addNewJob, getJobsDict, getJobsSpecipic
+    from postgres.queryJobs import addNewJob, getJobsDict, getJobsSingleCustomer, getJobHistory
     # visit_history table
     from postgres.queryVisitHistory import getVisitHistory, getVisitHistoryDict
 

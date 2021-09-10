@@ -10,7 +10,7 @@ def getCustomerDict(self, UUID):
             FROM customer
             WHERE user_id = %s AND is_deleted = NULL""",
             (UUID,))
-        return dict(self.cur.fetchall())
+        return self.cur.fetchall()
     except db.DatabaseError as err:
         print(err)
         return None
@@ -43,7 +43,7 @@ def getCustomerData(self, customerID):
             FROM customer_data
             WHERE customer_id = %s AND is_deleted = NULL""",
             (customerID,))
-        return dict(self.cur.fetchone())
+        return self.cur.fetchone()
     except db.DatabaseError as err:
         print(err)
         return False

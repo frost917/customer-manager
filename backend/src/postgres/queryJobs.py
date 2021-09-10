@@ -33,7 +33,7 @@ def getJobsDict(self, UUID):
 
 # 특정 손님의 작업 내역 불러오기
 # flaskGetSpecJobHistory
-def getJobsSpecipic(self, customerID):
+def getJobsSingleCustomer(self, customerID):
     try:
         self.cur.execute("""
     SELECT 
@@ -86,7 +86,7 @@ def getJobHistory(self, jobID):
     ON ( job_finished.job_type = job_type.job_type )
     WHERE customer.is_deleted = False AND job_history.job_id = uuid(%s)""",
             (jobID,))
-        return dict(self.cur.fetchone())
+        return self.cur.fetchone()
     except db.DatabaseError as err:
         print(err)
         return None
