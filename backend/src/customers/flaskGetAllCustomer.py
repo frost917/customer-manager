@@ -27,13 +27,15 @@ def getCustomerList():
 
     # 고객 정보 패키징
     for customer in customerDict:
-        customerData = dict()
+        customerSpec = dict()
         temp = dict()
         
         temp['customerName'] = customer.get('customer_name')
         temp['phoneNumber'] = customer.get('phone_number')
-        customerData[customer.get('customer_id')] = temp
+        customerSpec[customer.get('customer_id')] = temp
 
-        customers.append(customerData)
+        customers.append(customerSpec)
 
-    return Response(dumps({'UUID': UUID, 'customers': customers}), status=200, mimetype="application/json")
+    customerData = dict()
+    customerData['customerData'] = customers
+    return Response(dumps(customerData), status=200, mimetype="application/json")
