@@ -26,6 +26,13 @@ def updateCustomerData(customerID):
         from msg.jsonMsg import databaseIsGone
         result = Response(databaseIsGone(), status=500,mimetype="application/json")
     else:
-        result = Response(dumps(customerData), status=200, mimetype="application/json")
+        temp = dict()
+        temp['customerName'] = data.get('customerName')
+        temp['phoneNumber'] = data.get('phoneNumber')
+
+        payload = dict()
+        payload[customerID] = temp
+
+        result = Response(dumps(payload), status=200, mimetype="application/json")
 
     return result

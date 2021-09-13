@@ -11,9 +11,27 @@ manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 def getAllJobHistory():
     database = PostgresControll()
 
-    result = database.getJobsDict(UUID=g['UUID'])
-    if result is None:
+    UUID = g.get('UUID')
+    jobData = database.getJobsDict(UUID=UUID)
+
+    if jobData is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json',content_type='application/json')
+        
+    payload = dict()
 
-    return Response(json.dumps(result), status=200, mimetype='application/json', content_type='application/json')
+    for job in jobData:
+        temp = dict()
+
+        temp['jobFinished'] = list()
+        for jobType in job.get('job_finished'):
+            temp['jobFinished'].append(jobType)
+
+        temp['visitDate'] = job.get('visit_date')
+        temp['jobPrice'] = int(job.get('job_price'))
+        temp['jobDescription'] = job.get('job_description')
+
+        jobID = job.get('job_id')
+        payload[jobID] = temp
+
+    return Response(json.dumps(payload), status=200, mimetype='application/json', content_type='application/json')

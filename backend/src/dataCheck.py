@@ -8,9 +8,10 @@ from flask import Response, g
 @dataParsing
 def customerDataCheck(func):
     @wraps(func)
-    def wrapper(customerID = None, *args, **kwargs):
+    def wrapper(*args, **kwargs):
         # 손님 데이터가 전달되지 않을 경우 에러 반환
         customers = g.get('customers')
+        customerID = func.customerID
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
         failed = list()
@@ -53,13 +54,13 @@ def customerDataCheck(func):
 @customerDataCheck
 def jobDataCheck(func):
     @wraps(func)
-    def wrapper(jobID = None, *args, **kwargs):
+    def wrapper(*args, **kwargs):
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
 
         failed = list()
         jobs = g.get('jobs')
-
+        jobID = func.jobID
         # 작업 기록이 db에 있는지 확인
         # jobID를 인자로 받은 경우
         if jobID is not None:
