@@ -20,15 +20,19 @@ def customerDataCheck(func):
 
         # 손님 데이터가 db에 존재하는지 확인
         customerQueryDict = dict()
+        failed = list()
         for customer in customers:
             customerID = customer.get('customerID')
             customerQueryDict[customerID] = database.getCustomerData(customerID=customerID)
+            if len(customerQueryDict[customerID]) == 0:
+                failed.append(customerID)
 
         # 손님 데이터가 db에 없는 경우 에러
-        if len(customerQueryDict) == 0:
+        if len(failed) != 0:
             convDict = dict()
             convDict['error'] = 'CustomerNotFound'
             convDict['msg'] = 'customer is not found!'
+            convDict['customerList'] = failed
             
             convList = list()
             convList.append(convDict)
@@ -37,7 +41,6 @@ def customerDataCheck(func):
             payload['failed'] = convList
 
             return Response(json.dumps(payload), status=400, mimetype='application/json')
-
         return func(*args, **kwargs)
     return wrapper
 

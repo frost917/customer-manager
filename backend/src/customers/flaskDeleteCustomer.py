@@ -1,4 +1,5 @@
-﻿from datetime import datetime
+﻿from dataCheck import customerDataCheck
+from datetime import datetime
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
@@ -8,7 +9,7 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('deleteCustomer', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['DELETE'])
-@tokenVerify
+@customerDataCheck
 def deleteCustomer(customerID):
     UUID = g.get('UUID')
     database = PostgresControll()

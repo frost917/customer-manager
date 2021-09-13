@@ -47,7 +47,7 @@ class PostgresControll(metaclass=Singleton):
     from postgres.queryCustomerData import (addNewCustomer,
                                              deleteCustomerData,
                                              getCustomerData, getCustomerDict,
-                                             getCustomerID, updateCustomerData)
+                                             updateCustomerData)
     
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID

@@ -1,15 +1,14 @@
-﻿from dataCheck import customerDataCheck
-from datetime import datetime
+﻿from datetime import datetime
 
 # from auth.flaskAuthVerify import tokenVerify
-# from dataProcess import dataParsing
+from dataProcess import dataParsing
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 
 @manager.route("", methods=['POST'])
-@customerDataCheck
+@dataParsing
 def addNewCustomer():
     successedList = list()
     failedList = list()
@@ -18,7 +17,8 @@ def addNewCustomer():
 
     import uuid
     database = PostgresControll()
-    for data in g.get('customers'):
+    customers = g.get('customers')
+    for data in customers:
         customerData = dict()
         customerData['customerName'] = data.get('customerName')
         customerData['phoneNumber'] = data.get('phoneNumber')
@@ -34,9 +34,9 @@ def addNewCustomer():
 
     tasks['UUID'] = UUID
     tasks['addDate'] = datetime.now()
-    if successedList.count() != 0:
+    if len(successedList) != 0:
         tasks['successed'] = successedList
-    if failedList.count() != 0:
+    if len(failedList) != 0:
         tasks['failed'] = failedList
 
     from json import dumps
