@@ -1,4 +1,4 @@
-﻿from backend.src.dataCheck import customerDataCheck
+﻿from dataCheck import customerDataCheck
 import json
 import uuid
 from datetime import datetime
@@ -12,6 +12,8 @@ manager = Blueprint('addJobHistory', __name__, url_prefix='/jobs')
 
 # 단일 손님에 대한 단일 데이터만 책임짐
 @manager.route('/<customerID>/jobs', methods=['POST'])
+@tokenVerify
+@dataParsing
 @customerDataCheck
 def addJobHistory(customerID):
     # 받아오는 데이터: 손님 id, 작업 비용, 작업 기록, 작업 목록

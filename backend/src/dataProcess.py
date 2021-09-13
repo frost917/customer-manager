@@ -4,9 +4,7 @@ from functools import wraps
 
 from flask import Response, g, request
 
-
 # json 데이터 분해 및 별도 저장
-@tokenVerify
 def dataParsing(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

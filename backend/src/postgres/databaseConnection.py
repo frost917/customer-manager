@@ -39,20 +39,20 @@ class PostgresControll(metaclass=Singleton):
             print(err)
 
     def __del__(self):
+        self.dbconn.commit()
         self.dbconn.close()
         self.cur.close()
 
     # customer table
     # customer info
-    from postgres.queryCustomerData import (addNewCustomer,
-                                             deleteCustomerData,
-                                             getCustomerData, getCustomerDict,
-                                             updateCustomerData)
-    
+    from postgres.queryCustomerData import (addNewCustomer, deleteCustomerData,
+                                            getCustomerData, getCustomerDict,
+                                            updateCustomerData)
+    # job_list table
+    from postgres.queryJobs import (addNewJob, getJobHistory, getJobsDict,
+                                    getJobsSingleCustomer)
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
-    # job_list table
-    from postgres.queryJobs import addNewJob, getJobsDict, getJobsSingleCustomer, getJobHistory
     # visit_history table
     from postgres.queryVisitHistory import getVisitHistory, getVisitHistoryDict
 

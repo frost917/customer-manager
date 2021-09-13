@@ -9,6 +9,8 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('deleteCustomer', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['DELETE'])
+@tokenVerify
+@dataParsing
 @customerDataCheck
 def deleteCustomer(customerID):
     database = PostgresControll()

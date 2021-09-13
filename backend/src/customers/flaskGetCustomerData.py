@@ -2,6 +2,8 @@
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
+from dataCheck import customerDataCheck
+
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
@@ -10,6 +12,7 @@ manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
 @dataParsing
+@customerDataCheck
 def getCustomerData(customerID):
     database = PostgresControll()
     queryResult = database.getCustomerData(customerID=customerID)

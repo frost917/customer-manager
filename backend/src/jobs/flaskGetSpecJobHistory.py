@@ -10,6 +10,8 @@ manager = Blueprint('getSpecJobHistory', __name__, url_prefix='/jobs')
 
 # 특정 고객의 모든 작업 기록을 불러옴
 @manager.route('/<customerID>', methods=['GET'])
+@tokenVerify
+@dataParsing
 @customerDataCheck
 def getJobHistory(customerID):
     database = PostgresControll()

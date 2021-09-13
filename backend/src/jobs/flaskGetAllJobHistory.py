@@ -1,12 +1,15 @@
 ﻿import json
 
-from dataProcess import dataParsing
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
+
+from auth.flaskAuthVerify import tokenVerify
+from dataProcess import dataParsing
 
 manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
 @manager.route('', methods=['GET'])
+@tokenVerify
 @dataParsing
 def getAllJobHistory():
     database = PostgresControll()
@@ -17,7 +20,7 @@ def getAllJobHistory():
     if jobData is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json',content_type='application/json')
-        
+
     payload = dict()
 
     for job in jobData:

@@ -5,7 +5,6 @@ from functools import wraps
 from flask import Response, g
 
 # 넘어온 데이터 확인
-@dataParsing
 def customerDataCheck(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -51,7 +50,6 @@ def customerDataCheck(func):
         return func(*args, **kwargs)
     return wrapper
 
-@customerDataCheck
 def jobDataCheck(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
