@@ -1,4 +1,4 @@
-﻿from dataCheck import customerDataCheck
+﻿from dataCheck import customerDataCheck, jobDataCheck
 import json
 
 from flask import Blueprint, Response
@@ -14,6 +14,7 @@ manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 @tokenVerify
 @dataParsing
 @customerDataCheck
+@jobDataCheck
 def getJobHistory(jobID):
     database = PostgresControll()
 

@@ -11,14 +11,16 @@ class Singleton(type):
  
         return cls._instances[cls]
 
+# TODO 이 부분을 근본적으로 개선하던가 DB에 저장하는 식으로 개선해야함
+# TODO 현재 확인된 버그: userID, UUID 확인 불가, invalid username-password pair
 class redisToken(metaclass=Singleton):
     def __init__(self):
         from os import getenv
         # from config.secret import redisData
-        host = getenv("REDIS_HOST") if getenv("REDIS_HOST") is None else 'localhost'
-        port = getenv("REDIS_PORT") if getenv("REDIS_PORT") is None else '6432'
-        password = getenv("REDIS_PASSWD") if getenv("REDIS_PASSWD") is None else ''
-        db = 0 if getenv("REDIS_DB") is None else getenv("REDIS_DB")
+        host = getenv("REDIS_HOST") if getenv("REDIS_HOST") is not None else 'localhost'
+        port = getenv("REDIS_PORT") if getenv("REDIS_PORT") is not None else '6432'
+        password = getenv("REDIS_PASSWD") if getenv("REDIS_PASSWD") is not None else ''
+        db = 0 if getenv("REDIS_DB") is not None else getenv("REDIS_DB")
 
         # host = redisData.get("REDIS_HOST")
         # port = redisData.get("REDIS_PORT")
@@ -48,7 +50,7 @@ class redisToken(metaclass=Singleton):
     
     def delRefreshToken(self, refreshToken):
         try:
-            for hlen in range(self.redisConn.hlen()):
+            for hlen in range(self.redisConn.hlen(refreshToken)):
                 self.redisConn.hdel(refreshToken, hlen)
         except redis.RedisError as err:
             print(err)
