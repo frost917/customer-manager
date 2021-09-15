@@ -1,5 +1,4 @@
-﻿from dataProcess import dataParsing
-import json
+﻿import json
 from functools import wraps
 
 from flask import Response, g
@@ -11,6 +10,10 @@ def customerDataCheck(func):
         # 손님 데이터가 전달되지 않을 경우 에러 반환
         customers = g.get('customers')
         customerID = kwargs.get('customerID')
+
+        print(customers)
+        print(customerID)
+
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
         failed = list()
@@ -23,7 +26,8 @@ def customerDataCheck(func):
         # 손님 데이터가 db에 존재하는지 확인
         elif customers is not None:
             for customer in customers:
-                customerID = customer.get('customerID')
+                print(customer)
+                customerKeys = list(customer.keys())
                 result = database.getCustomerData(customerID=customerID)
                 if len(result) == 0:
                     failed.append(customerID)
@@ -38,7 +42,7 @@ def customerDataCheck(func):
             convDict = dict()
             convDict['error'] = 'CustomerNotFound'
             convDict['msg'] = 'customer is not found!'
-            convDict['customerList'] = failed
+            convDict['customerID'] = failed
             
             convList = list()
             convList.append(convDict)
