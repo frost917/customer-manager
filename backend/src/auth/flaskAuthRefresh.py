@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, Response, request
+﻿from flask import Blueprint, Response, request, make_response
 import json
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')

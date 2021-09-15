@@ -17,9 +17,8 @@ def updateCustomerData():
     database = PostgresControll()
     payload = dict()
 
-    for id, data in customers.items():
+    for customerID, data in customers.items():
         customerData = dict()
-        customerID = id
         customerName = data.get('customerName')
         phoneNumber = data.get('phoneNumber')
 
@@ -39,6 +38,6 @@ def updateCustomerData():
 
             payload[customerID] = temp
 
-        result = Response(dumps(payload), status=200, mimetype="application/json")
+    result = Response(dumps(payload), status=200, mimetype="application/json")
 
     return result
