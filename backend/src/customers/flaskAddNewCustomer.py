@@ -28,7 +28,7 @@ def addNewCustomer():
         if database.addNewCustomer(UUID = UUID, customerData=customerData) is True:
             successedList.append(customerData)
         else:
-            return Response(databaseIsGone(), status=500, mimetype="application/json")
+            return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     tasks = dict()
 
@@ -37,4 +37,4 @@ def addNewCustomer():
         tasks['successed'] = successedList
 
     from json import dumps
-    return Response(dumps(tasks), status=200, mimetype="application/json")
+    return Response(dumps(tasks), status=200, content_type="application/json; charset=UTF-8")

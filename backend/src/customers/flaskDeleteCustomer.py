@@ -21,7 +21,7 @@ def deleteCustomer():
         from json import dumps
         if result == False:
             from msg.jsonMsg import databaseIsGone
-            return Response(databaseIsGone(), status=500, mimetype="application/json")
+            return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
             
     # 전부 순회하면 반환
-    return Response(dumps({'status': 'successed'}), status=200, mimetype="application/json")
+    return Response(dumps({'status': 'successed'}), status=200, content_type="application/json; charset=UTF-8")

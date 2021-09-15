@@ -19,7 +19,7 @@ def getCustomerData(customerID):
 
     if queryResult is False:
         from msg.jsonMsg import databaseIsGone
-        result =  Response(databaseIsGone(), status=500)
+        result =  Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     customerData = dict()
     customerData['customerName'] = queryResult.get('customerName')
@@ -29,6 +29,6 @@ def getCustomerData(customerID):
     temp[customerID] = customerData
 
     from json import dumps
-    result = Response(dumps(temp), status=200, mimetype="application/json")
+    result = Response(dumps(temp), status=200, content_type="application/json; charset=UTF-8")
 
     return result

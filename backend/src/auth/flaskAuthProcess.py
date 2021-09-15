@@ -3,17 +3,18 @@ from flask.helpers import make_response
 
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 
+#TODO 여기 코드 정리할 것
 @manager.route("", methods=['POST'])
 def login():
     if request.is_json == False:
         from msg.jsonMsg import dataNotJSON
-        return Response(dataNotJSON(), status=400, mimetype="application/json")
+        return Response(dataNotJSON(), status=400, content_type="application/json; charset=UTF-8")
 
     try:
         data = request.get_json()
     except:
         from msg.jsonMsg import dataMissingJson
-        return Response(dataMissingJson(), status=400, mimetype="application/json")
+        return Response(dataMissingJson(), status=400, content_type="application/json; charset=UTF-8")
 
     userID = str(data['userID'])
     passwd = str(data['passwd'])
@@ -21,7 +22,7 @@ def login():
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or passwd is None:
         from msg.jsonMsg import dataMissingJson
-        return Response(dataMissingJson(), status=400, mimetype="application/json")
+        return Response(dataMissingJson(), status=400, content_type="application/json; charset=UTF-8")
 
     from postgres.databaseConnection import PostgresControll
     database = PostgresControll()
@@ -30,14 +31,15 @@ def login():
 
     # db가 죽은 경우
     if originPasswordDict is None:
-        return Response(status=500, mimetype="application/json")
+        from msg.jsonMsg import databaseIsGone
+        return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     originPassword = str(originPasswordDict.get("passwd"))
 
     # 쿼리한 비밀번호 값이 없을 경우 로그인 실패
     if originPassword is None:
         from msg.jsonMsg import authFailedJson
-        loginReturn = Response(response=authFailedJson(userID=userID), status=400, mimetype="application/json")
+        loginReturn = Response(authFailedJson(userID=userID), status=400, content_type="application/json; charset=UTF-8")
 
     import bcrypt
     # 비밀번호 비교 / bool
@@ -72,13 +74,10 @@ def login():
         import json
         loginSuccessed = json.dumps(payload)
 
-        loginReturn = make_response(Response(response=loginSuccessed, status=200, mimetype="application/json"))
-        loginReturn.set_cookie('userID', userID)
-        loginReturn.set_cookie('accessToken', accessToken)
-        loginReturn.set_cookie('refreshToken', refreshToken)
+        loginReturn = make_response(Response(response=loginSuccessed, status=200, content_type="application/json; charset=UTF-8"))
 
     else:
         from msg.jsonMsg import authFailedJson
-        loginReturn = Response(authFailedJson(), status=400, mimetype="application/json")
+        loginReturn = Response(authFailedJson(), status=400, content_type="application/json; charset=UTF-8")
 
     return loginReturn

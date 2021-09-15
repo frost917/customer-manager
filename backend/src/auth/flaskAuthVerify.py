@@ -13,7 +13,7 @@ def tokenVerify(func):
 
         if accessToken is None:
             import json
-            return Response(json.dumps('Unauthorized'), status=401)
+            return Response(json.dumps('Unauthorized'), status=401, content_type="text/html; charset=UTF-8")
 
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)

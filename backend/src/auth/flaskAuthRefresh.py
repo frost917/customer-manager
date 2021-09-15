@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, Response, request, make_response
+﻿from flask import Blueprint, Response, request
 import json
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')
@@ -12,7 +12,7 @@ def tokenRefresh():
     # print("header refreshToken is {}".format(refreshToken))
 
     if refreshToken is None:
-        refreshResult = Response('Unauthorized', status=401)
+        refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
@@ -80,6 +80,6 @@ def tokenRefresh():
     token['refreshToken'] = refreshToken
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
-    refreshResult = Response(json.dumps(token), status=200, mimetype='application/json') 
+    refreshResult = Response(json.dumps(token), status=200, content_type="application/json; charset=UTF-8") 
 
     return refreshResult

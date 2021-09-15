@@ -33,7 +33,7 @@ def addJobHistory(customerID):
 
     if result is False:
         from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500, mimetype='application/json')
+        return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     temp = dict()
     temp['jobFinished'] = jobData['jobFinished']
@@ -48,4 +48,4 @@ def addJobHistory(customerID):
     returnData = dict()
     returnData[jobID] = convList
 
-    return Response(json.dumps(temp), status=200, mimetype='application/json')
+    return Response(json.dumps(temp), status=200, content_type="application/json; charset=UTF-8")

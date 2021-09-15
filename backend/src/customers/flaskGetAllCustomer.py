@@ -22,7 +22,7 @@ def getCustomerList():
     # None인 경우 DB에러로 간주
     if customerDict is None:
         from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500,mimetype="application/json")
+        return Response(databaseIsGone(), status=500,content_type="application/json; charset=UTF-8")
 
     customers = list()
 
@@ -39,4 +39,4 @@ def getCustomerList():
 
     customerData = dict()
     customerData['customerData'] = customers
-    return Response(dumps(customerData), status=200, mimetype="application/json")
+    return Response(dumps(customerData), status=200, content_type="application/json; charset=UTF-8")

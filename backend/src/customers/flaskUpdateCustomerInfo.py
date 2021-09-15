@@ -30,7 +30,7 @@ def updateCustomerData():
 
         if queryResult is False:
             from msg.jsonMsg import databaseIsGone
-            result = Response(databaseIsGone(), status=500,mimetype="application/json")
+            result = Response(databaseIsGone(), status=500,content_type="application/json; charset=UTF-8")
         else:
             temp = dict()
             temp['customerName'] = customerName
@@ -38,6 +38,6 @@ def updateCustomerData():
 
             payload[customerID] = temp
 
-    result = Response(dumps(payload), status=200, mimetype="application/json")
+    result = Response(dumps(payload), status=200, content_type="application/json; charset=UTF-8")
 
     return result

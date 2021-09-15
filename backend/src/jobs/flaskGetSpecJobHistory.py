@@ -20,7 +20,7 @@ def getJobHistory(customerID):
 
     if jobData is None:
         from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500, mimetype='application/json',content_type='application/json')
+        return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     payload = dict()
 
@@ -38,4 +38,4 @@ def getJobHistory(customerID):
         jobID = job.get('job_id')
         payload[jobID] = temp
 
-    return Response(json.dumps(payload), status=200, mimetype='application/json', content_type='application/json')
+    return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
