@@ -1,4 +1,5 @@
-﻿import json
+﻿from dataCheck import customerDataCheck
+import json
 import uuid
 from datetime import datetime
 
@@ -9,32 +10,35 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('addJobHistory', __name__, url_prefix='/jobs')
 
-@manager.route('', methods=['POST'])
+# 단일 손님에 대한 단일 데이터만 책임짐
+@manager.route('/<customerID>/jobs', methods=['POST'])
 @tokenVerify
 @dataParsing
-def addJobHistory():
+@customerDataCheck
+def addJobHistory(customerID):
     # 받아오는 데이터: 손님 id, 작업 비용, 작업 기록, 작업 목록
     # 생성 후 반환하는 데이터: 작업 id, 방문 날짜, 작업 id
+    jobs = g.get('jobs')
 
-    jobData = dict(g['jobData'])
+    jobData = dict()
+    jobData['customerID'] = customerID
     jobData['jobID'] = str(uuid.uuid4())
-    jobData['customerID'] = g['customerID']
-    jobData['visitDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    jobData['jobFinished'] = g['jobFinished']
-    jobData['jobPrice'] = g['jobPrice']
-    jobData['jobDescription'] = g['jobDescription']
+    jobData['jobFinished'] = jobs.get('jobFinished')
+    jobData['visitDate'] = datetime.now().strftime('%Y-%m-%d')
+    jobData['jobPrice'] = jobs.get('jobPrice')
+    jobData['jobDescription'] = jobs.get('jobDescription')
 
     database = PostgresControll()
-    result = database.addNewJob(jobData=g['jobData'])
+    result = database.addNewJob(jobData=jobData)
 
     if result is False:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json')
 
     temp = dict()
-    temp['customerID'] = g['customerID']
+    temp['jobFinished'] = jobData['jobFinished']
+    temp['jobDate'] = jobData['visitDate']
     temp['jobPrice'] = jobData['jobPrice']
-    temp['jobDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     temp['jobDescription'] = jobData['jobDescription']
 
     convList = list()

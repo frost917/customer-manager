@@ -1,24 +1,18 @@
-﻿from os import access
-from flask import Blueprint, Response, make_response, request
+﻿from flask import Blueprint, Response, request, make_response
+import json
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')
 
 @manager.route("/refresh")
 def tokenRefresh():
-    print(len(request.cookies))
-    print(len(request.headers))
+    accessToken = request.headers.get("accessToken")
+    refreshToken = request.headers.get("refreshToken")
 
-    if len(request.cookies) != 0:
-        accessToken = request.cookies.get("accessToken")
-        refreshToken = request.cookies.get("refreshToken")
-    elif len(request.headers) != 0:
-        accessToken = request.headers.get("accessToken")
-        refreshToken = request.headers.get("refreshToken")
-    else:
-        from msg.jsonMsg import dataMissingJson
-        Response(dataMissingJson(), status=400)
+    # print("header accessToken is {}".format(accessToken))
+    # print("header refreshToken is {}".format(refreshToken))
 
-    refreshResult = Response()
+    if refreshToken is None:
+        refreshResult = Response('Unauthorized', status=401)
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
@@ -26,6 +20,9 @@ def tokenRefresh():
     
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
+
+    # print('isAccessTokenExpired is {}'.format(isAccessTokenExpired))
+    # print('isRefreshTokenExpired is {}'.format(isRefreshTokenExpired))
 
     from msg.jsonMsg import tokenInvalid
 
@@ -47,13 +44,11 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
-        import json
-        accessToken = createAccessToken(userID=userID, UUID=UUID)
-        cookies = make_response(Response(json.dumps({'accessToken': accessToken}), status=200))
-        cookies.set_cookie('accessToken', accessToken)
+        # print("redis userID is {}".format(userID))
+        # print("redis UUID is {}".format(UUID))
 
-        # 새로 생성된 토큰은 쿠키로도 전달
-        refreshResult = cookies
+        accessToken = createAccessToken(userID=userID, UUID=UUID)
+        # print("created accessToken is {}".format(accessToken))
 
     # refresh token만 파기된 경우
     elif isRefreshTokenExpired:
@@ -80,8 +75,11 @@ def tokenRefresh():
         if result == False:
             refreshResult = Response(status=500)
 
-        cookies = make_response(Response(status=200))
-        cookies.set_cookie('refreshToken', refreshToken)
-        refreshResult = cookies
+    token = dict()
+    token['accessToken'] = accessToken
+    token['refreshToken'] = refreshToken
+
+    # 새로 생성된 토큰은 json으로 변경해서 전달
+    refreshResult = Response(json.dumps(token), status=200, mimetype='application/json') 
 
     return refreshResult

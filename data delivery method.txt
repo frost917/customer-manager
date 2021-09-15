@@ -1,0 +1,71 @@
+﻿customer data json
+
+return customer data
+{
+    customerID: {
+        "customerName": str,
+        "phoneNumber": str
+    }
+}
+
+return many customers data
+{
+    customerData: [
+        customerID: {
+            "customerName": str,
+            "phoneNumber": str
+        }
+    ]
+}
+
+add customer result data
+{
+    "addDate": datetime,
+    "successed": [
+        "customerData": [
+            {
+                "customerID": str,
+                "customerName": str,
+                "phoneNumber": str
+            }
+        ]
+    ]
+}
+
+update customer data
+{
+    "customerData": [
+        {
+            customerID: {
+            "customerName": str,
+            "phoneNumber": str
+            }
+        }
+    ]
+}
+
+return job data
+{
+    jobID: {
+        "jobFinished": [
+            int,
+        ]
+        "visitDate": str,
+        "jobPrice": int,
+        "jobDescription": str
+    }
+}
+
+add job data
+{
+    "jobData": [
+        {
+            "jobFinished": [
+                int,
+            ]
+            "visitDate": str,
+            "jobPrice": int,
+            "jobDescription": str
+        }
+    ]
+}

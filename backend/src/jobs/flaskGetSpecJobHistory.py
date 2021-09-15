@@ -1,4 +1,5 @@
-﻿import json
+﻿from dataCheck import customerDataCheck
+import json
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
@@ -11,18 +12,30 @@ manager = Blueprint('getSpecJobHistory', __name__, url_prefix='/jobs')
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
 @dataParsing
-def getJobHistory(jobID):
+@customerDataCheck
+def getJobHistory(customerID):
     database = PostgresControll()
 
-    result = database.getJobsHistory(jobID=jobID)
-    if result is None:
+    jobData = database.getJobsSingleCustomer(customerID=customerID)
+
+    if jobData is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, mimetype='application/json',content_type='application/json')
 
-    convList = list()
     payload = dict()
 
-    convList.append(result)
-    payload[jobID] = convList
+    for job in jobData:
+        temp = dict()
+
+        temp['jobFinished'] = list()
+        for jobType in job.get('job_finished'):
+            temp['jobFinished'].append(jobType)
+
+        temp['visitDate'] = job.get('visit_date')
+        temp['jobPrice'] = int(job.get('job_price'))
+        temp['jobDescription'] = job.get('job_description')
+
+        jobID = job.get('job_id')
+        payload[jobID] = temp
 
     return Response(json.dumps(payload), status=200, mimetype='application/json', content_type='application/json')

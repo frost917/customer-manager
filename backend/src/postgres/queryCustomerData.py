@@ -6,56 +6,63 @@
 def getCustomerDict(self, UUID):
     try:
         self.cur.execute("""
-            SELECT customer_id,customer_name,phone_number 
+            SELECT 
+                customer.customer_id,
+                customer_data.customer_name,
+                customer_data.phone_number 
             FROM customer
-            WHERE user_id = %s AND is_deleted = NULL""",
+            INNER JOIN customer_data
+            ON ( customer_data.customer_id = customer.customer_id)
+            WHERE customer.user_id = uuid(%s) AND is_deleted IS NOT TRUE""",
             (UUID,))
-        return dict(self.cur.fetchall())
+        return self.cur.fetchall()
     except db.DatabaseError as err:
         print(err)
         return None
 
 # 고객 ID 불러오기
-def getCustomerID(self, userData):
-    UUID = userData["UUID"]
-    customerName = userData["customerName"]
-    phoneNumber = userData["phoneNumber"]
+# 용도 불명
+# def getCustomerID(self, userData):
+#     UUID = userData["UUID"]
+#     customerName = userData["customerName"]
+#     phoneNumber = userData["phoneNumber"]
 
-    try:
-        self.cur.execute("""
-            SELECT customer_id 
-            FROM customer
-            WHERE user_id = %s AND customer_name = %s AND phone_number = %s AND is_deleted = NULL""",
-            (UUID, customerName, phoneNumber,))
-        return dict(self.cur.fetchone())
-    except db.DatabaseError as err:
-        print(err)
-        return None
+#     try:
+#         self.cur.execute("""
+#             SELECT customer_id 
+#             FROM customer_data
+#             WHERE user_id = %s AND customer_name = %s AND phone_number = %s AND is_deleted = NULL""",
+#             (UUID, customerName, phoneNumber,))
+#         return dict(self.cur.fetchone())
+#     except db.DatabaseError as err:
+#         print(err)
+#         return False
 
 # 고객 정보 불러오기
-def getCustomerData(self, userData):
-    UUID = userData["UUID"]
-    customerID = userData["customerID"]
-
+def getCustomerData(self, customerID):
     try:
         self.cur.execute("""
             SELECT 
-                customer_name,
-                phone_number 
+                customer_data.customer_name,
+                customer_data.phone_number 
             FROM customer_data
-            WHERE customer_id = %s AND is_deleted = NULL""",
-            (UUID, customerID,))
-        return dict(self.cur.fetchone())
+            INNER JOIN customer
+            ON ( customer.customer_id = customer_data.customer_id) 
+            WHERE customer_data.customer_id = %s AND is_deleted IS NOT TRUE""",
+            (customerID,))
+        result = self.cur.fetchone()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
-        return None
+        return dict()
 
 # 새 고객 추가
-def addNewCustomer(self, userData):
-    UUID = userData["UUID"]
-    customerID = userData["customerID"]
-    customerName = userData["customerName"]
-    phoneNumber = userData["phoneNumber"]
+def addNewCustomer(self, UUID,customerData):
+    customerID = customerData["customerID"]
+    customerName = customerData["customerName"]
+    phoneNumber = customerData["phoneNumber"]
 
     try:
         self.cur.execute("""
@@ -95,8 +102,7 @@ def updateCustomerData(self, customerData):
         return False
 
 # customer table의 is_deleted 항목을 True로 변경
-def deleteCustomerData(self, customerData):
-    customerID = customerData["customerID"]
+def deleteCustomerData(self, customerID):
     try:
         self.cur.execute("""
         UPDATE

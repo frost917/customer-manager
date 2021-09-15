@@ -33,7 +33,7 @@ def getJobsDict(self, UUID):
 
 # 특정 손님의 작업 내역 불러오기
 # flaskGetSpecJobHistory
-def getJobsSpecipic(self, customerID):
+def getJobsSingleCustomer(self, customerID):
     try:
         self.cur.execute("""
     SELECT 
@@ -56,7 +56,7 @@ def getJobsSpecipic(self, customerID):
     ON ( job_finished.job_type = job_type.job_type )
     WHERE customer.is_deleted = False AND customer.customer_id = %s
     """,(customerID,))
-        return dict(self.cur.fetchall())
+        return self.cur.fetchall()
     except db.DatabaseError as err:
         print(err)
         return None
@@ -86,7 +86,7 @@ def getJobHistory(self, jobID):
     ON ( job_finished.job_type = job_type.job_type )
     WHERE customer.is_deleted = False AND job_history.job_id = uuid(%s)""",
             (jobID,))
-        return dict(self.cur.fetchone())
+        return self.cur.fetchone()
     except db.DatabaseError as err:
         print(err)
         return None
@@ -109,7 +109,7 @@ def addNewJob(self, jobData: dict):
             customer_id, job_id, visit_date, job_price, job_description
         ) AS ( VALUES ( 
 			uuid(%s), uuid(%s), 
-            to_timestamp(%s, 'YYYY-MM-DD HH:MI:SS'), CAST(%s AS INTEGER, %s) 
+            to_timestamp(%s, 'YYYY-MM-DD'), CAST(%s AS INTEGER), %s) 
         ), create_jobid AS (
             INSERT INTO job_list ( customer_id, job_id, visit_date )
             SELECT customer_id, job_id visit_date FROM data 

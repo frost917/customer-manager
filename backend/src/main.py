@@ -1,9 +1,6 @@
 import os
 
 from flask import Flask, Response, g
-
-from auth.flaskAuthVerify import tokenVerify
-
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
@@ -47,13 +44,8 @@ app.register_blueprint(visitHistory.flaskGetVisitHistory.manager)
 
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
-# @app.route("/install")
-# def install():
-#     db = postgresAttach.connect().cursor()
-#     s
 
 from auth.flaskAuthVerify import tokenVerify
-from dataProcess import dataParsing
 
 # 굳이 필요는 없지만 그냥 한번 만들어봄
 @app.route("/")

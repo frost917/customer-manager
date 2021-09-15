@@ -2,6 +2,8 @@
 
 from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
+from dataCheck import customerDataCheck
+
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
@@ -10,25 +12,23 @@ manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
 @dataParsing
+@customerDataCheck
 def getCustomerData(customerID):
-    UUID = g['UUID']
+    database = PostgresControll()
+    queryResult = database.getCustomerData(customerID=customerID)
 
-    userData = dict()
-    userData['UUID'] = UUID
-    userData['customerID'] = customerID
-
-    queryResult = PostgresControll().getCustomerData(userData=userData)
-
-    if queryResult is None:
+    if queryResult is False:
         from msg.jsonMsg import databaseIsGone
         result =  Response(databaseIsGone(), status=500)
 
-    customerData = dict()   
+    customerData = dict()
     customerData['customerName'] = queryResult.get('customerName')
     customerData['phoneNumber'] = queryResult.get('phoneNumber')
-    customerData['queryDate'] = datetime.now()
 
-    import json
-    result = Response(json.dumps(result), status=200)
+    temp = dict()
+    temp[customerID] = customerData
+
+    from json import dumps
+    result = Response(dumps(temp), status=200, mimetype="application/json")
 
     return result

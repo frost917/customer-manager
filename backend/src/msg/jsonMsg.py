@@ -60,7 +60,7 @@ def databaseIsGone():
 
     convDict['error'] = "DatabaseIsGone"
     convDict['msg'] = "database is dead!"
-    convDict['queryDate'] = datetime.now()
+    convDict['queryDate'] = datetime.now().strftime('%Y-%m-%d')
     convList.append(convDict)
 
     payload['failed'] = convList
