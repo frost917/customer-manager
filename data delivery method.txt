@@ -26,7 +26,6 @@
 {
     "customerData": [
         {
-            "customerID": "str",
             "customerName": "str",
             "phoneNumber": "str"
         }

@@ -47,13 +47,15 @@ def getCustomerData(self, customerID):
                 customer_data.phone_number 
             FROM customer_data
             INNER JOIN customer
-            ON ( customer.customer_id = customer_data.customer_id) 
+            ON ( customer.customer_id = customer_data.customer_id ) 
             WHERE customer_data.customer_id = %s AND is_deleted IS NOT TRUE""",
             (customerID,))
+
         result = self.cur.fetchone()
         if result is None:
             result = dict()
         return result
+
     except db.DatabaseError as err:
         print(err)
         return dict()

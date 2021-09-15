@@ -17,6 +17,7 @@ def getCustomerList():
     # UUID를 이용해 고객 명단 불러옴
     database = PostgresControll()
     customerDict = database.getCustomerDict(UUID=UUID)
+    print(customerDict)
 
     # DB 에러인 경우에만 None 반환하므로
     # None인 경우 DB에러로 간주
@@ -28,6 +29,7 @@ def getCustomerList():
 
     # 고객 정보 패키징
     for customer in customerDict:
+        print(customer)
         data = dict()
         data['customerID'] = customer.get('customer_id')
         data['customerName'] = customer.get('customer_name')
