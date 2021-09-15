@@ -10,7 +10,7 @@ def customerDataCheck(func):
     def wrapper(*args, **kwargs):
         # 손님 데이터가 전달되지 않을 경우 에러 반환
         customers = g.get('customers')
-        customerID = func.customerID
+        customerID = kwargs.get('customerID')
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
         failed = list()
@@ -58,7 +58,7 @@ def jobDataCheck(func):
 
         failed = list()
         jobs = g.get('jobs')
-        jobID = func.jobID
+        jobID = kwargs.get('jobID')
         # 작업 기록이 db에 있는지 확인
         # jobID를 인자로 받은 경우
         if jobID is not None:

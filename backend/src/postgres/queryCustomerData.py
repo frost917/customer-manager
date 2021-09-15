@@ -6,9 +6,14 @@
 def getCustomerDict(self, UUID):
     try:
         self.cur.execute("""
-            SELECT customer_id,customer_name,phone_number 
+            SELECT 
+                customer.customer_id,
+                customer_data.customer_name,
+                customer_data.phone_number 
             FROM customer
-            WHERE user_id = %s AND is_deleted = NULL""",
+            INNER JOIN customer_data
+            ON ( customer_data.customer_id = customer.customer_id)
+            WHERE customer.user_id = uuid(%s) AND is_deleted IS NOT TRUE""",
             (UUID,))
         return self.cur.fetchall()
     except db.DatabaseError as err:
@@ -38,15 +43,20 @@ def getCustomerData(self, customerID):
     try:
         self.cur.execute("""
             SELECT 
-                customer_name,
-                phone_number 
+                customer_data.customer_name,
+                customer_data.phone_number 
             FROM customer_data
-            WHERE customer_id = %s AND is_deleted = NULL""",
+            INNER JOIN customer
+            ON ( customer.customer_id = customer_data.customer_id) 
+            WHERE customer_data.customer_id = %s AND is_deleted IS NOT TRUE""",
             (customerID,))
-        return self.cur.fetchone()
+        result = self.cur.fetchone()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
-        return False
+        return dict()
 
 # 새 고객 추가
 def addNewCustomer(self, UUID,customerData):

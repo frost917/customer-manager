@@ -20,7 +20,7 @@ def addNewCustomer():
     customers = g.get('customers')
     for data in customers:
         customerData = dict()
-        customerData['customerID'] = uuid.uuid4()
+        customerData['customerID'] = str(uuid.uuid4())
         customerData['customerName'] = data.get('customerName')
         customerData['phoneNumber'] = data.get('phoneNumber')
 
@@ -32,7 +32,7 @@ def addNewCustomer():
 
     tasks = dict()
 
-    tasks['addDate'] = datetime.now()
+    tasks['addDate'] = datetime.now().strftime('%Y-%m-%d')
     if len(successedList) != 0:
         tasks['successed'] = successedList
 

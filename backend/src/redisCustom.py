@@ -11,8 +11,6 @@ class Singleton(type):
  
         return cls._instances[cls]
 
-# TODO 이 부분을 근본적으로 개선하던가 DB에 저장하는 식으로 개선해야함
-# TODO 현재 확인된 버그: userID, UUID 확인 불가, invalid username-password pair
 class redisToken(metaclass=Singleton):
     def __init__(self):
         from os import getenv
@@ -32,46 +30,46 @@ class redisToken(metaclass=Singleton):
         self.redisConn.close()
 
     def setRefreshToken(self, refreshToken, userID, UUID):
-        from datetime import datetime
-        from dateutil.relativedelta import relativedelta
-        try:
-            # JWT Refresh Token
-            self.redisConn.hset(refreshToken, "userID", userID)
-            self.redisConn.hset(refreshToken, "UUID", UUID)
-            self.redisConn.expire(refreshToken, datetime.today() + relativedelta(months=3)  )
-        except redis.RedisError as err:
-            print(err)
-            # 레디스 에러나면 False 반환하고 
-            # api 구현에서 500 반환
-            return False
+        from datetime import timedelta
+        # JWT Refresh Token
+        print('set userID')
+        self.redisConn.hset(refreshToken, "userID", userID)
+        print('set UUID')
+        self.redisConn.hset(refreshToken, "UUID", UUID)
+        print('set expire')
+        self.redisConn.expire(refreshToken, timedelta(hours=4320)  )
         
         # 인증 토큰은 api 응답에 보내야 해서 반환
         return True
     
     def delRefreshToken(self, refreshToken):
-        try:
-            for hlen in range(self.redisConn.hlen(refreshToken)):
-                self.redisConn.hdel(refreshToken, hlen)
-        except redis.RedisError as err:
-            print(err)
+        # try:
+        for hlen in range(self.redisConn.hlen(refreshToken)):
+            self.redisConn.hdel(refreshToken, hlen)
+        # except redis.RedisError as err:
+        #     print(err)
             # 레디스 에러나면 False 반환하고 
             # api 구현에서 500 반환
-            return False
+            # return False
 
     def getUserID(self, refreshToken):
-        try:
-            userID = self.redisConn.hget(refreshToken, "userID")
-        except redis.RedisError as err:
-            print(err)
-            return None
+        # try:
+        userID = self.redisConn.hget(refreshToken, "userID")
+        # except redis.RedisError as err:
+        #     print(err)
+        #     return None
 
+        if userID is not None:
+            userID = userID.decode('utf-8')
         return userID
 
     def getUUID(self, refreshToken):
-        try:
-            UUID = self.redisConn.hget(refreshToken, "UUID")
-        except redis.RedisError as err:
-            print(err)
-            return None
-            
+        # try:
+        UUID = self.redisConn.hget(refreshToken, "UUID")
+        # except redis.RedisError as err:
+        #     print(err)
+        #     return None
+
+        if UUID is not None:
+            UUID = UUID.decode('utf-8')
         return UUID

@@ -8,32 +8,36 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("updateCustomerData", __name__, url_prefix='/customers')
 
-@manager.route("/<customerID>", methods=['PUT'])
+@manager.route("", methods=['PUT'])
 @tokenVerify
 @dataParsing
 @customerDataCheck
-def updateCustomerData(customerID):
+def updateCustomerData():
     customers = g.get('customers')
-    data = customers.index(0)
-
-    customerData = dict()
-    customerData['customerID'] = customerID
-    customerData['customerName'] = data.get('customerName')
-    customerData['phoneNumber'] = data.get('phoneNumber')
-
     database = PostgresControll()
-    queryResult = database.updateCustomerData(customerData=customerData)
+    payload = dict()
 
-    if queryResult is False:
-        from msg.jsonMsg import databaseIsGone
-        result = Response(databaseIsGone(), status=500,mimetype="application/json")
-    else:
-        temp = dict()
-        temp['customerName'] = data.get('customerName')
-        temp['phoneNumber'] = data.get('phoneNumber')
+    for id, data in customers.items():
+        customerData = dict()
+        customerID = id
+        customerName = data.get('customerName')
+        phoneNumber = data.get('phoneNumber')
 
-        payload = dict()
-        payload[customerID] = temp
+        customerData['customerID'] = customerID
+        customerData['customerName'] = customerName
+        customerData['phoneNumber'] = phoneNumber
+
+        queryResult = database.updateCustomerData(customerData=customerData)
+
+        if queryResult is False:
+            from msg.jsonMsg import databaseIsGone
+            result = Response(databaseIsGone(), status=500,mimetype="application/json")
+        else:
+            temp = dict()
+            temp['customerName'] = customerName
+            temp['phoneNumber'] = phoneNumber
+
+            payload[customerID] = temp
 
         result = Response(dumps(payload), status=200, mimetype="application/json")
 

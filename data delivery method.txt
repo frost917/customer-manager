@@ -18,7 +18,7 @@ return many customers data
     ]
 }
 
-add customer data
+add customer result data
 {
     "addDate": datetime,
     "successed": [
@@ -36,8 +36,10 @@ update customer data
 {
     "customerData": [
         {
+            customerID: {
             "customerName": str,
             "phoneNumber": str
+            }
         }
     ]
 }

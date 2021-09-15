@@ -7,10 +7,9 @@ manager = Blueprint("refresh", __name__, url_prefix='/auth')
 def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
-    refreshResult = Response()
 
-    print("header accessToken is {}".format(accessToken))
-    print("header refreshToken is {}".format(refreshToken))
+    # print("header accessToken is {}".format(accessToken))
+    # print("header refreshToken is {}".format(refreshToken))
 
     if refreshToken is None:
         refreshResult = Response('Unauthorized', status=401)
@@ -22,8 +21,8 @@ def tokenRefresh():
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
 
-    print('isAccessTokenExpired is {}'.format(isAccessTokenExpired))
-    print('isRefreshTokenExpired is {}'.format(isRefreshTokenExpired))
+    # print('isAccessTokenExpired is {}'.format(isAccessTokenExpired))
+    # print('isRefreshTokenExpired is {}'.format(isRefreshTokenExpired))
 
     from msg.jsonMsg import tokenInvalid
 
@@ -45,11 +44,11 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
-        print("redis userID is {}".format(userID))
-        print("redis UUID is {}".format(UUID))
+        # print("redis userID is {}".format(userID))
+        # print("redis UUID is {}".format(UUID))
 
         accessToken = createAccessToken(userID=userID, UUID=UUID)
-        print("created accessToken is {}".format(accessToken))
+        # print("created accessToken is {}".format(accessToken))
 
     # refresh token만 파기된 경우
     elif isRefreshTokenExpired:
@@ -81,6 +80,6 @@ def tokenRefresh():
     token['refreshToken'] = refreshToken
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
-    refreshResult = json.dumps(token) 
+    refreshResult = Response(json.dumps(token), status=200, mimetype='application/json') 
 
     return refreshResult
