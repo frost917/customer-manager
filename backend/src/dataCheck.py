@@ -26,8 +26,7 @@ def customerDataCheck(func):
         # 손님 데이터가 db에 존재하는지 확인
         elif customers is not None:
             for customer in customers:
-                print(customer)
-                customerKeys = list(customer.keys())
+                customerID = customer.get('customerID')
                 result = database.getCustomerData(customerID=customerID)
                 if len(result) == 0:
                     failed.append(customerID)

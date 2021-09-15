@@ -15,7 +15,8 @@ def deleteCustomer():
     customers = g.get('customers')
     database = PostgresControll()
 
-    for customerID in customers.keys():
+    for customer in customers:
+        customerID = customer.get('customerID')
         result = database.deleteCustomerData(customerID=customerID)
 
         from json import dumps

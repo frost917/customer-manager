@@ -11,7 +11,7 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('addJobHistory', __name__, url_prefix='/jobs')
 
 # 단일 손님에 대한 단일 데이터만 책임짐
-@manager.route('/<customerID>/jobs', methods=['POST'])
+@manager.route('/<customerID>/job', methods=['POST'])
 @tokenVerify
 @dataParsing
 @customerDataCheck
