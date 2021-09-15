@@ -17,10 +17,11 @@ def updateCustomerData():
     database = PostgresControll()
     payload = dict()
 
-    for customerID, data in customers.items():
+    for customer in customers:
         customerData = dict()
-        customerName = data.get('customerName')
-        phoneNumber = data.get('phoneNumber')
+        customerID = customer.get('customerID')
+        customerName = customer.get('customerName')
+        phoneNumber = customer.get('phoneNumber')
 
         customerData['customerID'] = customerID
         customerData['customerName'] = customerName
@@ -32,11 +33,7 @@ def updateCustomerData():
             from msg.jsonMsg import databaseIsGone
             result = Response(databaseIsGone(), status=500,content_type="application/json; charset=UTF-8")
         else:
-            temp = dict()
-            temp['customerName'] = customerName
-            temp['phoneNumber'] = phoneNumber
-
-            payload[customerID] = temp
+            payload[customerID] = customerData
 
     result = Response(dumps(payload), status=200, content_type="application/json; charset=UTF-8")
 

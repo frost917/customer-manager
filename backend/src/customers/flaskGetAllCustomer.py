@@ -28,14 +28,12 @@ def getCustomerList():
 
     # 고객 정보 패키징
     for customer in customerDict:
-        customerSpec = dict()
-        temp = dict()
-        
-        temp['customerName'] = customer.get('customer_name')
-        temp['phoneNumber'] = customer.get('phone_number')
-        customerSpec[customer.get('customer_id')] = temp
+        data = dict()
+        data['customerID'] = customer.get('customer_id')
+        data['customerName'] = customer.get('customer_name')
+        data['phoneNumber'] = customer.get('phone_number')
 
-        customers.append(customerSpec)
+        customers.append(data)
 
     customerData = dict()
     customerData['customerData'] = customers

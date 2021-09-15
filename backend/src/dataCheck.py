@@ -11,8 +11,8 @@ def customerDataCheck(func):
         customers = g.get('customers')
         customerID = kwargs.get('customerID')
 
-        print(customers)
-        print(customerID)
+        # print(customers)
+        # print(customerID)
 
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()

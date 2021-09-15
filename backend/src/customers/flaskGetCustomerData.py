@@ -4,7 +4,7 @@ from auth.flaskAuthVerify import tokenVerify
 from dataProcess import dataParsing
 from dataCheck import customerDataCheck
 
-from flask import Blueprint, Response, g
+from flask import Blueprint, Response
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
@@ -22,11 +22,12 @@ def getCustomerData(customerID):
         result =  Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     customerData = dict()
+    customerData['customerID'] = queryResult.get('customerID')
     customerData['customerName'] = queryResult.get('customerName')
     customerData['phoneNumber'] = queryResult.get('phoneNumber')
 
-    temp = dict()
-    temp[customerID] = customerData
+    temp = list()
+    temp.append(customerData)
 
     from json import dumps
     result = Response(dumps(temp), status=200, content_type="application/json; charset=UTF-8")
