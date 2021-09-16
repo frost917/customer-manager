@@ -17,26 +17,33 @@ manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 def getJobHistory(jobID):
     database = PostgresControll()
 
-    job = database.getJobHistory(jobID=jobID)
+    jobData = database.getJobHistorySpec(jobID=jobID)
+    jobFinished = database.getJobFinishedArray(jobID=jobID)
+    customerData = database.getCustomerFromJobID(jobID=jobID)
 
-    if job is None:
-        from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
+    print(jobData)
+    print(jobFinished)
+    print(customerData)
 
     payload = dict()
-
+    array = list()
     temp = dict()
 
-    temp['jobFinished'] = list()
-    for jobType in job.get('job_finished'):
-        temp['jobFinished'].append(jobType)
-
-    temp['visitDate'] = job.get('visit_date')
-    temp['jobPrice'] = int(job.get('job_price'))
-    temp['jobDescription'] = job.get('job_description')
-
-    jobID = job.get('job_id')
-    payload[jobID] = temp
+    # 손님 데이터 패키징
+    temp['customerID'] = customerData.get('customer_id')
+    temp['customerName'] = customerData.get('customer_name')
+    temp['phoneNumber'] = customerData.get('phone_number')
+    array.append(temp)
+    
+    # 작업 데이터 패키징
+    temp = dict()
+    temp['jobID'] = jobID
+    jobs = list
+    for finished in jobFinished:
+        jobs.append(finished.get('type_id'))
+    temp['visitDate'] = jobData.get('visit_date').strftime('%Y-%m-%d')
+    temp['jobPrice'] = int(jobData.get('job_price'))
+    temp['jobDescription'] = jobData.get('job_description')
 
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
 

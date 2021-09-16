@@ -65,7 +65,7 @@ def jobDataCheck(func):
         # 작업 기록이 db에 있는지 확인
         # jobID를 인자로 받은 경우
         if jobID is not None:
-            result = database.getJobHistory(jobID=jobID)
+            result = database.getJobHistorySpec(jobID=jobID)
             if len(result) == 0:
                 failed.append(jobID)
 
@@ -73,7 +73,7 @@ def jobDataCheck(func):
         elif jobs is not None:
             for job in jobs:
                 jobID = job.get('jobID')
-                result = database.getJobHistory(jobID=jobID)
+                result = database.getJobHistorySpec(jobID=jobID)
                 if len(result) == 0:
                     failed.append(jobID)
 

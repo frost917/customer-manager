@@ -2,100 +2,71 @@
 
 # job_list table
 
-# 모든 작업 내역 불러오기
+# 모든 손님의 방문 기록 불러오기
 # flaskGetAllJobHistory
-def getJobsDict(self, UUID):
+def getAllJobs(self, UUID):
     try:
         self.cur.execute("""
     SELECT 
         customer.customer_id,
-        job_list.visit_date,
-        job_history.job_price,
-        job_history.job_description
+        job_list.job_id,
+        job_list.visit_date
     FROM customer
     INNER JOIN job_list
     ON ( job_list.customer_id = customer.customer_id )
-    INNER JOIN job_history
-    ON ( job_history.job_id = job_list.job_id )
-    INNER JOIN job_finished
-    ON ( job_finished.job_id = job_list.job_id )
-    INNER JOIN job_type
-    ON ( job_finished.type_id = job_type.type_id )
-    WHERE customer.is_deleted = False AND customer.user_id = uuid(%s)
+    WHERE customer.is_deleted IS NOT TRUE AND customer.user_id = uuid(%s)
     """, (UUID,))
-        return dict(self.cur.fetchall())
-    except:
-        return None
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
+    except db.DatabaseError as err:
+        print(err)
+        return dict()
 
-# 특정 손님의 작업 내역 불러오기
-# flaskGetSpecJobHistory
-def getJobsSingleCustomer(self, customerID):
+# 특정 ID의 작업 기록 불러오기
+def getJobHistorySpec(self, jobID):
     try:
         self.cur.execute("""
-    SELECT 
-        job_list.visit_date,
-        job_history.job_price,
-        job_history.job_description
-    FROM customer
-    INNER JOIN customer_data
-    ON ( customer_data.customer_id = customer.customer_id )
-    INNER JOIN job_list
-    ON ( job_list.customer_id = customer.customer_id )
-    INNER JOIN job_history
-    ON ( job_history.job_id = job_list.job_id )
-    WHERE customer.is_deleted = False AND customer.customer_id = %s
-    """,(customerID,))
-        jobData = self.cur.fetchone()
-
-        self.cur.execute("""
-        SELECT 
-            job_finished.type_id,
-            job_type.job_name
-        FROM job_finished
-        INNER JOIN job_type
-        ON ( job_type.type_id = job_finished.type_id )
-        WHERE job_finished.job_id = uuid(%s)
-        """, (jobData.get('job_id'),))
-
-        jobData['jobFinished'] = self.cur.fetchone()
-
-        return jobData
+    SELECT *
+    FROM job_history
+    WHERE job_id = uuid(%s)""",
+    (jobID,))
+        result = self.cur.fetchone()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None
 
-# 작업 기록 불러오기
-# flaskGetJobHistory
-def getJobHistory(self, jobID):
+# 특정 ID의 수행한 작업 내역 불러오기
+def getJobFinishedArray(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT * 
+    FROM job_finished 
+    INNER JOIN job_type 
+    ON (job_finished.type_id = job_type.type_id ) 
+    WHERE job_id = uuid(%s)""",
+    (jobID,))
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
+    except db.DatabaseError as err:
+        print(err)
+        return None
+
+# 작업 id로 고객 정보 반환
+def getCustomerFromJobID(self, jobID):
     try:
         self.cur.execute("""
     SELECT 
-        job_list.visit_date,
-        job_history.job_price,
-        job_history.job_description,
+        customer_id
     FROM job_list
-	INNER JOIN job_history
-	ON ( job_history.job_id = job_list.job_id )
-    INNER JOIN job_finished
-    ON ( job_finished.job_id = job_list.job_id )
-    WHERE customer.is_deleted IS NOT TRUE AND job_list.job_id = uuid(%s)""",
-            (jobID,))
-
-        jobData = self.cur.fetchone()
-
-        self.cur.execute("""
-        SELECT 
-            job_finished.type_id,
-            job_type.job_name
-        FROM job_finished
-        INNER JOIN job_type
-        ON ( job_type.type_id = job_finished.type_id )
-        WHERE job_finished.job_id = uuid(%s)
-        """, (jobID,))
-
-        jobData['jobFinished'] = self.cur.fetchone()
-
-        return jobData
+    WHERE job_id = uuid(%s)""", (jobID,))
+        return self.cur.fetchone()
     except db.DatabaseError as err:
         print(err)
         return None
