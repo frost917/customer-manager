@@ -2,28 +2,48 @@
 
 # job_list table
 
-# 모든 작업 내역 불러오기
+# 모든 손님의 방문 기록 불러오기
 # flaskGetAllJobHistory
-def getJobsDict(self, UUID):
+def getJobLists(self, UUID):
     try:
         self.cur.execute("""
     SELECT 
         customer.customer_id,
-        job_list.visit_date,
-        job_history.job_price,
-        job_history.job_description
+        job_list.job_id,
+        job_list.visit_date
     FROM customer
     INNER JOIN job_list
     ON ( job_list.customer_id = customer.customer_id )
-    INNER JOIN job_history
-    ON ( job_history.job_id = job_list.job_id )
-    INNER JOIN job_finished
-    ON ( job_finished.job_id = job_list.job_id )
-    INNER JOIN job_type
-    ON ( job_finished.type_id = job_type.type_id )
     WHERE customer.is_deleted = False AND customer.user_id = uuid(%s)
     """, (UUID,))
         return dict(self.cur.fetchall())
+    except:
+        return None
+
+# 특정 ID의 작업 기록 불러오기
+def getJobHistorySpec(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT
+        *
+    FROM job_history
+    WHERE job_id = uuid(%s))""",
+    (jobID,))
+        return self.cur.fetchone()
+    except:
+        return None
+
+# 특정 ID의 수행한 작업 내역 불러오기
+def getJobFinishedArray(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT * 
+    FROM job_finished 
+    INNER JOIN job_type 
+    ON (job_finished.type_id = job_type.type_id ) 
+    WHERE job_id = uuid(%s);""",
+    (jobID,))
+        return self.cur.fetchall()
     except:
         return None
 
