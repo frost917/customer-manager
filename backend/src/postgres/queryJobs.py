@@ -16,7 +16,10 @@ def getAllJobs(self, UUID):
     ON ( job_list.customer_id = customer.customer_id )
     WHERE customer.is_deleted IS NOT TRUE AND customer.user_id = uuid(%s)
     """, (UUID,))
-        return self.cur.fetchall()
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return dict()
@@ -29,7 +32,10 @@ def getJobHistorySpec(self, jobID):
     FROM job_history
     WHERE job_id = uuid(%s)""",
     (jobID,))
-        return self.cur.fetchone()
+        result = self.cur.fetchone()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None
@@ -44,12 +50,26 @@ def getJobFinishedArray(self, jobID):
     ON (job_finished.type_id = job_type.type_id ) 
     WHERE job_id = uuid(%s)""",
     (jobID,))
-        return self.cur.fetchall()
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None
 
-
+# 작업 id로 고객 정보 반환
+def getCustomerFromJobID(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT 
+        customer_id
+    FROM job_list
+    WHERE job_id = uuid(%s)""", (jobID,))
+        return self.cur.fetchone()
+    except db.DatabaseError as err:
+        print(err)
+        return None
 
 # 작업 기록 추가
 # flaskAddJobHistory

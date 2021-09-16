@@ -45,10 +45,12 @@ def getAllJobHistory():
     for job, history  in zip(jobList, jobHistories):
         temp = dict()
 
-        temp['jobID'] = job.get('job_id')
+        jobID = job.get('job_id')
+        temp['jobID'] = jobID
         temp['jobFinished'] = list()
+
         for finishedList in finished:
-            if finishedList.get('job_id') == job.get('job_id'):
+            if finishedList.get('job_id') == jobID:
                 temp['jobFinished'].append(finishedList.get('type_id'))
 
         visitDate = job.get('visit_date').strftime('%Y-%m-%d')
