@@ -11,13 +11,10 @@ manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
-@dataParsing
 @customerDataCheck
 def getCustomerData(customerID):
     database = PostgresControll()
     queryResult = database.getCustomerData(customerID=customerID)
-
-    print(queryResult)
 
     if queryResult is False:
         from msg.jsonMsg import databaseIsGone

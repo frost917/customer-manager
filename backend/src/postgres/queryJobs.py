@@ -12,11 +12,13 @@ def getJobsDict(self, UUID):
         customer_data.customer_name,
         customer_data.phone_number,
         job_list.visit_date,
-        job_finished.job_type,
+        job_finished.type_id,
         job_type.job_name,
         job_history.job_price,
         job_history.job_description
     FROM customer
+    INNER JOIN customer_data
+    ON ( customer_data.customer_id = customer.customer_id )
     INNER JOIN job_list
     ON ( job_list.customer_id = customer.customer_id )
     INNER JOIN job_history
@@ -24,7 +26,7 @@ def getJobsDict(self, UUID):
     INNER JOIN job_finished
     ON ( job_finished.job_id = job_list.job_id )
     INNER JOIN job_type
-    ON ( job_finished.job_type = job_type.job_type )
+    ON ( job_finished.type_id = job_type.type_id )
     WHERE customer.is_deleted = False AND customer.user_id = uuid(%s)
     """, (UUID,))
         return dict(self.cur.fetchall())
@@ -41,11 +43,13 @@ def getJobsSingleCustomer(self, customerID):
         customer_data.customer_name,
         customer_data.phone_number,
         job_list.visit_date,
-        job_finished.job_type,
+        job_finished.type_id,
         job_type.job_name,
         job_history.job_price,
         job_history.job_description
     FROM customer
+    INNER JOIN customer_data
+    ON ( customer_data.customer_id = customer.customer_id )
     INNER JOIN job_list
     ON ( job_list.customer_id = customer.customer_id )
     INNER JOIN job_history
@@ -53,7 +57,7 @@ def getJobsSingleCustomer(self, customerID):
     INNER JOIN job_finished
     ON ( job_finished.job_id = job_list.job_id )
     INNER JOIN job_type
-    ON ( job_finished.job_type = job_type.job_type )
+    ON ( job_finished.type_id = job_type.type_id )
     WHERE customer.is_deleted = False AND customer.customer_id = %s
     """,(customerID,))
         return self.cur.fetchall()
@@ -71,7 +75,7 @@ def getJobHistory(self, jobID):
         customer_data.customer_name,
         customer_data.phone_number,
         job_list.visit_date,
-        job_finished.job_type,
+        job_finished.type_id,
         job_type.job_name,
         job_history.job_price,
         job_history.job_description
@@ -83,7 +87,7 @@ def getJobHistory(self, jobID):
     INNER JOIN job_finished
     ON ( job_finished.job_id = job_history.job_id )
     INNER JOIN job_type
-    ON ( job_finished.job_type = job_type.job_type )
+    ON ( job_finished.type_id = job_type.type_id )
     WHERE customer.is_deleted = False AND job_history.job_id = uuid(%s)""",
             (jobID,))
         return self.cur.fetchone()
@@ -121,7 +125,7 @@ def addNewJob(self, jobData: dict):
         for jobType in jobFinished:
             self.cur.execute("""
             INSERT INTO job_finished
-            ( job_id, job_type )
+            ( job_id, type_id )
             VALUE (
                 uuid(%s), CAST( %s AS INTEGER )
             )""", (jobID, jobType,))
