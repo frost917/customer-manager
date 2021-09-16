@@ -4,8 +4,6 @@ from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 from auth.flaskAuthVerify import tokenVerify
-from dataProcess import dataParsing
-from datetime import datetime
 
 manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
@@ -20,6 +18,10 @@ def getAllJobHistory():
     if jobList is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
+
+    elif len(jobList) == 0:
+        from msg.jsonMsg import jobNotFound
+        return Response(jobNotFound(), status=404, content_type="application/json; charset=UTF-8")
 
     jobHistories = list()
     jobFinishs = list()

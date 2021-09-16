@@ -9,22 +9,13 @@ def customerDataCheck(func):
     def wrapper(*args, **kwargs):
         # 손님 데이터가 전달되지 않을 경우 에러 반환
         customers = g.get('customers')
-        customerID = kwargs.get('customerID')
-
-        # print(customers)
-        # print(customerID)
 
         from postgres.databaseConnection import PostgresControll
         database = PostgresControll()
         failed = list()
 
-        if customerID is not None:
-            result = database.getCustomerData(customerID=customerID)
-            if len(result) == 0:
-                failed.append(customerID)
-
         # 손님 데이터가 db에 존재하는지 확인
-        elif customers is not None:
+        if customers is not None:
             for customer in customers:
                 customerID = customer.get('customerID')
                 result = database.getCustomerData(customerID=customerID)
@@ -61,23 +52,13 @@ def jobDataCheck(func):
 
         failed = list()
         jobs = g.get('jobs')
-        jobID = kwargs.get('jobID')
-        # 작업 기록이 db에 있는지 확인
-        # jobID를 인자로 받은 경우
-        if jobID is not None:
-            result = database.getJobHistorySpec(jobID=jobID)
-            if len(result) == 0:
-                failed.append(jobID)
-
-        # 작업 데이터를 JSON으로 받은 경우
-        elif jobs is not None:
+        if jobs is not None:
             for job in jobs:
                 jobID = job.get('jobID')
                 result = database.getJobHistorySpec(jobID=jobID)
                 if len(result) == 0:
                     failed.append(jobID)
 
-        # 아무것도 아닌 경우
         else:     
             from msg.jsonMsg import dataMissingJson
             return Response(dataMissingJson(), status=400, mimetype='application/json')

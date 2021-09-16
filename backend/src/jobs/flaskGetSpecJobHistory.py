@@ -15,10 +15,14 @@ manager = Blueprint('getSpecJobHistory', __name__, url_prefix='/jobs')
 def getJobHistory(customerID):
     database = PostgresControll()
     jobData = database.getJobsSingleCustomer(customerID=customerID)
-    
+
     if jobData is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
+
+    elif len(jobData) == 0:
+        from msg.jsonMsg import jobNotFound
+        return Response(jobNotFound(), status=404, content_type="application/json; charset=UTF-8")
 
     payload = dict()
     jobs = list()

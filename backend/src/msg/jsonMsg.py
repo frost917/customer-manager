@@ -27,6 +27,30 @@ def dataMissingJson():
 
     return str(json.dumps(payload))
 
+def customerNotFound(customerID):
+    convDict = dict()
+    convDict['error'] = 'CustomerNotFound'
+    convDict['msg'] = 'customer is not found!'
+    convDict['customerID'] = customerID
+    
+    convList = list()
+    convList.append(convDict)
+
+    payload = dict()
+    payload['failed'] = convList
+
+def jobNotFound(jobID):
+    convDict = dict()
+    convDict['error'] = 'jobNotFound'
+    convDict['msg'] = 'job is not found!'
+    convDict['jobID'] = jobID
+    
+    convList = list()
+    convList.append(convDict)
+
+    payload = dict()
+    payload['failed'] = convList
+
 def dataNotJSON():
     payload = dict()
     convDict = dict()

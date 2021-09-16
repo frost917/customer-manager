@@ -58,6 +58,19 @@ def getJobFinishedArray(self, jobID):
         print(err)
         return None
 
+# 작업 id로 작업 리스트 반환
+def getJobListFromJobID(self, jobID):
+    try:
+        self.cur.execute("""
+    SELECT 
+        *
+    FROM job_list
+    WHERE job_id = uuid(%s)""", (jobID,))
+        return self.cur.fetchone()
+    except db.DatabaseError as err:
+        print(err)
+        return None
+
 # 작업 id로 고객 정보 반환
 def getCustomerFromJobID(self, jobID):
     try:
