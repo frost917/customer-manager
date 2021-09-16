@@ -33,7 +33,7 @@ class PostgresControll(metaclass=Singleton):
                 port=port, 
                 user=user, 
                 password=passwd)
-            self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         except psycopg2.DatabaseError as err:
             print(err)
 
@@ -48,8 +48,7 @@ class PostgresControll(metaclass=Singleton):
                                             getCustomerData, getCustomerDict,
                                             updateCustomerData)
     # job_list table
-    from postgres.queryJobs import (addNewJob, getJobHistory, getJobsDict,
-                                    getJobsSingleCustomer)
+    from postgres.queryJobs import (addNewJob, getJobHistory, getAllJobs,getJobHistorySpec, getJobFinishedArray)
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
     # visit_history table

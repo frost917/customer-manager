@@ -23,7 +23,6 @@ def addJobHistory(customerID):
     convList = list()
 
     for job in jobs:
-
         jobData = dict()
         jobData['customerID'] = customerID
         jobData['jobID'] = str(uuid.uuid4())
