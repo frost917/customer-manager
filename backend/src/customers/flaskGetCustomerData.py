@@ -11,7 +11,6 @@ manager = Blueprint('getCustomerData', __name__, url_prefix='/customers')
 
 @manager.route('/<customerID>', methods=['GET'])
 @tokenVerify
-@customerDataCheck
 def getCustomerData(customerID):
     database = PostgresControll()
     queryResult = database.getCustomerData(customerID=customerID)

@@ -8,7 +8,7 @@ from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("updateCustomerData", __name__, url_prefix='/customers')
 
-@manager.route("", methods=['PUT'])
+@manager.route('', methods=['PUT'])
 @tokenVerify
 @dataParsing
 @customerDataCheck

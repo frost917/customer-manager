@@ -5,7 +5,6 @@ from flask import Blueprint, Response
 from postgres.databaseConnection import PostgresControll
 
 from auth.flaskAuthVerify import tokenVerify
-from dataProcess import dataParsing
 
 manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 
