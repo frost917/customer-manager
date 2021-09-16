@@ -10,7 +10,6 @@ manager = Blueprint('getAllJobHistory', __name__, url_prefix='/jobs')
 
 @manager.route('', methods=['GET'])
 @tokenVerify
-@dataParsing
 def getAllJobHistory():
     database = PostgresControll()
 
@@ -22,10 +21,12 @@ def getAllJobHistory():
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     payload = dict()
+    jobs = list()
 
     for job in jobData:
         temp = dict()
 
+        temp['jobID'] = job.get('job_id')
         temp['jobFinished'] = list()
         for jobType in job.get('job_finished'):
             temp['jobFinished'].append(jobType)
@@ -34,7 +35,8 @@ def getAllJobHistory():
         temp['jobPrice'] = int(job.get('job_price'))
         temp['jobDescription'] = job.get('job_description')
 
-        jobID = job.get('job_id')
-        payload[jobID] = temp
+        jobs.append(temp)
+
+    payload['jobData'] = jobs
 
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
