@@ -77,7 +77,6 @@
             "jobFinished": [
                 "int",
             ],
-            "visitDate": "str",
             "jobPrice": "int",
             "jobDescription": "str"
         }

@@ -19,33 +19,27 @@ def addJobHistory(customerID):
     # 받아오는 데이터: 손님 id, 작업 비용, 작업 기록, 작업 목록
     # 생성 후 반환하는 데이터: 작업 id, 방문 날짜, 작업 id
     jobs = g.get('jobs')
-
-    jobData = dict()
-    jobData['customerID'] = customerID
-    jobData['jobID'] = str(uuid.uuid4())
-    jobData['jobFinished'] = jobs.get('jobFinished')
-    jobData['visitDate'] = datetime.now().strftime('%Y-%m-%d')
-    jobData['jobPrice'] = jobs.get('jobPrice')
-    jobData['jobDescription'] = jobs.get('jobDescription')
-
     database = PostgresControll()
-    result = database.addNewJob(jobData=jobData)
-
-    if result is False:
-        from msg.jsonMsg import databaseIsGone
-        return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
-
-    temp = dict()
-    temp['jobFinished'] = jobData['jobFinished']
-    temp['jobDate'] = jobData['visitDate']
-    temp['jobPrice'] = jobData['jobPrice']
-    temp['jobDescription'] = jobData['jobDescription']
-
     convList = list()
-    convList.append(temp)
 
-    jobID = jobData['jobID']
+    for job in jobs:
+
+        jobData = dict()
+        jobData['customerID'] = customerID
+        jobData['jobID'] = str(uuid.uuid4())
+        jobData['jobFinished'] = job.get('jobFinished')
+        jobData['visitDate'] = datetime.now().strftime('%Y-%m-%d')
+        jobData['jobPrice'] = job.get('jobPrice')
+        jobData['jobDescription'] = job.get('jobDescription')
+        result = database.addNewJob(jobData=jobData)
+
+        if result is False:
+            from msg.jsonMsg import databaseIsGone
+            return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
+
+        convList.append(jobData)
+
     returnData = dict()
-    returnData[jobID] = convList
+    returnData['jobData'] = convList
 
-    return Response(json.dumps(temp), status=200, content_type="application/json; charset=UTF-8")
+    return Response(json.dumps(returnData), status=200, content_type="application/json; charset=UTF-8")

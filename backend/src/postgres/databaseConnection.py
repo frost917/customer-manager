@@ -33,7 +33,6 @@ class PostgresControll(metaclass=Singleton):
                 port=port, 
                 user=user, 
                 password=passwd)
-            self.dbconn.autocommit = True
             self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         except psycopg2.DatabaseError as err:
             print(err)
