@@ -4,7 +4,7 @@ from flask.helpers import make_response
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 
 #TODO 여기 코드 정리할 것
-@manager.route("", methods=['POST'])
+@manager.route('', methods=['POST'])
 def login():
     if request.is_json == False:
         from msg.jsonMsg import dataNotJSON
@@ -72,9 +72,7 @@ def login():
             loginReturn = Response(status=500)
 
         import json
-        loginSuccessed = json.dumps(payload)
-
-        loginReturn = make_response(Response(response=loginSuccessed, status=200, content_type="application/json; charset=UTF-8"))
+        loginReturn = Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
 
     else:
         from msg.jsonMsg import authFailedJson

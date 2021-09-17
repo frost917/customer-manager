@@ -22,21 +22,13 @@
               </tr>
             </thead>
             <tbody>
-                {% for customer in customerData %}
-                <datalist id="customerName">
-                    <option value="{{customer.get('customerName')}}"></option>
-                </datalist>
-                <datalist id="phoneNumber">
-                    <option value="{{customer.get('phoneNumber')}}"></option>
-                </datalist>
-                {% endfor %}
               <tr>
                 <td class="tg-nrix">이름</td>
                 <td class="tg-nrix">전화번호</td>
               </tr>
               <tr>
-                <td class="tg-nrix" style="padding: 0; margin: 0;"><input list="customerName" placeholder="이름" value="{{customerName}}" style="min-height: 30px;"></td>
-                <td class="tg-nrix" style="padding: 0; margin: 0;"><input list="phoneNumber" placeholder="전화번호" value="{{phoneNumber}}" style="min-height: 30px;"></td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" placeholder="이름" value="{{customerName}}" style="min-height: 30px;"></td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" placeholder="전화번호" value="{{phoneNumber}}" style="min-height: 30px;"></td>
               </tr>
               <tr>
                 <td class="tg-y0n7" colspan="2" style="font-weight:bold; font-size: 15px;">작업 기록</td>
