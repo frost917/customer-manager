@@ -12,6 +12,12 @@ manager = Blueprint('getSpecJobHistory', __name__, url_prefix='/jobs')
 @tokenVerify
 def getJobHistory(customerID):
     database = PostgresControll()
+
+    customer = database.getCustomerData(customerID=customerID)
+    if len(customer) == 0:
+        from msg.jsonMsg import customerNotFound
+        return Response(customerNotFound(), status=404, content_type="application/json; charset=UTF-8")
+
     jobData = database.getJobsFromCustomerID(customerID=customerID)
 
     if jobData is None:

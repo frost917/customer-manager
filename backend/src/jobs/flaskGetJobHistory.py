@@ -15,8 +15,9 @@ def getJobHistory(jobID):
     database = PostgresControll()
 
     jobList = database.getJobListFromJobID(jobID=jobID)
-    jobData = database.getJobHistorySpec(jobID=jobID)
+    jobHistory = database.getJobHistorySpec(jobID=jobID)
     jobFinished = database.getJobFinishedArray(jobID=jobID)
+
     customerData = database.getCustomerData(customerID=jobList.get('customer_id'))
 
     if len(jobList) == 0:
@@ -26,8 +27,6 @@ def getJobHistory(jobID):
     payload = dict()
     array = list()
     temp = dict()
-
-    print(customerData)
 
     # 손님 데이터 패키징
     temp['customerID'] = jobList.get('customer_id')
@@ -41,11 +40,14 @@ def getJobHistory(jobID):
     temp = dict()
     temp['jobID'] = jobID
 
-    print(jobFinished)
-    temp['jobFinished'] = jobFinished
+    array = dict()
+    for finished in jobFinished:
+        array[int(finished.get('type_id'))] = finished.get('job_name')
+    temp['jobFinished'] = array
+
     temp['visitDate'] = jobList.get('visit_date').strftime('%Y-%m-%d')
-    temp['jobPrice'] = int(jobData.get('job_price'))
-    temp['jobDescription'] = jobData.get('job_description')
+    temp['jobPrice'] = int(jobHistory.get('job_price'))
+    temp['jobDescription'] = jobHistory.get('job_description')
 
     payload['jobData'] = temp
 
