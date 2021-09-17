@@ -3,14 +3,14 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 
-front = Blueprint('customerSelect', __name__, url_prefix='/customers')
+front = Blueprint('customerJobData', __name__, url_prefix='/customers')
 
-@front.route('', methods=['GET'])
-def customerSelect():
+@front.route('/<customerID>', methods=['GET'])
+def customerJobData(customerID):
     accessToken = request.cookies.get('accessToken')
 
     url = 'http://localhost:6000'
-    customerUrl = url + '/customers'
+    customerUrl = url + '/jobs/customer/' + customerID
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
     req = requests.get(url=customerUrl, headers=headers)
 
@@ -19,5 +19,6 @@ def customerSelect():
 
     data = json.loads(req.text)
     customerData = data.get('customerData')
+    jobData = data.get('jobData')
 
-    return render_template('select-customer.html', customerData)
+    return render_template('customer-data.html', customerData, jobData)

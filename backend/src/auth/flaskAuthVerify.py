@@ -22,7 +22,8 @@ def tokenVerify(func):
             g.userID = userID
             g.UUID = UUID
         elif userID is Response or UUID is Response:
-            return redirect('/auth/refresh')
+            from msg.jsonMsg import tokenInvalid
+            return Response(tokenInvalid, status=401, content_type='application/json; charset=UTF-8')
         elif userID is None or UUID is None:
             return Response(status=401)
 

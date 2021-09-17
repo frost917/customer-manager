@@ -37,7 +37,6 @@ def login():
             </script>"""
 
         loginResult = make_response("""<script>
-        alert("로그인 성공");
         location.href="/"
         </script>""")
         loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
