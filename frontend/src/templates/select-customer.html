@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-        <meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, minimum-scale=1.0">
+        <meta charset='utf-8'>
         <title>손님 선택</title>
     </head>
     <body>
@@ -11,10 +11,9 @@
               font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
             .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
               font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
+            .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle; width: 100%;}
             .tg .tg-nrix{text-align:center;vertical-align:middle}
-            @media (min-width: 700px) { .tg {width: 100% !important}.tg col {width: 100% !important}}
-            @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+            </style>
             <div class="tg-wrap"><table class="tg">
             <thead>
               <tr>
@@ -28,7 +27,7 @@
               </tr>
               {% for customer in customerData %}
               <tr>
-                <td class="tg-nrix">
+                <td class="tg-nrix" style="padding: 7px;">
                   <a href="/customers/{{ customer.get('customerID') }}">
                         {{ customer.get('customerName') }}
                     </a>

@@ -21,6 +21,12 @@ from customers import getCustomerJobs
 app.register_blueprint(customerSelect.front)
 app.register_blueprint(getCustomerJobs.front)
 
+# 작업 관련 페이지 블루프린트
+
+from jobs import addNewJob
+
+app.register_blueprint(addNewJob.front)
+
 @app.route('/')
 def index():
     return render_template('index.html')
