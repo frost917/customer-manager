@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-        <meta charset='utf-8'>
-        <title>{{customer.get('customerName')}} - 방문일 확인</title>
+        <meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, minimum-scale=1.0">
+        <title>{{ customerData.get('customerName') }} - 방문일 확인</title>
     </head>
     <body>
       <style type="text/css">
@@ -24,18 +24,21 @@
         <tbody>
           <tr>
             <!-- 손님 이름 -->
-            <td class="tg-9wq8">{{customer.get('customerName')}}</td>
+            <td class="tg-9wq8">{{ customerData.get('customerName') }}</td>
             <!-- 전화번호 -->
-            <td class="tg-9wq8">{{customer.get('phoneNumber')}}</td>
+            <td class="tg-9wq8">{{ customerData.get('phoneNumber') }}</td>
+          </tr>
+          <tr>
+            <th class="tg-uzvj" colspan="2">작업 기록</th>
           </tr>
           {% for job in jobs %}
           <tr>
             <td class="tg-9wq8">방문일</td>
             <td class="tg-9wq8">
               <!-- 작업기록 -->
-              <a href="/jobs/{{job.get('jobID')}}">
+              <a href="/jobs/{{ job.get('jobID') }}">
                 {% for finished in job.get('jobFinished').values() %}
-                {{finished}}
+                {{ finished }}
                 {% endfor %}
               </a>
             </td>
@@ -43,8 +46,8 @@
           <tr>
             <td class="tg-0lax" colspan="2">
               <!-- 클릭시 해당 작업으로 이동 -->
-              <a href="/jobs/{{job.get('jobID')}}">
-                {{job.get('visitDate')}}
+              <a href="/jobs/{{ job.get('jobID') }}">
+                {{ job.get('visitDate') }}
               </a>
             </td>
           </tr>

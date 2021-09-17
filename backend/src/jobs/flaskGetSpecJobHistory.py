@@ -13,10 +13,12 @@ manager = Blueprint('getSpecJobHistory', __name__, url_prefix='/jobs')
 def getJobHistory(customerID):
     database = PostgresControll()
 
-    customer = database.getCustomerData(customerID=customerID)
-    if len(customer) == 0:
+    customerData = database.getCustomerData(customerID=customerID)
+    if len(customerData) == 0:
         from msg.jsonMsg import customerNotFound
         return Response(customerNotFound(), status=404, content_type="application/json; charset=UTF-8")
+
+    print(customerData)
 
     jobData = database.getJobsFromCustomerID(customerID=customerID)
 
@@ -51,7 +53,12 @@ def getJobHistory(customerID):
 
         jobs.append(temp)
 
-    payload['customerID'] = customerID
+    temp = dict()
+    temp['customerID'] = customerID
+    temp['customerName'] = customerData.get('customer_name')
+    temp['phoneNumber'] = customerData.get('phone_number')
+
+    payload['customerData'] = temp
     payload['jobData'] = jobs
 
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")

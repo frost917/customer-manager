@@ -3,7 +3,7 @@ import json
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')
 
-@manager.route("/refresh")
+@manager.route("/refresh", methods=['GET', 'POST'])
 def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")

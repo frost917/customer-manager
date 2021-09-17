@@ -13,6 +13,14 @@ from login import loginPage
 app.register_blueprint(login.front)
 app.register_blueprint(loginPage.front)
 
+# 손님 페이지 블루프린트
+
+from customers import customerSelect
+from customers import getCustomerJobs
+
+app.register_blueprint(customerSelect.front)
+app.register_blueprint(getCustomerJobs.front)
+
 @app.route('/')
 def index():
     return render_template('index.html')

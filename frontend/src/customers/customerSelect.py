@@ -1,4 +1,4 @@
-﻿from flask import Flask, Response, render_template, g, request, Blueprint
+﻿from flask import url_for, render_template, request, Blueprint
 import json, requests
 
 from statusCodeParse import parseStatusCode
@@ -20,4 +20,4 @@ def customerSelect():
     data = json.loads(req.text)
     customerData = data.get('customerData')
 
-    return render_template('select-customer.html', customerData)
+    return render_template('select-customer.html', customerData=customerData)

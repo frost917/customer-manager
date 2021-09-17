@@ -1,4 +1,4 @@
-﻿from flask import Flask, Response, render_template, g, request, Blueprint
+﻿from flask import url_for, render_template, request, Blueprint
 import json, requests
 
 from statusCodeParse import parseStatusCode
@@ -21,4 +21,4 @@ def customerJobData(customerID):
     customerData = data.get('customerData')
     jobData = data.get('jobData')
 
-    return render_template('customer-data.html', customerData, jobData)
+    return render_template('customer-data.html', customerData=customerData, jobData=jobData)
