@@ -14,9 +14,7 @@ def loginPage():
     refreshToken = request.cookies.get('refreshToken')
 
     if accessToken is not None and refreshToken is not None:
-        return render_template('''
-        <script>alert("이미 로그인 되어있습니다.");</script>
-        ''')
+        return """<script>alert("이미 로그인 되어있습니다.");</script>"""
         
     # refreshToken이 있으면 accessToken만 따로 생성
     elif accessToken is None and refreshToken is not None:
@@ -25,12 +23,12 @@ def loginPage():
         req = requests.post(url=url, headers=headers)
 
         if 500 <= req.status_code and req.status_code <= 599:
-            return render_template('''<script>alert("서버 에러");</script>''')
+            return """<script>alert("서버 에러");</script>"""
         
         loginData = json.loads(req.text)
         accessToken = loginData.get('accessToken')
 
-        loginResult = make_response(render_template('''<script>alert("로그인 성공");</script>'''))
+        loginResult = make_response("""<script>alert("로그인 성공");</script>""")
         loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
 
         return loginResult

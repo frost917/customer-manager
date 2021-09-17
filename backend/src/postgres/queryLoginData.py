@@ -34,7 +34,7 @@ def getUserPasswd(self, userID):
             FROM login
             WHERE username = %s""",
             (userID,))
-        return dict(self.cur.fetchone())
+        return self.cur.fetchone()
     except db.DatabaseError as err:
         print(err)
         return None

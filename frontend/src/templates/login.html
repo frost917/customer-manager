@@ -5,9 +5,9 @@
         <title>로그인</title>
     </head>
     <body>
-        <form>
-            <input type="text" id="userID" placeholder="아이디"><br>
-            <input type="password" id="passwd" placeholder="비밀번호"><br>
+        <form action="/login" method="POST">
+            <input type="text" name="userID" placeholder="아이디"><br>
+            <input type="password" name="passwd" placeholder="비밀번호"><br>
             <input type="submit" value="로그인">
         </form>
     </body>

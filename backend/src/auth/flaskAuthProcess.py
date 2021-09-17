@@ -16,8 +16,8 @@ def login():
         from msg.jsonMsg import dataMissingJson
         return Response(dataMissingJson(), status=400, content_type="application/json; charset=UTF-8")
 
-    userID = str(data['userID'])
-    passwd = str(data['passwd'])
+    userID = data['userID']
+    passwd = data['passwd']
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or passwd is None:
@@ -48,8 +48,8 @@ def login():
     passComp = bcrypt.checkpw(password=passwd.encode('utf-8'), hashed_password=originPassword.encode('utf-8'))
     if passComp:
         userData = dict()
-        userData["userID"] = str(userID)
-        userData["passwd"] = str(originPassword)
+        userData["userID"] = userID
+        userData["passwd"] = originPassword
 
         UUID = database.getUUID(userData=userData).get('user_id')
 
