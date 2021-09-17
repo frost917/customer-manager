@@ -30,9 +30,7 @@ def getJobHistory(customerID):
         temp = dict()
 
         temp['jobID'] = job.get('job_id')
-        temp['jobFinished'] = list()
-        for jobType in job.get('job_finished'):
-            temp['jobFinished'].append(jobType)
+        temp['jobFinished'] = jobFinished
 
         temp['visitDate'] = job.get('visit_date')
         temp['jobPrice'] = int(job.get('job_price'))

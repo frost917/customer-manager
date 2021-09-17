@@ -9,7 +9,7 @@ from auth.flaskAuthVerify import tokenVerify
 manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 
 # 특정 작업 id의 데이터를 불러옴
-@manager.route('/job/<jobID>', methods=['GET'])
+@manager.route('/<jobID>', methods=['GET'])
 @tokenVerify
 def getJobHistory(jobID):
     database = PostgresControll()
@@ -42,9 +42,7 @@ def getJobHistory(jobID):
     temp['jobID'] = jobID
 
     print(jobFinished)
-    jobArray = list()
-    for finished in jobFinished:
-        jobArray.append(finished.get('type_id'))
+    temp['jobFinished'] = jobFinished
     temp['visitDate'] = jobList.get('visit_date').strftime('%Y-%m-%d')
     temp['jobPrice'] = int(jobData.get('job_price'))
     temp['jobDescription'] = jobData.get('job_description')

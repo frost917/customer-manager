@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>손님 선택</title>
+    </head>
+    <body>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+            .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
+            .tg .tg-nrix{text-align:center;vertical-align:middle}
+            @media screen and (max-width: 767px) {.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;}}</style>
+            <div class="tg-wrap"><table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-wa1i" colspan="3">손님 정보</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tg-nrix">이름</td>
+                <td class="tg-nrix">전화번호</td>
+              </tr>
+              {% for customer in customerData %}
+              <tr>
+                <td class="tg-nrix">
+                    <a href="/customers/{{customer.get('customerID')}}">
+                        {{customer.get('customerName)}}
+                    </a>
+                </td>
+                <td class="tg-nrix">
+                    <a href="/customers/{{customer.get('customerID')}}">
+                        {{customer.get('phoneNumber)}}
+                    </a>
+                </td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td class="tg-nrix" colspan="3">불러오기</td>
+              </tr>
+            </tbody>
+            </table></div>
+    </body>
+</html>
