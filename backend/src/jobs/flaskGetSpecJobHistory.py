@@ -2,7 +2,6 @@
 import json
 
 from auth.flaskAuthVerify import tokenVerify
-from dataProcess import dataParsing
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
@@ -18,10 +17,6 @@ def getJobHistory(customerID):
     if jobData is None:
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
-
-    elif len(jobData) == 0:
-        from msg.jsonMsg import customerNotFound
-        return Response(customerNotFound(), status=404, content_type="application/json; charset=UTF-8")
 
     payload = dict()
     jobs = list()
@@ -41,8 +36,11 @@ def getJobHistory(customerID):
             array[finished.get('type_id')] = finished.get('job_name')
         temp['jobFinished'] = array
 
-        temp['visitDate'] = job.get('visit_date')
-        temp['jobPrice'] = int(job.get('job_price'))
+        temp['visitDate'] = job.get('visit_date').strftime('%Y-%m-%d')
+        if job.get('job_price') is None:
+            temp['jobPrice'] = 0
+        else: 
+            temp['jobPrice'] = int(job.get('job_price'))
         temp['jobDescription'] = job.get('job_description')
 
         jobs.append(temp)

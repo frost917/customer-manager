@@ -94,7 +94,6 @@ def tokenGetUUID(accessToken):
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
-        print('try get uuid')
         decode = jwt.decode(jwt=accessToken, key=JWTSecret, algorithms=['HS256'])
     except jwt.InvalidSignatureError:
         return None

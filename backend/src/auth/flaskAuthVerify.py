@@ -26,7 +26,5 @@ def tokenVerify(func):
         elif userID is None or UUID is None:
             return Response(status=401)
 
-        print('{userID} is logined'.format(userID=userID))
-
         return func(*args, **kwargs)
     return verification
