@@ -18,26 +18,28 @@ def login():
     data = json.dumps({'userID': userID, 'passwd': passwd})
     req = requests.get(url=url, headers=headers, data=data)
 
-    if 400 <= req.status_code and req.status_code <= 499:
-        return render_template('''
-        <script>alert("아이디 또는 비밀번호가 잘못되었습니다");</script>
-        ''')
+    if 200 <= req.status_code and req.status_code <= 299:
+        loginData = json.loads(req.text)
+        accessToken = loginData.get('accessToken')
+        refreshToken = loginData.get('refreshToken')
+
+        if accessToken is None or refreshToken is None:
+            return render_template('''
+            <script>alert("아이디 또는 비밀번호가 잘못되었습니다");</script>
+            ''')
+
+        loginResult = make_response(render_template('''<script>alert("로그인 성공");</script>'''))
+        loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+        loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320))
+
+        return loginResult
+
     elif 500 <= req.status_code and req.status_code <= 599:
         return render_template('''
         <script>alert("서버 에러");</script>
         ''')
 
-    loginData = json.loads(req.text)
-    accessToken = loginData.get('accessToken')
-    refreshToken = loginData.get('refreshToken')
-
-    if accessToken is None or refreshToken is None:
+    elif 400 <= req.status_code and req.status_code <= 499:
         return render_template('''
         <script>alert("아이디 또는 비밀번호가 잘못되었습니다");</script>
         ''')
-
-    loginResult = make_response(render_template('''<script>alert("로그인 성공");</script>
-        '''))
-    loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
-    loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320))
-
