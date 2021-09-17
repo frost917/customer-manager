@@ -19,3 +19,7 @@ def loginPage():
 
     if accessToken is None and refreshToken is None:
         return render_template('login.html')
+    else:
+        return """<script>
+        location.href("/");
+        </script>"""

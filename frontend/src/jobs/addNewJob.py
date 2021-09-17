@@ -11,6 +11,7 @@ front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @tokenVerify
 def addNewJobPage(customerID):
     accessToken = g.get('accessToken')
+    print(accessToken)
 
     url = 'http://localhost:6000/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'accessToken': accessToken}
@@ -21,8 +22,9 @@ def addNewJobPage(customerID):
 
     data = json.loads(req.text)
     customerData = data.get('customerData')
+    print(customerData)
 
-    temp = make_response(render_template('customer-add.html', customerData=customerData))
+    temp = make_response(render_template('job-add.html', customerData=customerData, customerID=customerID))
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
     return temp
 
@@ -35,7 +37,7 @@ def addNewJob(customerID):
     customerName = request.form.get('customerName')
     phoneNumber = request.form.get('phoneNumber')
 
-    
+
 
     url = 'http://localhost:6000'
     customerUrl = url + '/jobs'

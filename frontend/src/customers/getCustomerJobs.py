@@ -21,4 +21,4 @@ def customerJobData(customerID):
     customerData = data.get('customerData')
     jobData = data.get('jobData')
 
-    return render_template('customer-data.html', customerData=customerData, jobData=jobData)
+    return render_template('customer-data.html', customerData=customerData,customerID=customerID,  jobData=jobData)

@@ -27,7 +27,9 @@ from jobs import addNewJob
 
 app.register_blueprint(addNewJob.front)
 
+from login.loginVerify import tokenVerify
 @app.route('/')
+@tokenVerify
 def index():
     return render_template('index.html')
 

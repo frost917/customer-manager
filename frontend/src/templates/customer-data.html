@@ -11,14 +11,15 @@
           font-family:Arial, sans-serif;font-size:20px;overflow:hidden;padding:10px 5px;word-break:normal;}
         .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
           font-family:Arial, sans-serif;font-size:20px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-        .tg .tg-9wq8{border-color:inherit;text-align:center;vertical-align:middle}
-        .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle; min-width: 100%;}
+        .tg .tg-9wq8{border-color:inherit;text-align:center;vertical-align:middle; font-size: 60px;}
+        .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle; font-size:50px;}
         .tg .tg-0lax{text-align:left;vertical-align:top}
+        .dataButton{font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;}
       </style>
       <div class="tg-wrap"><table class="tg">
         <thead>
           <tr>
-            <th class="tg-uzvj" colspan="2">손님 정보</th>
+            <th class="tg-uzvj" colspan="2" style="font-weight:bold; width: 960px">손님 정보</th>
           </tr>
         </thead>
         <tbody>
@@ -30,10 +31,9 @@
           </tr>
           <tr>
             <td class="tg-9wq8" colspan="2" style="background-color:#f0f0f0; margin: 0; padding: 0;">
-                <!-- <a href="/jobs/{{ customerData.get('customerName') }}">
-                  작업 추가
-                </a> -->
-                <input type="button" href="/jobs/{{ customerData.get('customerName') }}" style="margin: 0; padding: 3px; font-size: 20px; min-width: 100%; min-height: 100%;" value="작업 추가">
+                <input type="button" 
+                onclick="location.href='/jobs/{{ customerID }}/job'" 
+                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;" value="작업 추가">
             </td>
           </tr>
           <tr>

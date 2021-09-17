@@ -18,8 +18,6 @@ def getJobHistory(customerID):
         from msg.jsonMsg import customerNotFound
         return Response(customerNotFound(), status=404, content_type="application/json; charset=UTF-8")
 
-    print(customerData)
-
     jobData = database.getJobsFromCustomerID(customerID=customerID)
 
     if jobData is None:

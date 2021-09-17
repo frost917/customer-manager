@@ -18,22 +18,24 @@ def tokenVerify(func):
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
         if accessToken is not None and refreshToken is not None:
-            url = 'http://localhost:6000/'
-            headers = {'accessToken': accessToken}
+            url = 'http://localhost:6000'
+            headers = {'Authorization': accessToken}
             req = requests.get(url=url, headers=headers)
 
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             if req.status_code == 401:
                 headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
-                req = requests.get(url=url, headers=headers)
+                refUrl = url + '/auth/refresh'
+                req = requests.get(url=refUrl, headers=headers)
 
                 loginData = json.loads(req.text)
                 accessToken = loginData.get('accessToken')
-
+                print(accessToken)
             elif req.status_code != 200:
                 return parseStatusCode(req.status_code)
 
-            g.accessToken = accessToken
+            loginResult = make_response()
+            loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
 
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:
