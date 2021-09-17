@@ -44,7 +44,10 @@ def getJobHistorySpec(self, jobID):
 def getJobFinishedArray(self, jobID):
     try:
         self.cur.execute("""
-    SELECT * 
+    SELECT 
+        job_finished.job_id,
+        job_finished.type_id,
+        job_type.job_name
     FROM job_finished 
     INNER JOIN job_type 
     ON (job_finished.type_id = job_type.type_id ) 
@@ -80,6 +83,19 @@ def getCustomerFromJobID(self, jobID):
     FROM job_list
     WHERE job_id = uuid(%s)""", (jobID,))
         return self.cur.fetchone()
+    except db.DatabaseError as err:
+        print(err)
+        return None
+
+# 특정 손님 ID로 작업 기록 불러오기
+def getJobsFromCustomerID(self, customerID):
+    try:
+        self.cur.execute("""
+    SELECT 
+        *
+    FROM job_list
+    WHERE customer_id = uuid(%s)""", (customerID,))
+        return self.cur.fetchall()
     except db.DatabaseError as err:
         print(err)
         return None

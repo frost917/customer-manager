@@ -34,7 +34,7 @@
             <td class="tg-9wq8">
               <!-- 작업기록 -->
               <a href="/jobs/{{job.get('jobID')}}">
-                
+                {% for finished in job.get('jobFinished') %}
               </a>
             </td>
           </tr>

@@ -10,7 +10,6 @@ manager = Blueprint("getCustomerList", __name__, url_prefix='/customers')
 
 @manager.route("", methods=['GET'])
 @tokenVerify
-@dataParsing
 def getCustomerList():
     UUID = g.get('UUID')
 

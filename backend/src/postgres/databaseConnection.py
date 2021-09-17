@@ -44,13 +44,20 @@ class PostgresControll(metaclass=Singleton):
 
     # customer table
     # customer info
-    from postgres.queryCustomerData import (addNewCustomer, deleteCustomerData,
-                                            getCustomerData, getCustomerDict,
-                                            updateCustomerData)
+    from postgres.queryCustomerData import (addNewCustomer, 
+    deleteCustomerData,
+    getCustomerData, 
+    getCustomerDict,
+    updateCustomerData)
+
     # job_list table
     from postgres.queryJobs import (addNewJob, getAllJobs,
-                                    getCustomerFromJobID, getJobFinishedArray,
-                                    getJobHistorySpec, getJobListFromJobID)
+    getCustomerFromJobID, 
+    getJobFinishedArray,
+    getJobHistorySpec, 
+    getJobListFromJobID,
+    getJobsFromCustomerID)
+    
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
     # visit_history table
