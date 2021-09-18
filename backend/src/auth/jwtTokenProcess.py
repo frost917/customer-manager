@@ -2,8 +2,7 @@
 from dateutil.relativedelta import relativedelta
 
 import jwt
-import os
-JWTSecret = os.getenv('secret')
+from config.secret import JWTSecret
 
 # return Access token
 def createAccessToken(userID: str, UUID: str):

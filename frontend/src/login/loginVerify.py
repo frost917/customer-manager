@@ -6,6 +6,7 @@ from functools import wraps
 from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
+from config.secret import backendData
 
 # 토큰 살아있는지 확인
 def tokenVerify(func):
@@ -18,7 +19,7 @@ def tokenVerify(func):
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
         if accessToken is not None and refreshToken is not None:
-            url = 'http://localhost:6000'
+            url = backendData['ADDR']
             headers = {'Authorization': accessToken}
             req = requests.get(url=url, headers=headers)
 
@@ -28,14 +29,14 @@ def tokenVerify(func):
                 refUrl = url + '/auth/refresh'
                 req = requests.get(url=refUrl, headers=headers)
 
-                loginData = json.loads(req.text)
-                accessToken = loginData.get('accessToken')
-                print(accessToken)
-            elif req.status_code != 200:
-                return parseStatusCode(req.status_code)
+                print('\n\n'+req.text)
 
-            loginResult = make_response()
-            loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+                loginData = json.loads(req.text)
+
+                print('\n\n' + loginData)
+
+                accessToken = loginData.get('accessToken')
+                g.accessToken = accessToken
 
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:

@@ -5,6 +5,8 @@ from flask.templating import render_template
 import requests
 import json
 
+from config.secret import backendData
+
 front = Blueprint('login', __name__, url_prefix='/login')
 
 @front.route('', methods=['POST'])
@@ -19,7 +21,7 @@ def login():
         </script>"""
 
     # 로그인 페이지와 연동
-    url = 'http://localhost:6000/auth'
+    url = backendData['ADDR'] + '/auth'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
     data = json.dumps({'userID': userID, 'passwd': passwd})
     print(data)

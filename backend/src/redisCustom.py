@@ -13,16 +13,16 @@ class Singleton(type):
 
 class redisToken(metaclass=Singleton):
     def __init__(self):
-        from os import getenv
-        # from config.secret import redisData
-        host = getenv("REDIS_HOST") if getenv("REDIS_HOST") is not None else 'localhost'
-        port = getenv("REDIS_PORT") if getenv("REDIS_PORT") is not None else '6432'
-        password = getenv("REDIS_PASSWD") if getenv("REDIS_PASSWD") is not None else ''
-        db = 0 if getenv("REDIS_DB") is not None else getenv("REDIS_DB")
+        # from os import getenv
+        from config.secret import redisData
+        # host = getenv("REDIS_HOST") if getenv("REDIS_HOST") is not None else 'localhost'
+        # port = getenv("REDIS_PORT") if getenv("REDIS_PORT") is not None else '6432'
+        # password = getenv("REDIS_PASSWD") if getenv("REDIS_PASSWD") is not None else ''
+        db = 0
 
-        # host = redisData.get("REDIS_HOST")
-        # port = redisData.get("REDIS_PORT")
-        # password = redisData.get("REDIS_PASSWD")
+        host = redisData.get("REDIS_HOST")
+        port = redisData.get("REDIS_PORT")
+        password = redisData.get("REDIS_PASSWD")
 
         self.redisConn = redis.StrictRedis(host=host, port=port, db=db, password=password)
     

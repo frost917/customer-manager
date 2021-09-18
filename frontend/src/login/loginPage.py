@@ -1,5 +1,7 @@
 ﻿
-from flask import request, Blueprint
+from datetime import timedelta
+from flask import request, Blueprint, g
+from flask.helpers import make_response
 from flask.templating import render_template
 
 import requests
@@ -19,7 +21,3 @@ def loginPage():
 
     if accessToken is None and refreshToken is None:
         return render_template('login.html')
-    else:
-        return """<script>
-        location.href("/");
-        </script>"""

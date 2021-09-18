@@ -1,10 +1,11 @@
 ﻿from flask import Blueprint, render_template, make_response, request, g
 import json
 import requests
-
 from datetime import timedelta
+
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from config.secret import backendData
 
 front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @front.route('/<customerID>/job', methods=['GET'])
@@ -13,7 +14,7 @@ def addNewJobPage(customerID):
     accessToken = g.get('accessToken')
     print(accessToken)
 
-    url = 'http://localhost:6000/customers/' + customerID
+    url = backendData['ADDR'] + '/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'accessToken': accessToken}
     req = requests.get(url=url, headers=headers)
 

@@ -7,7 +7,8 @@ hairmgmt/
 src/.dev
 
 # 민감한 데이터
-src/config/
+backend/src/config/
+frontend/src/config/
 
 # 디버깅용 코드 제외
 debug

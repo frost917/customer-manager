@@ -14,17 +14,24 @@ class Singleton(type):
 
 class PostgresControll(metaclass=Singleton):
     def __init__(self):
-        import os
+        from config.secret import dbData
 
-        # DB HOST
-        host = os.getenv("DB_HOST")
-        database = os.getenv("DB_DATABASE")
-        # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
-        port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
+        # # DB HOST
+        # host = os.getenv("DB_HOST")
+        # database = os.getenv("DB_DATABASE")
+        # # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
+        # port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
 
-        # DB USER
-        user = os.getenv("DB_USER")
-        passwd = os.getenv("DB_PASSWD")
+        host = dbData['DB_HOST']
+        database = dbData['DB_DATABASE']
+        port = dbData['DB_PORT']
+
+        # # DB USER
+        # user = os.getenv("DB_USER")
+        # passwd = os.getenv("DB_PASSWD")
+
+        user = dbData['DB_USER']
+        passwd = dbData['DB_PASSWD']
 
         try:
             self.dbconn = psycopg2.connect(

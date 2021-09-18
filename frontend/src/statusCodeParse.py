@@ -2,7 +2,7 @@
 
 def parseStatusCode(status_code):
     if status_code == 401:
-        return redirect('/login')
+        pass
     elif 400 <= status_code and status_code <= 499:
         return """<script>
         alert("데이터가 잘못되었습니다");
