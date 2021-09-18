@@ -24,9 +24,5 @@ def dataParsing(func):
         # 작업 리스트
         g.jobs = data.get('jobData')
 
-        # 방문 기록 파싱
-        # tmpVisitDate = str(data['job']['visitDate'])
-        # tmpJobID = str(data['job']['jobID'])
-
         return func(*args, **kwargs)
     return wrapper

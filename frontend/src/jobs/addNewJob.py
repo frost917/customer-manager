@@ -29,13 +29,11 @@ def addNewJobPage(customerID):
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
     return temp
 
-@front.route('/<customerID>/job', methods=['POST'])
+@front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
     data = dict()
-
-    customerID = request.form.get('customerID')
 
     # 작업 데이터 불러오기
     jobFinished = request.form.getlist('jobFinished')
@@ -53,9 +51,9 @@ def addNewJob(customerID):
 
     # 백엔드에 접근해서 새 작업기록 추가
     url = backendData['ADDR']
-    jobAddUrl = url + '/jobs' + customerID + '/job'
+    jobAddUrl = url + '/jobs/' + customerID + '/job'
     headers = {'Content-Type': 'application/json; charset=utf-8', 'Authorization': accessToken}
-    req = requests.post(url=jobAddUrl, headers=headers, data=data)
+    req = requests.post(url=jobAddUrl, headers=headers, data=json.dumps(data))
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
@@ -65,7 +63,7 @@ def addNewJob(customerID):
     jobData = data.get('jobData')[0]
     jobID = jobData.get('jobID')
 
-    result = make_response(redirect('/jobs/'+ jobID, code=200))
+    result = make_response(redirect('/jobs/'+ jobID, code=302))
     result.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
 
     return result

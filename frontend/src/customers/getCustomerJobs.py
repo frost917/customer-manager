@@ -19,10 +19,8 @@ def customerJobData(customerID):
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
     req = requests.get(url=customerUrl, headers=headers)
 
-    print(req.text)
-
-    # if req.status_code != 200:
-    #     return parseStatusCode(req.status_code)
+    if req.status_code != 200:
+        return parseStatusCode(req.status_code)
 
     data = json.loads(req.text)
     customerData = data.get('customerData')
