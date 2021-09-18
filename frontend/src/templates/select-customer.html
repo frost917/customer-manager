@@ -28,12 +28,12 @@
               {% for customer in customerData %}
               <tr>
                 <td class="tg-nrix" style="padding: 7px;">
-                  <a href="/customers/{{ customer.get('customerID') }}">
+                  <a href="/customers/{{ customer.get('customerID') }}/jobs">
                         {{ customer.get('customerName') }}
                     </a>
                 </td>
                 <td class="tg-nrix">
-                  <a href="/customers/{{ customer.get('customerID') }}">
+                  <a href="/customers/{{ customer.get('customerID') }}/jobs">
                         {{ customer.get('phoneNumber') }}
                     </a>
                 </td>

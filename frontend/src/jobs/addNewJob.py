@@ -3,12 +3,14 @@ import json
 import requests
 from datetime import timedelta
 
+from werkzeug.utils import redirect
+
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.secret import backendData
 
 front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
-@front.route('/<customerID>/job', methods=['GET'])
+@front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
 def addNewJobPage(customerID):
     accessToken = g.get('accessToken')
@@ -31,33 +33,39 @@ def addNewJobPage(customerID):
 @tokenVerify
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
-    payload = dict()
+    data = dict()
 
     customerID = request.form.get('customerID')
 
+    # 작업 데이터 불러오기
     jobFinished = request.form.getlist('jobFinished')
     jobPrice = request.form.get('jobPrice')
     jobDescription = request.form.get('jobDescription')
 
+    # 작업 데이터 패키징
     jobData = dict()
     jobData['jobFinished'] = jobFinished
     jobData['jobPrice'] = jobPrice
     jobData['jobDescription'] = jobDescription
 
     temp = [jobData]
-    payload['jobData'] = temp
+    data['jobData'] = temp
 
-    url = 'http://localhost:6000'
-    customerUrl = url + '/jobs'
-    headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
-    req = requests.post(url=customerUrl, headers=headers)
+    # 백엔드에 접근해서 새 작업기록 추가
+    url = backendData['ADDR']
+    jobAddUrl = url + '/jobs' + customerID + '/job'
+    headers = {'Content-Type': 'application/json; charset=utf-8', 'Authorization': accessToken}
+    req = requests.post(url=jobAddUrl, headers=headers, data=data)
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
+    # 반환받은 jobID를 통해 작업 내역 불러오기
     data = json.loads(req.text)
     jobData = data.get('jobData')[0]
     jobID = jobData.get('jobID')
 
-    temp = make_response(render_template('customer-data.html'))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
+    result = make_response(redirect('/jobs/'+ jobID, code=200))
+    result.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
+
+    return result

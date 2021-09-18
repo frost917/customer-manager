@@ -57,6 +57,13 @@
 
 //return job data
 {
+    "customerData": [
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str
+        }
+    ]
     "jobData": [
         {
             "jobID": "str",

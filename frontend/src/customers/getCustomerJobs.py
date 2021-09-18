@@ -9,7 +9,7 @@ from config.secret import backendData
 
 front = Blueprint('customerJobData', __name__, url_prefix='/customers')
 
-@front.route('/<customerID>', methods=['GET'])
+@front.route('/<customerID>/jobs', methods=['GET'])
 @tokenVerify
 def customerJobData(customerID):
     accessToken = g.get('accessToken')

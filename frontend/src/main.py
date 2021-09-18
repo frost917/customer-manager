@@ -24,8 +24,10 @@ app.register_blueprint(getCustomerJobs.front)
 # 작업 관련 페이지 블루프린트
 
 from jobs import addNewJob
+from jobs import getJobData
 
 app.register_blueprint(addNewJob.front)
+app.register_blueprint(getJobData.front)
 
 from login.loginVerify import tokenVerify
 @app.route('/')

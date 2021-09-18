@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <title>테스트 프론트엔드</title>
+        <title>{{ customerData.get('customerName')}} - 작업 기록</title>
     </head>
     <body>
         <style type="text/css">
@@ -23,7 +23,6 @@
                 <th class="tg-nrix" colspan="2" style="font-weight:bold; font-size: 15px;">손님 정보</th>
               </tr>
           </thead>
-          <form action="/jobs/{{ customerData.get('customerID') }}/job" method="POST">
             <tbody>
               <tr>
                 <td class="tg-nrix">이름</td>
@@ -46,33 +45,57 @@
                 <td class="tg-nrix" colspan="2">
                     <div class="check">
                         <div>
-                            <input type="checkbox"
-                            value="1" name="jobFinished"> 커트
-                            <input type="checkbox"
-                            value="2" name="jobFinished"> 파마
-                            <input type="checkbox"
-                            value="4" name="jobFinished"> 매직
+                          {% for finished in jobData.get('jobFinished') %}
+                          <input type="checkbox" value="1" name="jobFinished"
+                          {% if finished == '1'%}
+                          checked
+                          {% endif %}> 커트
+                          <input type="checkbox" value="2" name="jobFinished"
+                          {% if finished == '1'%}
+                          checked
+                          {% endif %}> 파마
+                          <input type="checkbox" value="4" name="jobFinished"
+                          {% if finished == '1'%}
+                          checked
+                          {% endif %}> 매직
                         </div>
                         <div>
-                            <input type="checkbox" value="8" name="jobFinished"> 염색
-                            <input type="checkbox" value="16" name="jobFinished"> 클리닉
+                          <input type="checkbox" value="8" name="jobFinished"
+                          {% if finished == '1'%}
+                          checked
+                          {% endif %}> 염색
+                          <input type="checkbox" value="16" name="jobFinished"
+                          {% if finished == '1'%}
+                          checked
+                          {% endif %}> 클리닉
                         </div>
+                          {% endfor %}
                     </div>
                 </td>
               </tr>
               <tr>
                 <td class="tg-nrix" style="font-size: 40px;">메모</td>
-                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" name="jobPrice" placeholder="금액" style="min-height: 70px; font-size: 40px"></td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                  <input type="text" name="jobPrice" placeholder="금액" 
+                  value="{{ jobData.get('jobPrice') }}" 
+                  style="min-height: 70px; font-size: 40px"></td>
               </tr>
               <tr>
                 <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
-                    <textarea name="jobDescription" cols="4" rows="2" style="min-height: 500px; min-width: 100%; font-size: 50px;"></textarea>
+                    <textarea name="jobDescription" cols="4" rows="2" style="min-height: 500px; min-width: 100%; font-size: 50px;">{{ jobData.get('jobDescription') }}</textarea>
                 </td>
               </tr>
               <tr>
                 <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
-                    <input type="submit" value="작업 추가" style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;">
+                    <input type="button" value="손님 목록으로" 
+                    style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
+                    onclick="location.href='/customers'">
                 </td>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <input type="button" value="작업 목록으로" 
+                  style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
+                  onclick="location.href='/customers/{{ customerID }}'">
+              </td>
               </tr>
             </tbody>
             </table>
