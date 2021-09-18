@@ -24,7 +24,7 @@ def addNewCustomer():
         customerData['customerName'] = data.get('customerName')
         customerData['phoneNumber'] = data.get('phoneNumber')
 
-        # 작업에 실패한 경우 DB가 죽은 것
+        # 시술에 실패한 경우 DB가 죽은 것
         if database.addNewCustomer(UUID = UUID, customerData=customerData) is True:
             successedList.append(customerData)
         else:

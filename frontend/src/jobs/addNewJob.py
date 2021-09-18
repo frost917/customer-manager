@@ -35,12 +35,12 @@ def addNewJob(customerID):
     accessToken = g.get('accessToken')
     data = dict()
 
-    # 작업 데이터 불러오기
+    # 시술 데이터 불러오기
     jobFinished = request.form.getlist('jobFinished')
     jobPrice = request.form.get('jobPrice')
     jobDescription = request.form.get('jobDescription')
 
-    # 작업 데이터 패키징
+    # 시술 데이터 패키징
     jobData = dict()
     jobData['jobFinished'] = jobFinished
     jobData['jobPrice'] = jobPrice
@@ -49,7 +49,7 @@ def addNewJob(customerID):
     temp = [jobData]
     data['jobData'] = temp
 
-    # 백엔드에 접근해서 새 작업기록 추가
+    # 백엔드에 접근해서 새 시술기록 추가
     url = backendData['ADDR']
     jobAddUrl = url + '/jobs/' + customerID + '/job'
     headers = {'Content-Type': 'application/json; charset=utf-8', 'Authorization': accessToken}
@@ -58,7 +58,7 @@ def addNewJob(customerID):
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
-    # 반환받은 jobID를 통해 작업 내역 불러오기
+    # 반환받은 jobID를 통해 시술 내역 불러오기
     data = json.loads(req.text)
     jobData = data.get('jobData')[0]
     jobID = jobData.get('jobID')

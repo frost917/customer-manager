@@ -24,7 +24,7 @@ def getAllJobs(self, UUID):
         print(err)
         return dict()
 
-# 특정 ID의 작업 기록 불러오기
+# 특정 ID의 시술 기록 불러오기
 def getJobHistorySpec(self, jobID):
     try:
         self.cur.execute("""
@@ -40,7 +40,7 @@ def getJobHistorySpec(self, jobID):
         print(err)
         return None
 
-# 특정 ID의 수행한 작업 내역 불러오기
+# 특정 ID의 수행한 시술 내역 불러오기
 def getJobFinishedArray(self, jobID):
     try:
         self.cur.execute("""
@@ -61,7 +61,7 @@ def getJobFinishedArray(self, jobID):
         print(err)
         return None
 
-# 작업 id로 작업 리스트 반환
+# 시술 id로 시술 리스트 반환
 def getJobListFromJobID(self, jobID):
     try:
         self.cur.execute("""
@@ -74,7 +74,7 @@ def getJobListFromJobID(self, jobID):
         print(err)
         return None
 
-# 작업 id로 고객 정보 반환
+# 시술 id로 고객 정보 반환
 def getCustomerFromJobID(self, jobID):
     try:
         self.cur.execute("""
@@ -87,7 +87,7 @@ def getCustomerFromJobID(self, jobID):
         print(err)
         return None
 
-# 특정 손님 ID로 작업 기록 불러오기
+# 특정 손님 ID로 시술 기록 불러오기
 def getJobsFromCustomerID(self, customerID):
     try:
         self.cur.execute("""
@@ -100,7 +100,7 @@ def getJobsFromCustomerID(self, customerID):
         print(err)
         return None
 
-# 작업 기록 추가
+# 시술 기록 추가
 # flaskAddJobHistory
 def addNewJob(self, jobData: dict):
     customerID = jobData['customerID']
@@ -110,8 +110,8 @@ def addNewJob(self, jobData: dict):
     jobPrice = jobData['jobPrice']
     jobDescription = jobData['jobDescription']
 
-    # 작업 기록 생성시 작업 타입이 리스트로 들어오기 때문에
-    # 이거 하나하나 분리해서 작업할 필요가 있음
+    # 시술 기록 생성시 시술 타입이 리스트로 들어오기 때문에
+    # 이거 하나하나 분리해서 시술할 필요가 있음
     try:
         self.cur.execute("""
         WITH data (

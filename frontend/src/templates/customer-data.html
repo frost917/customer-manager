@@ -30,20 +30,25 @@
             <td class="tg-9wq8">{{ customerData.get('phoneNumber') }}</td>
           </tr>
           <tr>
-            <td class="tg-9wq8" colspan="2" style="background-color:#f0f0f0; margin: 0; padding: 0;">
+            <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
                 <input type="button" 
-                onclick="location.href='/jobs/customer/{{ customerID }}'" 
-                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;" value="작업 추가">
+                onclick="location.href='/customers'" 
+                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;" value="손님 목록으로">
             </td>
+            <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
+              <input type="button" 
+                onclick="location.href='/jobs/customer/{{ customerID }}'" 
+                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;" value="시술 추가">
+          </td>
           </tr>
           <tr>
-            <th class="tg-uzvj" colspan="2">작업 기록</th>
+            <th class="tg-uzvj" colspan="2">시술 기록</th>
           </tr>
-          {% for job in jobs %}
+          {% for job in jobData %}
           <tr>
             <td class="tg-9wq8">방문일</td>
             <td class="tg-9wq8">
-              <!-- 작업기록 -->
+              <!-- 시술기록 -->
               <a href="/jobs/{{ job.get('jobID') }}">
                 {% for finished in job.get('jobFinished').values() %}
                 {{ finished }}
@@ -52,8 +57,8 @@
             </td>
           </tr>
           <tr>
-            <td class="tg-0lax" colspan="2">
-              <!-- 클릭시 해당 작업으로 이동 -->
+            <td class="tg-0lax" colspan="2" style="font-size: 50px;">
+              <!-- 클릭시 해당 시술으로 이동 -->
               <a href="/jobs/{{ job.get('jobID') }}">
                 {{ job.get('visitDate') }}
               </a>

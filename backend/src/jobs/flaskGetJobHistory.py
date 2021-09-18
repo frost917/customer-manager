@@ -8,7 +8,7 @@ from auth.flaskAuthVerify import tokenVerify
 
 manager = Blueprint('getJobHistory', __name__, url_prefix='/jobs')
 
-# 특정 작업 id의 데이터를 불러옴
+# 특정 시술 id의 데이터를 불러옴
 @manager.route('/<jobID>', methods=['GET'])
 @tokenVerify
 def getJobHistory(jobID):
@@ -36,7 +36,7 @@ def getJobHistory(jobID):
     
     payload['customerData'] = array
 
-    # 작업 데이터 패키징
+    # 시술 데이터 패키징
     temp = dict()
     temp['jobID'] = jobID
 

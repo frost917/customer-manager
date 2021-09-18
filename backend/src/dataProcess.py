@@ -21,7 +21,7 @@ def dataParsing(func):
         # 손님 리스트
         g.customers = data.get('customerData')
 
-        # 작업 리스트
+        # 시술 리스트
         g.jobs = data.get('jobData')
 
         return func(*args, **kwargs)

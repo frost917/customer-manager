@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <title>{{ customerData.get('customerName')}} - 작업 기록</title>
+        <title>{{ customerData.get('customerName')}} - 시술 기록</title>
     </head>
     <body>
         <style type="text/css">
@@ -38,38 +38,36 @@
               </tr>
               <tr>
                 <td class="tg-y0n7" colspan="2" style="font-weight:bold;">
-                  작업 기록
+                  시술 기록
                 </td>
               </tr>
               <tr>
                 <td class="tg-nrix" colspan="2">
                     <div class="check">
                         <div>
-                          {% for finished in jobData.get('jobFinished') %}
                           <input type="checkbox" value="1" name="jobFinished"
-                          {% if finished == '1'%}
+                          {% if '1' in jobData.get('jobFinished') %}
                           checked
                           {% endif %}> 커트
                           <input type="checkbox" value="2" name="jobFinished"
-                          {% if finished == '1'%}
+                          {% if '2' in jobData.get('jobFinished') %}
                           checked
                           {% endif %}> 파마
                           <input type="checkbox" value="4" name="jobFinished"
-                          {% if finished == '1'%}
+                          {% if '4' in jobData.get('jobFinished') %}
                           checked
                           {% endif %}> 매직
                         </div>
                         <div>
                           <input type="checkbox" value="8" name="jobFinished"
-                          {% if finished == '1'%}
+                          {% if '8' in jobData.get('jobFinished') %}
                           checked
                           {% endif %}> 염색
                           <input type="checkbox" value="16" name="jobFinished"
-                          {% if finished == '1'%}
+                          {% if '16' in jobData.get('jobFinished') %}
                           checked
                           {% endif %}> 클리닉
                         </div>
-                          {% endfor %}
                     </div>
                 </td>
               </tr>
@@ -91,8 +89,10 @@
                     style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
                     onclick="location.href='/customers'">
                 </td>
+              </tr>
+              <tr>
                 <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
-                  <input type="button" value="작업 목록으로" 
+                  <input type="button" value="시술 목록으로" 
                   style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
                   onclick="location.href='/customers/{{ customerID }}/jobs'">
               </td>
