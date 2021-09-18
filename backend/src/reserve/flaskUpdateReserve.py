@@ -5,13 +5,16 @@ from postgres.databaseConnection import PostgresControll
 
 from auth.flaskAuthVerify import tokenVerify
 
-manager = Blueprint('deleteReserveData', __name__, url_prefix='/reserves')
+manager = Blueprint('updateReserveData', __name__, url_prefix='/reserves')
 
-@manager.route('/<reserveID>', methods=['DELETE'])
+@manager.route('', methods=['PUT'])
 @tokenVerify
-def deleteReserveData(reserveID):
+def updateReserveData():
     database = PostgresControll()
-    result = database.deleteReserveData(reserveID=reserveID)
+
+    reserveData = g.get('reserveData')
+
+    result = database.updateReserveData(reserveData=reserveData)
 
     if result is False:
         from msg.jsonMsg import databaseIsGone

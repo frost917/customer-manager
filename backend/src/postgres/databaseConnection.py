@@ -78,7 +78,9 @@ class PostgresControll(metaclass=Singleton):
         getReserveType, 
         addNewReserve, 
         setReserveComplete,
-        getReserveFromCustomerID)
+        getReserveFromCustomerID,
+        deleteReserveData,
+        updateReserveData)
 
     # # 모든 예약 불러오기
     # def getReserveDict(self, UUID):

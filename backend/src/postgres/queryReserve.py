@@ -114,7 +114,7 @@ def addNewReserve(self, UUID, reserveData: dict):
         print(err)
         return False
 
-def updateReserve(self, reserveData):
+def updateReserveData(self, reserveData):
     reserveID = reserveData['reserveID']
     reserveTime = reserveData['reserveTime']
     reserveType = reserveData['reserveType']
@@ -141,14 +141,14 @@ def updateReserve(self, reserveData):
             VALUES (
                 uuid(%s), CAST( %s AS INTEGER ) 
             )""", (reserveID, jobType, ))
-            
+
         self.dbconn.commit()
         return True
     except db.DatabaseError as err:
         print(err)
         return False
 
-def deleteReserve(self, reserveID):
+def deleteReserveData(self, reserveID):
     try:
         self.cur.execute("""
         WITH data (
