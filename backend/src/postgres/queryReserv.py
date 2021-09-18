@@ -58,7 +58,8 @@ def getReserveType(self, reserveID):
         print(err)
         return dict()
 
-def addNewReserve(self, UUID, customerID, reserveData: dict):
+def addNewReserve(self, UUID, reserveData: dict):
+    customerID = reserveData['customerID']
     reserveID = reserveData['reserveID']
     reserveTime = reserveData['reserveTime']
     reserveType = reserveData['reserveType']
@@ -70,7 +71,7 @@ def addNewReserve(self, UUID, customerID, reserveData: dict):
         WITH data (
             user_id, customer_id, reserve_id, reserve_time
         ) AS ( VALUES ( 
-			uuid(%s), uuid(%s), uuid(%s), to_timestamp(%s, 'YYYY-MM-DD') ) 
+			uuid(%s), uuid(%s), uuid(%s), to_timestamp(%s, 'YYYY-MM-DD HH24:MI') ) 
         ), create_reserve AS (
             INSERT INTO reserve ( user_id, reserve_id )
             SELECT user_id, reserve_id FROM data 

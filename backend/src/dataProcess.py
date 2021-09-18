@@ -24,5 +24,8 @@ def dataParsing(func):
         # 시술 리스트
         g.jobs = data.get('jobData')
 
+        # 예약 리스트
+        g.reserve = data.get('reserveData')
+
         return func(*args, **kwargs)
     return wrapper
