@@ -10,7 +10,7 @@ from postgres.databaseConnection import PostgresControll
 manager = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
 
 # 손님 한 명의 예약 추가
-@manager.route('/<customerID>', methods=['POST'])
+@manager.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
 @dataParsing
 def addNewReserve(customerID):
