@@ -22,21 +22,20 @@ def tokenVerify(func):
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
             req = requests.get(url=url, headers=headers)
-
+        
+            if 200 <= req.status_code and req.status_code <= 299:
+                pass
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
-            if req.status_code == 401:
+            elif req.status_code == 401:
                 headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
                 refUrl = url + '/auth/refresh'
                 req = requests.get(url=refUrl, headers=headers)
 
-                print('\n\n'+req.text)
-
                 loginData = json.loads(req.text)
-
-                print('\n\n' + loginData)
-
                 accessToken = loginData.get('accessToken')
-                g.accessToken = accessToken
+            
+            # 검증 끝나면 g 변수로 넘김
+            g.accessToken = accessToken
 
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:

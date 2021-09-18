@@ -1,9 +1,7 @@
-﻿from json import dumps
+﻿from flask import Blueprint, Response, g
+from json import dumps
 
 from auth.flaskAuthVerify import tokenVerify
-from dataProcess import dataParsing
-
-from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
 manager = Blueprint("getCustomerList", __name__, url_prefix='/customers')
