@@ -7,6 +7,7 @@ from auth.flaskAuthVerify import tokenVerify
 
 manager = Blueprint('deleteReserveData', __name__, url_prefix='/reserves')
 
+# 해당 id로 된 예약 삭제
 @manager.route('/<reserveID>', methods=['DELETE'])
 @tokenVerify
 def deleteReserveData(reserveID):

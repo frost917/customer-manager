@@ -7,6 +7,7 @@ from auth.flaskAuthVerify import tokenVerify
 
 manager = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 
+# 손님 id로 예약 데이터 받아오기
 @manager.route('/customers/<customerID>', methods=['GET'])
 @tokenVerify
 def getReserveData(customerID):

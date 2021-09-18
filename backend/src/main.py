@@ -42,6 +42,21 @@ import visitHistory.flaskGetVisitHistory
 app.register_blueprint(visitHistory.flaskGetAllVisitHistory.manager)
 app.register_blueprint(visitHistory.flaskGetVisitHistory.manager)
 
+# reserve
+import reserve.flaskAddNewReserve
+import reserve.flaskDeleteReserve
+import reserve.flaskGetAllReserve
+import reserve.flaskGetReserveData
+import reserve.flaskGetReserveSpec
+import reserve.flaskUpdateReserveData
+
+app.register_blueprint(reserve.flaskAddNewReserve.manager)
+app.register_blueprint(reserve.flaskDeleteReserve.manager)
+app.register_blueprint(reserve.flaskGetAllReserve.manager)
+app.register_blueprint(reserve.flaskGetReserveData.manager)
+app.register_blueprint(reserve.flaskGetReserveSpec.manager)
+app.register_blueprint(reserve.flaskUpdateReserveData.manager)
+
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
 

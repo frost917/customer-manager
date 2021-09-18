@@ -20,4 +20,9 @@ def updateReserveData():
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
-    return Response(json.dumps('Successed'), status=200, content_type="application/json; charset=UTF-8")
+    payload = dict()
+    temp = list()
+    temp.append(reserveData)
+    payload['reserveData'] = temp
+
+    return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
