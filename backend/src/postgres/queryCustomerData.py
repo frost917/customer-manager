@@ -12,7 +12,7 @@ def getCustomerDict(self, UUID):
                 customer_data.phone_number 
             FROM customer
             INNER JOIN customer_data
-            ON ( customer_data.customer_id = customer.customer_id)
+            ON ( customer_data.customer_id = customer.customer_id )
             WHERE customer.user_id = uuid(%s) AND is_deleted IS NOT TRUE""",
             (UUID,))
         return self.cur.fetchall()
@@ -128,11 +128,11 @@ def removeCustomerData(self, customerData):
         ) AS ( VALUES ( uuid(%s) ) ), 
         step_one AS (
             DELETE FROM customer_data
-            WHERE customer_id IN (SELECT data.customer_id FROM data)
+            WHERE customer_id IN ( SELECT data.customer_id FROM data )
         )
         DELETE FROM customer
-        WHERE customer_id IN (SELECT data.customer_id FROM data)""",
-        (customerID,))
+        WHERE customer_id IN ( SELECT data.customer_id FROM data )""",
+        (customerID, ))
         return True
     except db.DatabaseError as err:
         print(err)

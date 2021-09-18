@@ -114,6 +114,63 @@ def addNewReserve(self, UUID, reserveData: dict):
         print(err)
         return False
 
+def updateReserve(self, reserveData):
+    reserveID = reserveData['reserveID']
+    reserveTime = reserveData['reserveTime']
+    reserveType = reserveData['reserveType']
+
+    try:
+        self.cur.execute("""
+        UPDATE
+            reserve_data
+        SET
+            reserve_time = to_timestamp(%s, 'YYYY-MM-DD HH24:MI')
+        WHERE reserve_id = uuid(%s)
+        )""", 
+        (reserveTime ,reserveID, ))
+
+        self.cur.execute("""
+        DELETE FROM reserve_type
+        WHERE reserve_id = uuid(%s)
+        """, (reserveID, ))
+
+        for jobType in reserveType:
+            self.cur.execute("""
+            INSERT INTO reserve_type
+                ( reserve_id, type_id )
+            VALUES (
+                uuid(%s), CAST( %s AS INTEGER ) 
+            )""", (reserveID, jobType, ))
+            
+        self.dbconn.commit()
+        return True
+    except db.DatabaseError as err:
+        print(err)
+        return False
+
+def deleteReserve(self, reserveID):
+    try:
+        self.cur.execute("""
+        WITH data (
+            reserve_id
+            ) AS ( VALUES (uuid(%s) ) ),
+            delete_reserve_type AS (
+                DELETE FROM reserve_type
+                WHERE reserve_id IN ( SELECT data.reserve_id FROM data )
+            )
+            delete_reserve_data AS (
+                DELETE FROM reserve_type
+                WHERE reserve_data IN ( SELECT data.reserve_id FROM data )
+            )
+            DELETE FROM reserve
+            WHERE reserve_id IN ( SELECT data.reserve_id FROM data )
+        )""", (reserveID, ))
+        self.dbconn.commit()
+        return True
+    except db.DatabaseError as err:
+        print(err)
+        return False
+
 def setReserveComplete(self):
     try:
         self.cur.execute("""

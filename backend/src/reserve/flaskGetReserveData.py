@@ -5,7 +5,7 @@ from postgres.databaseConnection import PostgresControll
 
 from auth.flaskAuthVerify import tokenVerify
 
-manager = Blueprint('getReserveData', __name__, url_prefix='/reserve')
+manager = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 
 @manager.route('/<reserveID>', methods=['GET'])
 @tokenVerify

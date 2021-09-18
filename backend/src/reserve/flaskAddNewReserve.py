@@ -7,7 +7,7 @@ from dataProcess import dataParsing
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
-manager = Blueprint('addNewReserve', __name__, url_prefix='/reserve')
+manager = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
 
 # 손님 한 명의 예약 추가
 @manager.route('/<customerID>', methods=['POST'])
