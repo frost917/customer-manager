@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>테스트 프론트엔드</title>
+    </head>
+    <body>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+            .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-nrix{text-align:center;vertical-align:middle}
+            .tg .tg-y0n7{background-color:#efefef;text-align:center;vertical-align:middle}
+            input[type=text]{padding: 0; margin: 0; min-width: 100%; min-height: 100%;}
+            </style>
+            <div class="tg-wrap"><table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-nrix" colspan="2" style="font-weight:bold; font-size: 15px;">손님 정보</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tg-nrix">이름</td>
+                <td class="tg-nrix">전화번호</td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" placeholder="이름" value="{{customerName}}" style="min-height: 30px;"></td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" placeholder="전화번호" value="{{phoneNumber}}" style="min-height: 30px;"></td>
+              </tr>
+              <tr>
+                <td class="tg-y0n7" colspan="2" style="font-weight:bold; font-size: 15px;">시술 기록</td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2">
+                    <div>
+                        <div>
+                            <input type="checkbox" name="cut"> 커트
+                            <input type="checkbox" name="perm"> 파마
+                            <input type="checkbox" name="magic"> 매직
+                        </div>
+                        <div>
+                            <input type="checkbox" name="color"> 염색
+                            <input type="checkbox" name="clinic"> 클리닉
+                            <input type="checkbox"> 
+                        </div>
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">메모</td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="text" placeholder="금액" value="{{jobPrice}}" style="min-height: 35px;"></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;"><textarea name="jobDescription" cols="4" rows="2" style="min-height: 100px; min-width: 100%;"></textarea></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="button" value="손님 추가" style="font-size: 15px; min-width: 100%; min-height: 15px; padding: 5px;"></td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;"><input type="button" value="정보 수정" style="font-size: 15px; min-width: 100%; min-height: 15px; padding: 5px;"></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;"><input type="button" value="불러오기" style="font-size: 15px; min-width: 100%; min-height: 20px; padding: 5px;"></td>
+              </tr>
+            </tbody>
+            </table>
+        </div>
+    </body>
+</html>

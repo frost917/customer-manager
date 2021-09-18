@@ -1,15 +1,19 @@
-FROM alpine/git AS source
+FROM python:3.8-slim-buster
 
-WORKDIR /
+ENV LC_CTYPE=ko_KR.UTF-8 \
+    LC_TIME=ko_KR.UTF-8 \
+    LANG=ko_KR.UTF-8 \
+    LANGUAGE=ko_KR.UTF-8
 
-RUN git clone https://github.com/frost917/customer-manager.git
+RUN apt update && apt install -y git locales \
+    && locale-gen \
+    && dpkg-reconfigure locales
 
-FROM python:3.9.5-slim-buster AS python
-
-COPY --from=source /customer-manager /customer-manager
 WORKDIR /customer-manager
 VOLUME [ "/customer-manager" ]
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/frost917/customer-manager.git /customer-manager \
+    && git checkout debugging \
+    && pip install --no-cache-dir -r requirements.txt
 
 CMD tail -f /dev/null

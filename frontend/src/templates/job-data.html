@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{ customerData.get('customerName')}} - 시술 기록</title>
+    </head>
+    <body>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+            .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-nrix{text-align:center;vertical-align:middle}
+            .tg .tg-y0n7{background-color:#efefef;text-align:center;vertical-align:middle}
+            input[type=text]{padding: 0; margin: 0; min-width: 100%; min-height: 100%;}
+            input[type="checkbox"]{width: 40px; height: 40px;}
+            .check{font-size: 50px;}
+            </style>
+            <div class="tg-wrap"><table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-nrix" colspan="2" style="font-weight:bold; font-size: 15px;">손님 정보</th>
+              </tr>
+          </thead>
+            <tbody>
+              <tr>
+                <td class="tg-nrix">이름</td>
+                <td class="tg-nrix">전화번호</td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                    {{ customerData.get('customerName') }}
+                </td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                    {{ customerData.get('phoneNumber') }}
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-y0n7" colspan="2" style="font-weight:bold;">
+                  시술 기록
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2">
+                    <div class="check">
+                        <div>
+                          <input type="checkbox" value="1" name="jobFinished"
+                          {% if '1' in jobData.get('jobFinished') %}
+                          checked
+                          {% endif %}> 커트
+                          <input type="checkbox" value="2" name="jobFinished"
+                          {% if '2' in jobData.get('jobFinished') %}
+                          checked
+                          {% endif %}> 파마
+                          <input type="checkbox" value="4" name="jobFinished"
+                          {% if '4' in jobData.get('jobFinished') %}
+                          checked
+                          {% endif %}> 매직
+                        </div>
+                        <div>
+                          <input type="checkbox" value="8" name="jobFinished"
+                          {% if '8' in jobData.get('jobFinished') %}
+                          checked
+                          {% endif %}> 염색
+                          <input type="checkbox" value="16" name="jobFinished"
+                          {% if '16' in jobData.get('jobFinished') %}
+                          checked
+                          {% endif %}> 클리닉
+                        </div>
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" style="font-size: 40px;">메모</td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                  <input type="text" name="jobPrice" placeholder="금액" 
+                  value="{{ jobData.get('jobPrice') }}" 
+                  style="min-height: 70px; font-size: 40px"></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                    <textarea name="jobDescription" cols="4" rows="2" style="min-height: 500px; min-width: 100%; font-size: 50px;">{{ jobData.get('jobDescription') }}</textarea>
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                    <input type="button" value="손님 목록으로" 
+                    style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
+                    onclick="location.href='/customers'">
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <input type="button" value="시술 목록으로" 
+                  style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;" 
+                  onclick="location.href='/customers/{{ customerID }}/jobs'">
+              </td>
+              </tr>
+            </tbody>
+            </table>
+          </form>
+        </div>
+    </body>
+</html>

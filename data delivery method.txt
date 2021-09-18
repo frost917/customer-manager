@@ -1,0 +1,91 @@
+﻿//customer data json
+
+//return customer data
+{
+    "customerData": [ 
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str"
+        }
+    ]
+}
+
+//return many customers data
+{
+    "customerData": [
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str"
+        }
+    ]
+}
+
+//add customer data
+{
+    "customerData": [
+        {
+            "customerName": "str",
+            "phoneNumber": "str"
+        }
+    ]
+}
+
+// return add customer
+{
+    "addTime": "%Y-%m-%d",
+    "customerData":[
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str"
+        }
+    ]
+}
+
+//update customer data
+{
+    "customerData": [
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str"
+        }
+    ]
+}
+
+//return job data
+{
+    "customerData": [
+        {
+            "customerID": "str",
+            "customerName": "str",
+            "phoneNumber": "str
+        }
+    ]
+    "jobData": [
+        {
+            "jobID": "str",
+            "jobFinished": [
+                "int",
+            ],
+            "visitDate": "str",
+            "jobPrice": "int",
+            "jobDescription": "str"
+        }
+    ]
+}
+
+//add job data
+{
+    "jobData": [
+        {
+            "jobFinished": [
+                "int",
+            ],
+            "jobPrice": "int",
+            "jobDescription": "str"
+        }
+    ]
+}
