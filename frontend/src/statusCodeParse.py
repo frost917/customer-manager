@@ -2,7 +2,9 @@
 
 def parseStatusCode(status_code):
     if status_code == 401:
-        pass
+        return """<script>
+        history.go(-1);
+        </script>"""
     elif 400 <= status_code and status_code <= 499:
         return """<script>
         alert("데이터가 잘못되었습니다");
@@ -11,5 +13,5 @@ def parseStatusCode(status_code):
     elif 500 <= status_code and status_code <= 599:
         return """<script>
         alert("서버 에러");
-        history.go(-2);
+        history.go(-1);
         </script>"""

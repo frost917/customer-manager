@@ -12,18 +12,16 @@ front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @tokenVerify
 def addNewJobPage(customerID):
     accessToken = g.get('accessToken')
-    print(accessToken)
 
     url = backendData['ADDR'] + '/customers/' + customerID
-    headers = {'content-type': 'charset=UTF-8', 'accessToken': accessToken}
+    headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
     req = requests.get(url=url, headers=headers)
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
     data = json.loads(req.text)
-    customerData = data.get('customerData')
-    print(customerData)
+    customerData = data.get('customerData')[0]
 
     temp = make_response(render_template('job-add.html', customerData=customerData, customerID=customerID))
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))
@@ -33,17 +31,33 @@ def addNewJobPage(customerID):
 @tokenVerify
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
+    payload = dict()
 
     customerID = request.form.get('customerID')
-    customerName = request.form.get('customerName')
-    phoneNumber = request.form.get('phoneNumber')
 
+    jobFinished = request.form.getlist('jobFinished')
+    jobPrice = request.form.get('jobPrice')
+    jobDescription = request.form.get('jobDescription')
 
+    jobData = dict()
+    jobData['jobFinished'] = jobFinished
+    jobData['jobPrice'] = jobPrice
+    jobData['jobDescription'] = jobDescription
+
+    temp = [jobData]
+    payload['jobData'] = temp
 
     url = 'http://localhost:6000'
     customerUrl = url + '/jobs'
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
     req = requests.post(url=customerUrl, headers=headers)
 
-    temp = make_response(render_template('customer-add.html'))
+    if req.status_code != 200:
+        return parseStatusCode(req.status_code)
+
+    data = json.loads(req.text)
+    jobData = data.get('jobData')[0]
+    jobID = jobData.get('jobID')
+
+    temp = make_response(render_template('customer-data.html'))
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3))

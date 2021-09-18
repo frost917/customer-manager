@@ -19,11 +19,10 @@ def getCustomerData(customerID):
         from msg.jsonMsg import databaseIsGone
         result =  Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
-    # TODO Dict가 아니라 리스트로 나오는 버그 있음
     customerData = dict()
     customerData['customerID'] = customerID
-    customerData['customerName'] = queryResult[0]
-    customerData['phoneNumber'] = queryResult[1]
+    customerData['customerName'] = queryResult.get('customer_name')
+    customerData['phoneNumber'] = queryResult.get('phone_number')
 
     temp = list()
     temp.append(customerData)
