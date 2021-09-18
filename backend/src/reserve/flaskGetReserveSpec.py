@@ -5,15 +5,13 @@ from postgres.databaseConnection import PostgresControll
 
 from auth.flaskAuthVerify import tokenVerify
 
-manager = Blueprint('getAllReserve', __name__, url_prefix='/reserve')
+manager = Blueprint('getReserveData', __name__, url_prefix='/reserve')
 
-@manager.route('', methods=['GET'])
+@manager.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
-def getAllReserve():
+def getReserveData(customerID):
     database = PostgresControll()
-
-    UUID = g.get('UUID')
-    reserves = database.getAllReserve(UUID=UUID)
+    reserves = database.getReserveFromCustomerID(customerID=customerID)
 
     if reserves is None:
         from msg.jsonMsg import databaseIsGone
@@ -25,8 +23,8 @@ def getAllReserve():
 
     convList = list()
 
-    # 전체 데이터 패키징
     for reserve in reserves:
+    # 전체 데이터 패키징
         temp = dict()
         reserveID = reserve.get('reserve_id')
         reserveData = database.getReserveData(reserveID=reserveID)

@@ -7,9 +7,9 @@ from dataProcess import dataParsing
 from flask import Blueprint, Response, g
 from postgres.databaseConnection import PostgresControll
 
-manager = Blueprint('addJobHistory', __name__, url_prefix='/reserve')
+manager = Blueprint('addNewReserve', __name__, url_prefix='/reserve')
 
-# 단일 손님에 대한 단일 데이터만 책임짐
+# 손님 한 명의 예약 추가
 @manager.route('/<customerID>', methods=['POST'])
 @tokenVerify
 @dataParsing

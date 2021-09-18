@@ -28,7 +28,7 @@ def getReserveData(self, reserveID):
             WHERE reserve_id = uuid(%s)""",
             (reserveID,))
 
-        result = self.cur.fetchall()
+        result = self.cur.fetchone()
         if result is None:
             result = dict()
         return result
@@ -48,6 +48,25 @@ def getReserveType(self, reserveID):
             ON ( job_type.type_id = reserve_type.type_id )
             WHERE reserve_type.reserve_id = uuid(%s)""",
             (reserveID,))
+
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
+
+    except db.DatabaseError as err:
+        print(err)
+        return dict()
+
+def getReserveFromCustomerID(self, customerID):
+    try:
+        self.cur.execute("""
+            SELECT 
+                reserve_id,
+                reserve_time
+            FROM reserve_data
+            WHERE customer_id = uuid(%s)""",
+            (customerID,))
 
         result = self.cur.fetchall()
         if result is None:
