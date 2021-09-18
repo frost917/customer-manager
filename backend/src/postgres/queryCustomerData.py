@@ -96,7 +96,7 @@ def updateCustomerData(self, customerData):
             SET
                 customer_name = %s,
                 phone_number = %s
-            WHERE customer_id = %s""",
+            WHERE customer_id = uuid(%s)""",
             (customerName, phoneNumber, customerID,))
         return True
     except db.DatabaseError as err:
@@ -110,8 +110,8 @@ def deleteCustomerData(self, customerID):
         UPDATE
             customer
         SET
-            is_deleted = True
-        WHERE customer_id = %s""",
+            is_deleted IS True
+        WHERE customer_id = uuid(%s)""",
         (customerID,))
         return True
     except db.DatabaseError as err:
