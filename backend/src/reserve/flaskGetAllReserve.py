@@ -21,8 +21,7 @@ def getAllReserve():
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     elif len(reserves) == 0:
-        from msg.jsonMsg import jobNotFound
-        return Response(jobNotFound(), status=404, content_type="application/json; charset=UTF-8")
+        return Response(json.dumps({}), status=200, content_type="application/json; charset=UTF-8")
 
     convList = list()
 

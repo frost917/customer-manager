@@ -33,9 +33,9 @@
                 </td>
                 <td class="tg-nrix" style="padding: 0; margin: 0;">
                   <input type="button" 
-                  onclick="location.href='/reserves'" 
+                  onclick="location.href='/customers'" 
                   style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;"
-                  value="예약 정보">    
+                  value="예약 추가">    
                 </td>
               </tr>
               <tr>
@@ -43,6 +43,7 @@
                   다음 예약
                 </td>
               </tr>
+              {% if reserveData is not none %}
               {% for reserve in reserveData %}
               <tr>
                 <td class="tg-y0n7">
@@ -59,6 +60,13 @@
                 </td>
               </tr>
               {% endfor %}
+              {% else %}
+              <tr>
+                <td class="tg-y0n7" colspan="2">
+                  예약 없음
+                </td>
+              </tr>
+              {% endif %}
             </tbody>
             </table>
         </div>
