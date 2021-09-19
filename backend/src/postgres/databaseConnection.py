@@ -33,16 +33,13 @@ class PostgresControll(metaclass=Singleton):
         user = dbData['DB_USER']
         passwd = dbData['DB_PASSWD']
 
-        try:
-            self.dbconn = psycopg2.connect(
-                database=database, 
-                host=host, 
-                port=port, 
-                user=user, 
-                password=passwd)
-            self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        except psycopg2.DatabaseError as err:
-            print(err)
+        self.dbconn = psycopg2.connect(
+            database=database, 
+            host=host, 
+            port=port, 
+            user=user, 
+            password=passwd)
+        self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     def __del__(self):
         self.dbconn.commit()
