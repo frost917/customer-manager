@@ -8,16 +8,13 @@ from flask import Response, g, request
 def dataParsing(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print('데이터 파싱 시작')
         if request.is_json == False:
-            print('데이터 형식이 JSON이 아님')
             from msg.jsonMsg import dataNotJSON
             return Response(dataNotJSON(), status=400)
 
         try:
             data = request.get_json()
         except:
-            print('데이터 파싱 실패')
             from msg.jsonMsg import dataNotJSON
             return Response(dataNotJSON(), status=400)
 
@@ -29,6 +26,5 @@ def dataParsing(func):
 
         # 예약 리스트
         g.reserves = data.get('reserveData')
-        print('데이터 파싱 성공')
         return func(*args, **kwargs)
     return wrapper

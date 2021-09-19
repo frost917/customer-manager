@@ -61,7 +61,6 @@ def index():
         return parseStatusCode(reserveReq.status_code)
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
-    print(reserveData)
 
     return render_template('index.html', reserveData=reserveData)
 

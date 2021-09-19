@@ -25,8 +25,6 @@ def getReserveData(reserveID):
     data = json.loads(reserveReq.text)
     reserveData = data.get('reserveData')[0]
 
-    print(reserveData)
-
     # 날짜 데이터는 일자 / 시간 으로 분리
     reserveDate = reserveData['reserveTime'].split()[0]
     reserveTime = reserveData['reserveTime'].split()[1]

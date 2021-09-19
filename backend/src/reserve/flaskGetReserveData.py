@@ -26,8 +26,6 @@ def getReserveData(reserveID):
     temp = dict()
     reserveTypes = database.getReserveType(reserveID=reserveID)
 
-    print(reserveTypes)
-
     customerID = reserveData.get('customer_id')
     # 시간 쿼리했을 경우 datetime 객체로 불러와짐
     reserveTime = reserveData.get('reserve_time').strftime('%Y-%m-%d %H:%M')
@@ -37,7 +35,6 @@ def getReserveData(reserveID):
     temp['reserveID'] = reserveID
 
     # 시술 타입 패키징
-    print(reserveTypes)
     types = dict()
     for reserveType in reserveTypes:
         types[reserveType.get('type_id')] = reserveType.get('job_name')
@@ -45,7 +42,5 @@ def getReserveData(reserveID):
     temp['reserveTime'] = reserveTime
 
     payload = {'reserveData': [temp]}
-
-    print(payload)
 
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
