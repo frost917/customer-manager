@@ -5,6 +5,8 @@ import requests
 from functools import wraps
 from datetime import timedelta
 
+from werkzeug.utils import redirect
+
 from statusCodeParse import parseStatusCode
 from config.backendData import backendData
 
@@ -70,6 +72,9 @@ def tokenVerify(func):
             history.go(-1);
             </script>""")
             loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+
+        elif accessToken is None and refreshToken is None:
+            return redirect('/login')
 
         return func(*args, **kwargs)
     return wrapper

@@ -16,8 +16,4 @@ front = Blueprint('loginPage', __name__, url_prefix='/login')
 @front.route('', methods=['GET'])
 @tokenVerify
 def loginPage():
-    accessToken = request.cookies.get('accessToken')
-    refreshToken = request.cookies.get('refreshToken')
-
-    if accessToken is None and refreshToken is None:
-        return render_template('login.html')
+    return render_template('login.html')
