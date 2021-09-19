@@ -13,6 +13,7 @@ front = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 def getReserveData(reserveID):
     accessToken = g.get('accessToken')
 
+    # 예약 id로 데이터 불러오기
     url = backendData['ADDR']
     reserveUrl = url + '/reserves/' + reserveID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
@@ -24,7 +25,10 @@ def getReserveData(reserveID):
     data = json.loads(reserveReq.text)
     reserveData = data.get('reserveData')[0]
 
-    # 시:분 부분만 따로 빼옴
+    print(reserveData)
+
+    # 날짜 데이터는 일자 / 시간 으로 분리
+    reserveDate = reserveData['reserveTime'].split()[0]
     reserveTime = reserveData['reserveTime'].split()[1]
 
     customerID = reserveData.get('customerID')
@@ -42,6 +46,7 @@ def getReserveData(reserveID):
         render_template('reserve-data.html', 
             customerData=customerData, 
             reserveData=reserveData,
+            reserveDate=reserveDate,
             reserveTime=reserveTime, 
             customerID=customerID)
     )

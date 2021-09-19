@@ -22,13 +22,11 @@ def getReserveData(reserveID):
         from msg.jsonMsg import reserveNotFound
         return Response(reserveNotFound(reserveID), status=404, content_type="application/json; charset=UTF-8")
 
-    convList = list()
-
     # 전체 데이터 패키징
     temp = dict()
-    reserveID = reserveData.get('reserve_id')
-    reserveData = database.getReserveData(reserveID=reserveID)
     reserveTypes = database.getReserveType(reserveID=reserveID)
+
+    print(reserveTypes)
 
     customerID = reserveData.get('customer_id')
     # 시간 쿼리했을 경우 datetime 객체로 불러와짐
@@ -39,12 +37,15 @@ def getReserveData(reserveID):
     temp['reserveID'] = reserveID
 
     # 시술 타입 패키징
-    types = list()
+    print(reserveTypes)
+    types = dict()
     for reserveType in reserveTypes:
-        types.append(reserveType)
+        types[reserveType.get('type_id')] = reserveType.get('job_name')
     temp['reserveType'] = types
-
     temp['reserveTime'] = reserveTime
 
-    payload = {'reserveData': [reserveData]}
+    payload = {'reserveData': [temp]}
+
+    print(payload)
+
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")

@@ -3,6 +3,8 @@ import json
 import requests
 from datetime import timedelta
 
+from werkzeug.utils import redirect
+
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.secret import backendData
@@ -33,8 +35,6 @@ def addNewReservePage(customerID):
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
 
-    customerData = {'customerID': customerID}
-
     reserveType = request.form.getlist('reserveType')    
     reserveDate = request.form.get('reserveDate')
     reserveTime = request.form.get('reserveTime')
@@ -54,14 +54,8 @@ def addNewJob(customerID):
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
-    # 백엔드에서 손님 데이터 받아옴
-    # 손님 id는 url에서 받음
-    url = backendData['ADDR'] + '/customers/' + customerID
-    req = requests.get(url=url, headers=headers)
+    reserveID = json.loads(req.text).get('reserveData')[0].get('reserveID')
 
-    data = json.loads(req.text)
-    customerData = data.get('customerData')[0]
-
-    temp = make_response(render_template('reserve-data.html', customerData=customerData, customerID=customerID, reserveData=reserveData))
+    temp = make_response(redirect('/reserves/'+ reserveID))
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
     return temp

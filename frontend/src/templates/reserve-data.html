@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <title>{{ customerData.get('customerName') }} - 예약 추가</title>
+        <title>{{ customerData.get('customerName') }} - 예약 정보</title>
     </head>
     <body>
         <style type="text/css">
@@ -48,25 +48,25 @@
                   <div class="check">
                     <div>
                       <input type="checkbox" value="1" name="reserveType"
-                      {% if '1' in jobData.get('reserveType') %}
+                      {% if '1' in reserveData.get('reserveType') %}
                       checked
                       {% endif %}> 커트
                       <input type="checkbox" value="2" name="reserveType"
-                      {% if '2' in jobData.get('reserveType') %}
+                      {% if '2' in reserveData.get('reserveType') %}
                       checked
                       {% endif %}> 파마
                       <input type="checkbox" value="4" name="reserveType"
-                      {% if '4' in jobData.get('reserveType') %}
+                      {% if '4' in reserveData.get('reserveType') %}
                       checked
                       {% endif %}> 매직
                     </div>
                     <div>
                       <input type="checkbox" value="8" name="reserveType"
-                      {% if '8' in jobData.get('reserveType') %}
+                      {% if '8' in reserveData.get('reserveType') %}
                       checked
                       {% endif %}> 염색
                       <input type="checkbox" value="16" name="reserveType"
-                      {% if '16' in jobData.get('reserveType') %}
+                      {% if '16' in reserveData.get('reserveType') %}
                       checked
                       {% endif %}> 클리닉
                     </div>
@@ -81,7 +81,7 @@
               <tr>
                 <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
                   <!-- 예약 일자 -->
-                  <input type="date" name="reserveDate" required style="width: 100%; height: 100%; font-size: 55px;" value="{{ reserveData.get('reserveDate') }}">
+                  <input type="date" name="reserveDate" required style="width: 100%; height: 100%; font-size: 55px;" value="{{ reserveDate }}">
                 </td>
               </tr>
               <tr>

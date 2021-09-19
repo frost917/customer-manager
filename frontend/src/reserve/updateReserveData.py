@@ -20,6 +20,7 @@ def updateReserveData(reserveID):
     reserveTime = request.form.get('reserveTime')
 
     reserveData = dict()
+    reserveData['reserveID'] = reserveID
     reserveData['reserveType'] = reserveType
     reserveData['reserveTime'] = reserveDate + ' ' + reserveTime
 
@@ -34,6 +35,6 @@ def updateReserveData(reserveID):
         return parseStatusCode(req.status_code)
 
     # 업데이트 후 데이터 열람 페이지로 이동
-    temp = make_response(redirect('/reserves' + reserveID))
+    temp = make_response(redirect('/reserves/' + reserveID))
     temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
     return temp

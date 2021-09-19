@@ -126,7 +126,7 @@ def updateReserveData(self, reserveData):
         SET
             reserve_time = to_timestamp(%s, 'YYYY-MM-DD HH24:MI')
         WHERE reserve_id = uuid(%s)
-        )""", 
+        """, 
         (reserveTime ,reserveID, ))
 
         self.cur.execute("""
