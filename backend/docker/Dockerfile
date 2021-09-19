@@ -15,10 +15,12 @@ RUN apt update && apt install -y locales \
 
 COPY --from=clone /customer-manager /customer-manager
 
-WORKDIR /customer-manager
+WORKDIR /customer-manager/backend/
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /customer-manager/backend/requirements.txt
 
 WORKDIR /customer-manager/backend/src/
 
 CMD python main.py
+
+EXPOSE 443
