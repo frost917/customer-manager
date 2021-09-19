@@ -5,7 +5,7 @@ from datetime import timedelta
 import json, requests
 
 from login.loginVerify import tokenVerify
-from config.secret import backendData
+from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
