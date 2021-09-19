@@ -67,8 +67,20 @@ class PostgresControll(metaclass=Singleton):
     
     # login table
     from postgres.queryLoginData import addNewUser, getUserPasswd, getUUID
+
     # visit_history table
     from postgres.queryVisitHistory import getVisitHistory, getVisitHistoryDict
+
+    # 예약 관련 기능 추가
+    from postgres.queryReserve import (
+        getAllReserve, 
+        getReserveData, 
+        getReserveType, 
+        addNewReserve, 
+        setReserveComplete,
+        getReserveFromCustomerID,
+        deleteReserveData,
+        updateReserveData)
 
     # # 모든 예약 불러오기
     # def getReserveDict(self, UUID):

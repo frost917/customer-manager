@@ -51,6 +51,18 @@ def jobNotFound(jobID):
     payload = dict()
     payload['failed'] = convList
 
+def reserveNotFound(reserveID):
+    convDict = dict()
+    convDict['error'] = 'reserveNotFound'
+    convDict['msg'] = 'reserve is not found!'
+    convDict['reserveID'] = reserveID
+    
+    convList = list()
+    convList.append(convDict)
+
+    payload = dict()
+    payload['failed'] = convList
+
 def dataNotJSON():
     payload = dict()
     convDict = dict()

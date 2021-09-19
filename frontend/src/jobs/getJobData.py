@@ -30,6 +30,6 @@ def getJobData(jobID):
     customerID = customerData.get('customerID')
 
     result = make_response(render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
 
     return result

@@ -50,12 +50,14 @@ def tokenVerify(func):
             accessToken = loginData.get('accessToken')
 
             loginResult = make_response("""<script>
-            history.go(-2);
+            history.go(-1);
             </script>""")
-            loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+            loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
 
             return loginResult
 
+        # refreshToken이 없는 경우 accessToken을 이용해
+        # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
             url = 'http://localhost:6000/auth/refresh'
             headers = {'accessToken': accessToken}
@@ -65,9 +67,9 @@ def tokenVerify(func):
                 return parseStatusCode(req.status_code)
 
             loginResult = make_response("""<script>
-            history.go(-2);
+            history.go(-1);
             </script>""")
-            loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320))
+            loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
 
         return func(*args, **kwargs)
     return wrapper
