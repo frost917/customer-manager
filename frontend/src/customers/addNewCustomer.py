@@ -31,13 +31,13 @@ def addNewCustomer():
 
     url = backendData['ADDR'] + '/customers'
     headers = {'content-type': 'application/json; charset=UTF-8', 'Authorization': accessToken}
-    req = requests.get(url=url, headers=headers, data=json.dumps(payload))
+    req = requests.post(url=url, headers=headers, data=json.dumps(payload))
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
 
-    result = make_response(redirect('/customers/' + customerID))
+    result = make_response(redirect('/customers/' + customerID + '/jobs'))
     result.set_cookie('accessToken', accessToken, httponly=True)
     return result

@@ -79,6 +79,7 @@ def addNewCustomer(self, UUID,customerData):
         FROM data
         """,
         (UUID, customerID, customerName, phoneNumber,))
+        self.dbconn.commit()
         return True
     except db.DatabaseError as err:
         print(err)
@@ -98,6 +99,7 @@ def updateCustomerData(self, customerData):
                 phone_number = %s
             WHERE customer_id = uuid(%s)""",
             (customerName, phoneNumber, customerID,))
+        self.dbconn.commit()
         return True
     except db.DatabaseError as err:
         print(err)
@@ -113,6 +115,7 @@ def deleteCustomerData(self, customerID):
             is_deleted IS True
         WHERE customer_id = uuid(%s)""",
         (customerID,))
+        self.dbconn.commit()
         return True
     except db.DatabaseError as err:
         print(err)
@@ -133,6 +136,7 @@ def removeCustomerData(self, customerData):
         DELETE FROM customer
         WHERE customer_id IN ( SELECT data.customer_id FROM data )""",
         (customerID, ))
+        self.dbconn.commit()
         return True
     except db.DatabaseError as err:
         print(err)
