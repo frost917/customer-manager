@@ -36,6 +36,6 @@ def getReserveData(reserveID):
     customerID = customerData.get('customerID')
 
     result = make_response(render_template('reserve-data.html', customerData=customerData, reserveData=reserveData, customerID=customerID))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
 
     return result

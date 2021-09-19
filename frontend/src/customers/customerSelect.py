@@ -25,5 +25,5 @@ def customerSelect():
     customerData = data.get('customerData')
 
     result = make_response(render_template('select-customer.html', customerData=customerData))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
     return result
