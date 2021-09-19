@@ -26,7 +26,7 @@ def addNewJobPage(customerID):
     customerData = data.get('customerData')[0]
 
     temp = make_response(render_template('job-add.html', customerData=customerData, customerID=customerID))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
+    temp.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
     return temp
 
 @front.route('/customer/<customerID>', methods=['POST'])
