@@ -16,7 +16,7 @@ def getAllReserve(self, UUID):
 
     except db.DatabaseError as err:
         print(err)
-        return dict()
+        return None
 
 def getReserveData(self, reserveID):
     try:
@@ -35,7 +35,7 @@ def getReserveData(self, reserveID):
 
     except db.DatabaseError as err:
         print(err)
-        return dict()
+        return None
 
 def getReserveType(self, reserveID):
     try:
@@ -56,7 +56,7 @@ def getReserveType(self, reserveID):
 
     except db.DatabaseError as err:
         print(err)
-        return dict()
+        return None
 
 def getReserveFromCustomerID(self, customerID):
     try:
@@ -75,7 +75,7 @@ def getReserveFromCustomerID(self, customerID):
 
     except db.DatabaseError as err:
         print(err)
-        return dict()
+        return None
 
 def addNewReserve(self, UUID, reserveData: dict):
     customerID = reserveData['customerID']

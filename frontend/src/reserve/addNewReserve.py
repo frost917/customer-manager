@@ -3,14 +3,12 @@ import json
 import requests
 from datetime import timedelta
 
-from werkzeug.utils import redirect
-
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.secret import backendData
 
 front = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
-@front.route('/customers/<customerID>', methods=['GET'])
+@front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
 def addNewReservePage(customerID):
     accessToken = g.get('accessToken')
@@ -45,6 +43,7 @@ def addNewJob(customerID):
     reserveData['reserveType'] = reserveType
     reserveData['reserveTime'] = reserveTime
 
+    # 백엔드와 통신, 데이터 등록
     url = backendData['ADDR'] + '/reserves/customer/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
     req = requests.post(url=url, headers=headers, data=reserveData)
@@ -52,7 +51,11 @@ def addNewJob(customerID):
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
 
+    # 백엔드에서 손님 데이터 받아옴
     # 손님 id는 url에서 받음
+    url = backendData['ADDR'] + '/customers/' + customerID
+    req = request.get(url=url, headers=headers)
+
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 

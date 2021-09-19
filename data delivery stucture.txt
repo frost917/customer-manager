@@ -108,19 +108,6 @@
     "reserveData": [
         {
             "customerID": "str",
-            "reserveType": [
-                "int",
-            ],
-            "reserveTime": "str"
-        }
-    ]
-}
-
-// return reserve data
-{
-    "reserveData": [
-        {
-            "customerID": "str",
             "reserveID": "str",
             "reserveType": [
                 "int",
