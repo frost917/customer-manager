@@ -1,7 +1,6 @@
 ﻿FROM alpine/git AS clone
 
-RUN git clone https://github.com/frost917/customer-manager.git /customer-manager \
-    && git checkout frontend
+RUN git clone https://github.com/frost917/customer-manager.git /customer-manager
 
 FROM python:3.8-slim-buster AS RUN
 

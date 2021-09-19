@@ -1,0 +1,6 @@
+﻿flask
+psycopg2-binary
+bcrypt
+redis
+PyJWT[crypto]
+python-dateutil
