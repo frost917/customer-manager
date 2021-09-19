@@ -15,6 +15,7 @@
         .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle; font-size:50px;}
         .tg .tg-0lax{text-align:left;vertical-align:top}
         .dataButton{font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;}
+        input[type="button"]{margin: 0; padding: 3px; font-size: 50px; min-width: 100%;}
       </style>
       <div class="tg-wrap"><table class="tg">
         <thead>
@@ -33,12 +34,12 @@
             <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
                 <input type="button" 
                 onclick="location.href='/customers'" 
-                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;" value="손님 목록으로">
+                style="min-height: 70px;" value="손님 목록으로">
             </td>
             <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
               <input type="button" 
                 onclick="location.href='/jobs/customer/{{ customerID }}'" 
-                style="margin: 0; padding: 3px; font-size: 50px; min-width: 100%; min-height: 70px;"
+                style="min-height: 70px;"
                 value="시술 추가">
           </td>
           </tr>
