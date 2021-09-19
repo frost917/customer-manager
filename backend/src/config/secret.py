@@ -10,6 +10,6 @@ dbData['DB_USER'] = os.getenv("DB_USER")
 dbData['DB_PASSWD'] = os.getenv("DB_PASSWD")
 
 redisData = dict()
-redisData['REDIS_HOST']
-redisData['REDIS_PORT']
-redisData['REDIS_PASSWD']
+redisData['REDIS_HOST'] = os.getenv("REDIS_HOST")
+redisData['REDIS_PORT'] = os.getenv("REDIS_PORT")
+redisData['REDIS_PASSWD'] = os.getenv("REDIS_PASSWD")
