@@ -33,9 +33,11 @@ app.register_blueprint(getJobData.front)
 
 from reserve import addNewReserve
 from reserve import getReserveData
+from reserve import updateReserveData
 
 app.register_blueprint(addNewReserve.front)
 app.register_blueprint(getReserveData.front)
+app.register_blueprint(updateReserveData.front)
 
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 

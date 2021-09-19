@@ -26,7 +26,8 @@
                 </th>
               </tr>
             </thead>
-            <form action="/reserves/customer/{{ customerID }}" method="PUT">
+            <form action="/reserves/{{ reserveData.get('reserveID') }}" method="POST">
+              <input type="hidden" value="{{ customerData.get('customerID') }}">
               <input type="hidden" value="{{ reserveData.get('reserveID') }}">
             <tbody>
               <tr>
