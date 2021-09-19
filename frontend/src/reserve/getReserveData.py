@@ -24,6 +24,9 @@ def getReserveData(reserveID):
     data = json.loads(reserveReq.text)
     reserveData = data.get('reserveData')[0]
 
+    # 시:분 부분만 따로 빼옴
+    reserveTime = reserveData['reserveTime'].split()[1]
+
     customerID = reserveData.get('customerID')
     customerUrl = url + '/customers/' + customerID
     customerReq = requests.get(url=customerUrl, headers=headers)
@@ -38,7 +41,8 @@ def getReserveData(reserveID):
     result = make_response(
         render_template('reserve-data.html', 
             customerData=customerData, 
-            reserveData=reserveData, 
+            reserveData=reserveData,
+            reserveTime=reserveTime, 
             customerID=customerID)
     )
     result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)

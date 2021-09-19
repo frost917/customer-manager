@@ -45,9 +45,6 @@ def getReserveData(reserveID):
     temp['reserveType'] = types
 
     temp['reserveTime'] = reserveTime
-    convList.append(temp)
 
-    payload = dict()
-    payload['reserveData'] = convList
-
+    payload = {'reserveData': [reserveData]}
     return Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")

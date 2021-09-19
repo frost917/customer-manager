@@ -8,29 +8,9 @@ from login.loginVerify import tokenVerify
 from config.secret import backendData
 
 front = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
-@front.route('/customer/<customerID>', methods=['GET'])
+@front.route('/customer/<customerID>', methods=['PUT'])
 @tokenVerify
-def addNewReservePage(customerID):
-    accessToken = g.get('accessToken')
-
-    url = backendData['ADDR'] + '/customers/' + customerID
-    headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    req = requests.get(url=url, headers=headers)
-
-    if req.status_code != 200:
-        return parseStatusCode(req.status_code)
-
-    # 손님 id는 url에서 받음
-    data = json.loads(req.text)
-    customerData = data.get('customerData')[0]
-
-    temp = make_response(render_template('reserve-add.html', customerData=customerData, customerID=customerID))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
-    return temp
-
-@front.route('/customer/<customerID>', methods=['POST'])
-@tokenVerify
-def addNewJob(customerID):
+def updateReserveData(customerID):
     accessToken = g.get('accessToken')
 
     customerData = {'customerID': customerID}
@@ -46,10 +26,10 @@ def addNewJob(customerID):
 
     payload = {'reserveData': [ reserveData ]}
 
-    # 백엔드와 통신, 데이터 등록
+    # 백엔드와 통신, 데이터 업데이트
     url = backendData['ADDR'] + '/reserves/customer/' + customerID
     headers = {'content-type': 'application/json; charset=UTF-8', 'Authorization': accessToken}
-    req = requests.post(url=url, headers=headers, data=json.dumps(payload))
+    req = requests.put(url=url, headers=headers, data=json.dumps(payload))
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)
