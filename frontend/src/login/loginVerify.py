@@ -6,7 +6,7 @@ from functools import wraps
 from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
-from config.secret import backendData
+from config.backendData import backendData
 
 # 토큰 살아있는지 확인
 def tokenVerify(func):

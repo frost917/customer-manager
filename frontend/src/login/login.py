@@ -4,7 +4,7 @@ from flask import request, make_response, Blueprint
 import requests
 import json
 
-from config.secret import backendData
+from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
 front = Blueprint('login', __name__, url_prefix='/login')

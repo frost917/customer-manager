@@ -47,7 +47,7 @@ import requests
 import json
 
 from login.loginVerify import tokenVerify
-from config.secret import backendData
+from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 @app.route('/')
 @tokenVerify

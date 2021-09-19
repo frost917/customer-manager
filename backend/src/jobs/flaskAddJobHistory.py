@@ -1,5 +1,4 @@
-﻿from dataCheck import customerDataCheck
-import json
+﻿import json
 import uuid
 from datetime import datetime
 

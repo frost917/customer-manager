@@ -5,7 +5,7 @@ import json, requests
 from flask.helpers import make_response
 
 from statusCodeParse import parseStatusCode
-from config.secret import backendData
+from config.backendData import backendData
 front = Blueprint('customerSelect', __name__, url_prefix='/customers')
 
 @front.route('', methods=['GET'])

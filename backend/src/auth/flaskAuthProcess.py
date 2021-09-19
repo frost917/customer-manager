@@ -1,5 +1,4 @@
 ﻿from flask import Response, request, Blueprint
-from flask.helpers import make_response
 
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 

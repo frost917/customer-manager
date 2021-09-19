@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from config.secret import backendData
+from config.backendData import backendData
 
 front = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['GET'])

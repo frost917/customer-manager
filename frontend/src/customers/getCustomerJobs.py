@@ -5,7 +5,7 @@ from flask.helpers import make_response
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from config.secret import backendData
+from config.backendData import backendData
 
 front = Blueprint('customerJobData', __name__, url_prefix='/customers')
 

@@ -7,7 +7,7 @@ from werkzeug.utils import redirect
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from config.secret import backendData
+from config.backendData import backendData
 
 front = Blueprint('updateReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['POST'])

@@ -1,6 +1,6 @@
 ﻿from functools import wraps
 
-from flask import Response, g, redirect, request
+from flask import Response, g, request
 
 from auth.jwtTokenProcess import tokenGetUserID, tokenGetUUID
 
