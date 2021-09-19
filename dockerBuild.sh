@@ -7,5 +7,11 @@ cd  ${gitDir}/
 docker buildx build \
     --push \
     --platform=linux/arm64/v8,linux/amd64 \
-    -t ${REGISTRY}/customer-manager:${ver} \
-    ./ 
+    -t ${REGISTRY}/customer-manager:frontend \
+    ./docker/Dockerfile.frontend
+
+docker buildx build \
+    --push \
+    --platform=linux/arm64/v8,linux/amd64 \
+    -t ${REGISTRY}/customer-manager:backend \
+    ./docker/Dockerfile.backend

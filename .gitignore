@@ -1,6 +1,5 @@
 docker-compose.yml
 k8s/
-docker/
 
 # venv는 제외
 hairmgmt/
