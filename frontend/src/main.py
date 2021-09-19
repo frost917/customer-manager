@@ -29,6 +29,16 @@ from jobs import getJobData
 app.register_blueprint(addNewJob.front)
 app.register_blueprint(getJobData.front)
 
+# 예약 관련 페이지 블루프린트
+
+from reserve import addNewReserve
+from reserve import getReserveData
+
+app.register_blueprint(addNewReserve.front)
+app.register_blueprint(getReserveData.front)
+
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
 from login.loginVerify import tokenVerify
 @app.route('/')
 @tokenVerify
