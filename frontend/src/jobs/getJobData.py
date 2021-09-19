@@ -25,7 +25,6 @@ def getJobData(jobID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
     jobData = data.get('jobData')
-    print(jobData)
 
     customerID = customerData.get('customerID')
 

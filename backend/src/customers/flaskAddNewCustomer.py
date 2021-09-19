@@ -13,7 +13,7 @@ manager = Blueprint("addNewCustomer", __name__, url_prefix='/customers')
 @dataParsing
 def addNewCustomer():
     UUID = g.get('UUID')
-    successedList = list()
+    temp = list()
 
     import uuid
     database = PostgresControll()
@@ -26,15 +26,11 @@ def addNewCustomer():
 
         # 시술에 실패한 경우 DB가 죽은 것
         if database.addNewCustomer(UUID = UUID, customerData=customerData) is True:
-            successedList.append(customerData)
+            temp.append(customerData)
         else:
             return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
-    tasks = dict()
-
-    tasks['addDate'] = datetime.now().strftime('%Y-%m-%d')
-    if len(successedList) != 0:
-        tasks['successed'] = successedList
+    tasks = { "customerData": temp}
 
     from json import dumps
     return Response(dumps(tasks), status=200, content_type="application/json; charset=UTF-8")

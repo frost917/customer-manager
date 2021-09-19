@@ -17,9 +17,11 @@ app.register_blueprint(loginPage.front)
 
 from customers import customerSelect
 from customers import getCustomerJobs
+from customers import addNewCustomer
 
 app.register_blueprint(customerSelect.front)
 app.register_blueprint(getCustomerJobs.front)
+app.register_blueprint(addNewCustomer.front)
 
 # 시술 관련 페이지 블루프린트
 
@@ -61,7 +63,6 @@ def index():
         return parseStatusCode(reserveReq.status_code)
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
-    print(reserveData)
 
     return render_template('index.html', reserveData=reserveData)
 

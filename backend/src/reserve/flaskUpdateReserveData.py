@@ -15,8 +15,7 @@ def updateReserveData():
 
     reserveData = g.get('reserves')
 
-    for reserve in reserveData: 
-        print(reserve)
+    for reserve in reserveData:
         result = database.updateReserveData(reserveData=reserve)
 
         if result is False:

@@ -8,9 +8,6 @@ def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
 
-    # print("header accessToken is {}".format(accessToken))
-    # print("header refreshToken is {}".format(refreshToken))
-
     if refreshToken is None:
         refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
@@ -20,9 +17,6 @@ def tokenRefresh():
     
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
-
-    # print('isAccessTokenExpired is {}'.format(isAccessTokenExpired))
-    # print('isRefreshTokenExpired is {}'.format(isRefreshTokenExpired))
 
     from msg.jsonMsg import tokenInvalid
 
@@ -44,12 +38,8 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
-        # print("redis userID is {}".format(userID))
-        # print("redis UUID is {}".format(UUID))
-
         accessToken = createAccessToken(userID=userID, UUID=UUID)
-        # print("created accessToken is {}".format(accessToken))
-
+        
     # refresh token만 파기된 경우
     elif isRefreshTokenExpired:
         # refresh token 삭제
