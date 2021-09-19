@@ -5,6 +5,8 @@ import requests
 from functools import wraps
 from datetime import timedelta
 
+from werkzeug.utils import redirect
+
 from statusCodeParse import parseStatusCode
 from config.backendData import backendData
 
@@ -21,7 +23,7 @@ def tokenVerify(func):
         if accessToken is not None and refreshToken is not None:
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
-            req = requests.get(url=url, headers=headers)
+            req = requests.get(url=url, headers=headers, verify=False)
         
             if 200 <= req.status_code and req.status_code <= 299:
                 pass
@@ -29,7 +31,7 @@ def tokenVerify(func):
             elif req.status_code == 401:
                 headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
                 refUrl = url + '/auth/refresh'
-                req = requests.get(url=refUrl, headers=headers)
+                req = requests.get(url=refUrl, headers=headers, verify=False)
 
                 loginData = json.loads(req.text)
                 accessToken = loginData.get('accessToken')
@@ -41,7 +43,7 @@ def tokenVerify(func):
         elif accessToken is None and refreshToken is not None:
             url = 'http://localhost:6000/auth/refresh'
             headers = {'refreshToken': refreshToken}
-            req = requests.post(url=url, headers=headers)
+            req = requests.post(url=url, headers=headers, verify=False)
 
             if req.status_code != 200:
                 return parseStatusCode(req.status_code)
@@ -61,7 +63,7 @@ def tokenVerify(func):
         elif accessToken is not None and refreshToken is None:
             url = 'http://localhost:6000/auth/refresh'
             headers = {'accessToken': accessToken}
-            req = requests.post(url=url, headers=headers)
+            req = requests.post(url=url, headers=headers, verify=False)
 
             if req.status_code != 200:
                 return parseStatusCode(req.status_code)
@@ -70,6 +72,9 @@ def tokenVerify(func):
             history.go(-1);
             </script>""")
             loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+
+        elif accessToken is None and refreshToken is None:
+            return redirect('/login')
 
         return func(*args, **kwargs)
     return wrapper

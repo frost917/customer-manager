@@ -20,7 +20,7 @@ def addNewUser(self, userData):
         )
         VALUES
         (
-            %s,
+            uuid(%s),
             %s,
             %s
         )""",
