@@ -15,7 +15,7 @@ front = Blueprint('getJobData', __name__, url_prefix='/reserve')
 def getJobData(jobID):
     accessToken = g.get('accessToken')
 
-    url = backendData['ADDR'] + '/jobs/' + jobID
+    url = backendData['ADDR'] + '/reserve/' + jobID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
     req = requests.get(url=url, headers=headers)
 

@@ -19,8 +19,8 @@ def getReserveData(reserveID):
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
     elif len(reserveData) == 0:
-        from msg.jsonMsg import jobNotFound
-        return Response(jobNotFound(), status=404, content_type="application/json; charset=UTF-8")
+        from msg.jsonMsg import reserveNotFound
+        return Response(reserveNotFound(reserveID), status=404, content_type="application/json; charset=UTF-8")
 
     convList = list()
 
