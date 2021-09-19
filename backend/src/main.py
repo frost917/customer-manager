@@ -75,6 +75,8 @@ def index():
     helloUser = dumps(convDict)
     return Response(helloUser, status=200, mimetype="application/json")
     
+import ssl
 if __name__ == "__main__":
-    app.debug = True
-    app.run(host="0.0.0.0", port=6000)
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    ssl_context.load_cert_chain(certfile='/customer-manager/cert/tls.crt', keyfile='/customer-manager/cert/tls.key')
+    app.run(host="0.0.0.0", port=443, ssl_context=ssl_context)  
