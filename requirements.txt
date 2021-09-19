@@ -2,4 +2,8 @@
 psycopg2-binary
 bcrypt
 redis
-PyJWT
+PyJWT[crypto]
+python-dateutil
+
+# debug
+requests

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{ customerData.get('customerName') }} - 예약 정보</title>
+    </head>
+    <body>
+        <style type="text/css">
+            .tg  {border-collapse:collapse;border-color:#ccc;border-spacing:0;}
+            .tg td{background-color:#fff;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
+              font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-nrix{border-color:inherit;text-align:center;vertical-align:middle; font-size: 60px;}
+            .tg .tg-y0n7{background-color:#efefef;text-align:center;vertical-align:middle; font-size: 60px; font-weight: bold; width: 960px}
+            .tg-warp{min-width: 960px}
+            input[type=text]{padding: 0; margin: 0; min-width: 100%; min-height: 100%;}
+            input[type="checkbox"]{width: 40px; height: 40px;}
+            .check{font-size: 50px;}
+            </style>
+            <div class="tg-wrap"><table class="tg">
+            <thead>
+              <tr>
+                <th class="tg-y0n7" colspan="2">
+                  손님 정보
+                </th>
+              </tr>
+            </thead>
+            <form action="/reserves/{{ reserveData.get('reserveID') }}" method="POST">
+              <input type="hidden" value="{{ customerData.get('customerID') }}">
+              <input type="hidden" value="{{ reserveData.get('reserveID') }}">
+            <tbody>
+              <tr>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                  {{ customerData.get('customerName') }}
+                </td>
+                <td class="tg-nrix" style="padding: 0; margin: 0;">
+                  {{ customerData.get('phoneNumber') }}
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-y0n7" colspan="2">
+                  시술 예정
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2">
+                  <div class="check">
+                    <div>
+                      <input type="checkbox" value="1" name="reserveType"
+                      {% if '1' in reserveData.get('reserveType') %}
+                      checked
+                      {% endif %}> 커트
+                      <input type="checkbox" value="2" name="reserveType"
+                      {% if '2' in reserveData.get('reserveType') %}
+                      checked
+                      {% endif %}> 파마
+                      <input type="checkbox" value="4" name="reserveType"
+                      {% if '4' in reserveData.get('reserveType') %}
+                      checked
+                      {% endif %}> 매직
+                    </div>
+                    <div>
+                      <input type="checkbox" value="8" name="reserveType"
+                      {% if '8' in reserveData.get('reserveType') %}
+                      checked
+                      {% endif %}> 염색
+                      <input type="checkbox" value="16" name="reserveType"
+                      {% if '16' in reserveData.get('reserveType') %}
+                      checked
+                      {% endif %}> 클리닉
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-y0n7" colspan="2" style="padding: 0; margin: 0;">
+                  예약 시간
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <!-- 예약 일자 -->
+                  <input type="date" name="reserveDate" required style="width: 100%; height: 100%; font-size: 55px;" value="{{ reserveDate }}">
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <!-- 예약 시간 -->
+                  <input type="time" name="reserveTime" required style="width: 100%; height: 100%; font-size: 55px;" value="{{ reserveTime }}">
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <input type="submit" value="예약 수정" style="font-size: 45px; min-width: 100%; min-height: 60px; padding: 5px;">
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+                  <input type="button" value="시작 페이지로" 
+                  onclick="location.href='/'"
+                  style="font-size: 45px; min-width: 100%; min-height: 60px; padding: 5px;">
+                </td>
+              </tr>
+            </tbody>
+          </form>
+            </table>
+        </div>
+    </body>
+</html>
