@@ -4,9 +4,13 @@ def getAllReserve(self, UUID):
     try:
         self.cur.execute("""
             SELECT 
-                reserve_id
+                reserve.reserve_id
             FROM reserve
-            WHERE user_id = uuid(%s) AND is_completed IS NOT TRUE""",
+            INNER JOIN reserve_data
+            ON ( reserve_data.reserve_id = reserve.reserve_id )
+            WHERE reserve.user_id = uuid(%s) 
+            AND reserve.is_completed IS NOT TRUE 
+            AND reserve_data.reserve_time > now()""",
             (UUID,))
 
         result = self.cur.fetchall()

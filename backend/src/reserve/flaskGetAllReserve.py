@@ -42,9 +42,9 @@ def getAllReserve():
         temp['reserveID'] = reserveID
 
         # 시술 타입 패키징
-        types = list()
+        types = dict()
         for reserveType in reserveTypes:
-            types.append(reserveType)
+            types[reserveType.get('type_id')] = reserveType.get('job_name')
         temp['reserveType'] = types
 
         temp['reserveTime'] = reserveTime

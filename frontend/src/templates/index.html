@@ -12,7 +12,7 @@
             .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
               font-family:Arial, sans-serif;font-size:50px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
             .tg .tg-nrix{text-align:center;vertical-align:middle}
-            .tg .tg-y0n7{background-color:#efefef;text-align:center;vertical-align:middle; font-size: 50px;}
+            .tg .tg-y0n7{text-align:center;vertical-align:middle; font-size: 50px;}
             input[type=text]{padding: 0; margin: 0; min-width: 100%; min-height: 100%;}
             input[type="checkbox"]{width: 40px; height: 40px;}
             .check{font-size: 50px;}
@@ -38,6 +38,27 @@
                   value="예약 정보">    
                 </td>
               </tr>
+              <tr>
+                <td class="tg-nrix" colspan="2" style="font-weight:bold; background-color: #f0f0f0;">
+                  다음 예약
+                </td>
+              </tr>
+              {% for reserve in reserveData %}
+              <tr>
+                <td class="tg-y0n7">
+                  <a href="/reserves/{{ reserve.get('reserveID')}}">
+                  {{ reserve.get('reserveTime') }}
+                  </a>
+                </td>
+                <td class="tg-y0n7">
+                  <a href="/reserves/{{ reserve.get('reserveID')}}">
+                  {% for type in reserve.get('reserveType').values() %}
+                  {{ type }}
+                  {% endfor %}
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
             </tbody>
             </table>
         </div>
