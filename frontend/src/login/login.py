@@ -46,4 +46,5 @@ def login():
         return loginResult
 
     else:
+        print(json.loads(req.text))
         return parseStatusCode(req.status_code)
