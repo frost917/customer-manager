@@ -29,7 +29,7 @@ def updateReserveData(reserveID):
     # 백엔드와 통신, 데이터 업데이트
     url = backendData['ADDR'] + '/reserves'
     headers = {'content-type': 'application/json; charset=UTF-8', 'Authorization': accessToken}
-    req = requests.put(url=url, headers=headers, data=json.dumps(payload), verify=False)
+    req = requests.put(url=url, headers=headers, data=json.dumps(payload))
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)

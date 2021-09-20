@@ -7,7 +7,6 @@ import json, requests
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])
@@ -32,7 +31,7 @@ def addNewCustomer():
 
     url = backendData['ADDR'] + '/customers'
     headers = {'content-type': 'application/json; charset=UTF-8', 'Authorization': accessToken}
-    req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=False)
+    req = requests.post(url=url, headers=headers, data=json.dumps(payload))
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)

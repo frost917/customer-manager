@@ -45,7 +45,6 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests
 import json
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
@@ -58,7 +57,7 @@ def index():
     url = backendData['ADDR']
     reserveUrl = url + '/reserves'
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    reserveReq = requests.get(url=reserveUrl, headers=headers, verify=False)
+    reserveReq = requests.get(url=reserveUrl, headers=headers)
 
     if reserveReq.status_code != 200:
         return parseStatusCode(reserveReq.status_code)

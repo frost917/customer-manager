@@ -1,10 +1,5 @@
 ﻿from flask import request, Blueprint, redirect, render_template
 
-import requests
-import json
-
-from werkzeug.utils import redirect
-
 front = Blueprint('loginPage', __name__, url_prefix='/login')
 
 # 토큰 활성화 여부를 사전에 파악해서

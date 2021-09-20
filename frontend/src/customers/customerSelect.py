@@ -6,7 +6,6 @@ from flask.helpers import make_response
 
 from statusCodeParse import parseStatusCode
 from config.backendData import backendData
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('customerSelect', __name__, url_prefix='/customers')
 @front.route('', methods=['GET'])
@@ -17,7 +16,7 @@ def customerSelect():
     url = backendData['ADDR']
     customerUrl = url + '/customers'
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
-    req = requests.get(url=customerUrl, headers=headers, verify=False)
+    req = requests.get(url=customerUrl, headers=headers)
 
     if req.status_code != 200:
        return parseStatusCode(req.status_code)

@@ -6,7 +6,6 @@ from datetime import timedelta
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @front.route('/customer/<customerID>', methods=['GET'])
@@ -16,7 +15,7 @@ def addNewJobPage(customerID):
 
     url = backendData['ADDR'] + '/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    req = requests.get(url=url, headers=headers, verify=False)
+    req = requests.get(url=url, headers=headers)
 
     if req.status_code != 200:
         return parseStatusCode(req.status_code)

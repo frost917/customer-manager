@@ -6,7 +6,6 @@ import json
 
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('login', __name__, url_prefix='/login')
 
@@ -25,7 +24,7 @@ def login():
     url = backendData['ADDR'] + '/auth'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
     data = json.dumps({'userID': userID, 'passwd': passwd})
-    req = requests.post(url=url, headers=headers, data=data, verify=False)
+    req = requests.post(url=url, headers=headers, data=data)
 
     if 200 <= req.status_code and req.status_code <= 299:
         loginData = json.loads(req.text)
