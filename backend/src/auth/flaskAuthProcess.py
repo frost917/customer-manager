@@ -12,6 +12,7 @@ def login():
     try:
         data = request.get_json()
     except:
+        print(request.data.decode('utf-8'))
         from msg.jsonMsg import dataMissingJson
         return Response(dataMissingJson(), status=400, content_type="application/json; charset=UTF-8")
 
