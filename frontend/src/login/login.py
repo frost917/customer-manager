@@ -6,6 +6,7 @@ import json
 
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('login', __name__, url_prefix='/login')
 

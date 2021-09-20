@@ -7,6 +7,7 @@ import json, requests
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])

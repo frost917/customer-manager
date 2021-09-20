@@ -1,13 +1,12 @@
-﻿from flask import Blueprint, render_template, make_response, request, g
+﻿from flask import Blueprint, render_template, make_response, g
 import json
 import requests
 from datetime import timedelta
 
-from werkzeug.utils import redirect
-
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('getJobData', __name__, url_prefix='/jobs')
 @front.route('/<jobID>', methods=['GET'])

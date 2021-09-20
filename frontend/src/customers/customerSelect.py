@@ -6,8 +6,9 @@ from flask.helpers import make_response
 
 from statusCodeParse import parseStatusCode
 from config.backendData import backendData
-front = Blueprint('customerSelect', __name__, url_prefix='/customers')
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
+front = Blueprint('customerSelect', __name__, url_prefix='/customers')
 @front.route('', methods=['GET'])
 @tokenVerify
 def customerSelect():

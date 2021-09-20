@@ -44,8 +44,8 @@ app.register_blueprint(updateReserveData.front)
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import json
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 from login.loginVerify import tokenVerify
 from config.backendData import backendData

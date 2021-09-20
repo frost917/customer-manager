@@ -14,7 +14,9 @@
           .tg .tg-nrix{text-align:center;vertical-align:middle; font-size: 50px;}
           .tg .tg-y0n7{background-color:#efefef;text-align:center;vertical-align:middle; font-weight:bold; font-size: 50px; width: 960px;}
           .tg .tg-data{text-align:center; vertical-align:middle; font-size: 50px; width: 480px; }
-          input[type=text]{padding: 0; margin: 0; min-width: 100%; min-height: 100%;}
+          .tg .tg-button{padding: 0; margin: 0;}
+          input[type=text]{padding: 0; margin: 0; width: 100%; height: 100%;}
+          input[type=submit]{padding: 5px; margin: 0;width: 100%; height: 100%; font-size: 50px; padding: 5px;}
           input[type="checkbox"]{width: 40px; height: 40px;}
           .check{font-size: 35px;}
       </style>
@@ -71,13 +73,18 @@
               </td>
             </tr>
             <tr>
-              <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
+              <td class="tg-button" colspan="2">
                   <textarea name="jobDescription" cols="4" rows="2" style="min-height: 550px; min-width: 100%; font-size: 50px;"></textarea>
               </td>
             </tr>
             <tr>
-              <td class="tg-nrix" colspan="2" style="padding: 0; margin: 0;">
-                  <input type="submit" value="시술 추가" style="font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;">
+              <td class="tg-button" colspan="2">
+                  <input type="submit" value="시술 추가">
+              </td>
+            </tr>
+            <tr>
+              <td class="tg-button" colspan="2">
+                  <input type="submit" value="뒤로 가기" onclick="history.back()">
               </td>
             </tr>
           </tbody>

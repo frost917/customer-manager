@@ -7,6 +7,7 @@ from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from config.backendData import backendData
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 # 토큰 살아있는지 확인
 def tokenVerify(func):

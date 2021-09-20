@@ -6,9 +6,9 @@ from flask.helpers import make_response
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 front = Blueprint('customerJobData', __name__, url_prefix='/customers')
-
 @front.route('/<customerID>/jobs', methods=['GET'])
 @tokenVerify
 def customerJobData(customerID):
