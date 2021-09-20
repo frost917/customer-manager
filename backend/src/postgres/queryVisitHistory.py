@@ -18,7 +18,10 @@ def getVisitHistoryDict(self, UUID):
         ON ( job_list.customer_id = customer.customer_id )
         WHERE customer.user_id = uuid(%s)""",
         (UUID,))
-        return dict(self.cur.fetchall())
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None
@@ -37,7 +40,10 @@ def getVisitHistory(self, customerID):
         ON ( job_list.customer_id = customer_data.customer_id )
         WHERE customer_data.customer_id = uuid(%s)""",
         (customerID, ))
-        return dict(self.cur.fetchall())
+        result = self.cur.fetchall()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None

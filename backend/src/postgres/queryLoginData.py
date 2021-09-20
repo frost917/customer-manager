@@ -49,7 +49,10 @@ def getUUID(self, userData):
             FROM login
             WHERE username = %s AND passwd = %s""",
             (userID, passwd,))
-        return dict(self.cur.fetchone())
+        result = self.cur.fetchone()
+        if result is None:
+            result = dict()
+        return result
     except db.DatabaseError as err:
         print(err)
         return None
