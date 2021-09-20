@@ -16,7 +16,7 @@ def customerSelect():
     url = backendData['ADDR']
     customerUrl = url + '/customers'
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
-    req = requests.get(url=customerUrl, headers=headers)
+    req = requests.get(url=customerUrl, headers=headers, verify=False)
 
     if req.status_code != 200:
        return parseStatusCode(req.status_code)

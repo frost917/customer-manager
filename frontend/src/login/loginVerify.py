@@ -23,14 +23,14 @@ def tokenVerify(func):
         if accessToken is not None and refreshToken is not None:
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
-            req = requests.get(url=url, headers=headers)
+            req = requests.get(url=url, headers=headers, verify=False)
         
             if 200 <= req.status_code and req.status_code <= 299:
                 pass
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
                 headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
-                req = requests.get(url=refreshUrl, headers=headers)
+                req = requests.get(url=refreshUrl, headers=headers, verify=False)
 
                 loginData = json.loads(req.text)
                 accessToken = loginData.get('accessToken')
@@ -41,7 +41,7 @@ def tokenVerify(func):
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:
             headers = {'refreshToken': refreshToken}
-            req = requests.post(url=refreshUrl, headers=headers)
+            req = requests.post(url=refreshUrl, headers=headers, verify=False)
 
             if req.status_code != 200:
                 return parseStatusCode(req.status_code)
@@ -60,7 +60,7 @@ def tokenVerify(func):
         # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
             headers = {'accessToken': accessToken}
-            req = requests.post(url=refreshUrl, headers=headers)
+            req = requests.post(url=refreshUrl, headers=headers, verify=False)
 
             if req.status_code != 200:
                 return parseStatusCode(req.status_code)

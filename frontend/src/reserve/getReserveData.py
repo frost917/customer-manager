@@ -17,7 +17,7 @@ def getReserveData(reserveID):
     url = backendData['ADDR']
     reserveUrl = url + '/reserves/' + reserveID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    reserveReq = requests.get(url=reserveUrl, headers=headers)
+    reserveReq = requests.get(url=reserveUrl, headers=headers, verify=False)
 
     if reserveReq.status_code != 200:
         return parseStatusCode(reserveReq.status_code)
@@ -31,7 +31,7 @@ def getReserveData(reserveID):
 
     customerID = reserveData.get('customerID')
     customerUrl = url + '/customers/' + customerID
-    customerReq = requests.get(url=customerUrl, headers=headers)
+    customerReq = requests.get(url=customerUrl, headers=headers, verify=False)
 
     if customerReq.status_code != 200:
         return parseStatusCode(customerReq.status_code)
