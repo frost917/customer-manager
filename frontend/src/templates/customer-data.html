@@ -11,17 +11,17 @@
           font-family:Arial, sans-serif;font-size:50px;overflow:hidden;padding:10px 5px;word-break:normal;}
         .tg th{background-color:#f0f0f0;border-color:#ccc;border-style:solid;border-width:1px;color:#333;
           font-family:Arial, sans-serif;font-size:50px;font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-        .tg .tg-9wq8{border-color:inherit;text-align:center;vertical-align:middle; font-size: 50px;}
-        .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle; font-size:35px;}
-        .tg .tg-0lax{text-align:left;vertical-align:top}
+        .tg .tg-9wq8{border-color:inherit;text-align:center;vertical-align:middle; font-size: 40px; width: 960px}
+        .tg .tg-uzvj{border-color:inherit;font-weight:bold;text-align:center;vertical-align:middle; font-size:35px; width: 960px}
+        .tg .tg-0lax{text-align:left;vertical-align:top; margin: 0; padding: 0; width: 480px}
         .dataButton{font-size: 50px; min-width: 100%; min-height: 100px; padding: 5px;}
-        input[type="text"]{width: 480px; height: 70px;}
+        input[type="text"]{width: 100%; height: 70px;}
         input[type="button"]{margin: 0; padding: 3px; font-size: 35px; min-width: 100%; height: 70px;}
       </style>
       <div class="tg-wrap"><table class="tg">
         <thead>
           <tr>
-            <th class="tg-uzvj" colspan="2" style="font-weight:bold; width: 960px">손님 정보</th>
+            <th class="tg-uzvj" colspan="2">손님 정보</th>
           </tr>
         </thead>
         <tbody>
@@ -32,16 +32,16 @@
             <td class="tg-9wq8">{{ customerData.get('phoneNumber') }}</td>
           </tr>
           <tr>
-            <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
+            <td class="tg-0lax">
                 <input type="button" onclick="location.href='/customers'" value="손님 목록으로">
             </td>
-            <td class="tg-9wq8" style="background-color:#f0f0f0; margin: 0; padding: 0;">
+            <td class="tg-0lax">
               <input type="button" onclick="location.href='/jobs/customer/{{ customerID }}'"
                 value="시술 추가">
           </td>
           </tr>
           <tr>
-            <td class="tg-0lax" colspan="2" style="margin: 0; padding: 0;">
+            <td class="tg-0lax" colspan="2">
               <input type="button" value="예약 추가"
               onclick="location.href='/reserves/customer/{{ customerID }}'">
             </td>
@@ -51,7 +51,9 @@
           </tr>
           {% for job in jobData %}
           <tr>
-            <td class="tg-9wq8">방문일</td>
+            <td class="tg-9wq8">
+              방문일
+            </td>
             <td class="tg-9wq8">
               <!-- 시술기록 -->
               <a href="/jobs/{{ job.get('jobID') }}">
