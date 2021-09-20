@@ -4,3 +4,4 @@ bcrypt
 redis
 PyJWT[crypto]
 python-dateutil
+pyOpenSSL

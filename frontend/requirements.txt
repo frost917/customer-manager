@@ -1,3 +1,4 @@
 ﻿flask
 python-dateutil
 requests
+pyOpenSSL
