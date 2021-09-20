@@ -1,16 +1,19 @@
-﻿from flask import Response, redirect
+﻿import json
 
-def parseStatusCode(status_code):
-    if status_code == 401:
+def parseStatusCode(req):
+    if req.status_code == 401:
+        print(json.loads(req.text))
         return """<script>
         history.go(-1);
         </script>"""
-    elif 400 <= status_code and status_code <= 499:
+    elif 400 <= req.status_code and req.status_code <= 499:
+        print(json.loads(req.text))
         return """<script>
         alert("데이터가 잘못되었습니다");
         history.back();
         </script>"""
-    elif 500 <= status_code and status_code <= 599:
+    elif 500 <= req.status_code and req.status_code <= 599:
+        print(json.loads(req.text))
         return """<script>
         alert("서버 에러");
         history.go(-1);
