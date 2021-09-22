@@ -1,18 +1,16 @@
-﻿from flask import (make_response, g, Blueprint, 
+﻿from flask import (g, Blueprint, 
                     render_template, request, redirect)
 from datetime import timedelta
 
 import json, requests
 
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])
 @tokenVerify
-@makeResponse
 def addNewCustomerPage():
     result = render_template('customer-add.html')
     return result
@@ -37,5 +35,6 @@ def addNewCustomer():
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
 
-    result = redirect('/customers/' + customerID + '/jobs')
+    result = g.get('response')
+    result.response = redirect('/customers/' + customerID + '/jobs')
     return result

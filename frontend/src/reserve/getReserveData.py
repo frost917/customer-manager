@@ -3,13 +3,11 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['GET'])
 @tokenVerify
-@makeResponse
 def getReserveData(reserveID):
     accessToken = g.get('accessToken')
 
@@ -40,7 +38,9 @@ def getReserveData(reserveID):
     customerData = data.get('customerData')[0]
     customerID = customerData.get('customerID')
 
-    result = render_template('reserve-data.html', 
+
+    result = g.get('response')
+    result.response = render_template('reserve-data.html', 
             customerData=customerData, 
             reserveData=reserveData,
             reserveDate=reserveDate,

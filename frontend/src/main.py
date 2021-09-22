@@ -49,12 +49,10 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 @app.route('/')
 @tokenVerify
-@makeResponse
 def index():
     accessToken = g.get('accessToken')
 
@@ -68,7 +66,8 @@ def index():
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 
-    result = render_template('index.html', reserveData=reserveData)
+    result = g.get('response')
+    result.response = render_template('index.html', reserveData=reserveData)
     return result
 
 import ssl

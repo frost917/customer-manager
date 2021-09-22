@@ -4,13 +4,11 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('customerSelect', __name__, url_prefix='/customers')
 @front.route('', methods=['GET'])
 @tokenVerify
-@makeResponse
 def customerSelect():
     accessToken = g.get('accessToken')
 
@@ -25,5 +23,6 @@ def customerSelect():
     data = json.loads(req.text)
     customerData = data.get('customerData')
 
-    result = render_template('select-customer.html', customerData=customerData)
+    result = g.get('response')
+    result.response = render_template('select-customer.html', customerData=customerData)
     return result

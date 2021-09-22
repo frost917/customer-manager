@@ -3,13 +3,11 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
 @front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
-@makeResponse
 def addNewReservePage(customerID):
     accessToken = g.get('accessToken')
 
@@ -24,12 +22,12 @@ def addNewReservePage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    result = render_template('reserve-add.html', customerData=customerData, customerID=customerID)
+    result = g.get('response')
+    result.response = render_template('reserve-add.html', customerData=customerData, customerID=customerID)
     return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
-@makeResponse
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
 
@@ -53,6 +51,7 @@ def addNewJob(customerID):
         return parseStatusCode(req)
 
     reserveID = json.loads(req.text).get('reserveData')[0].get('reserveID')
-
-    result = redirect('/reserves/'+ reserveID)
+    
+    result = g.get('response')
+    result.response = redirect('/reserves/'+ reserveID)
     return result

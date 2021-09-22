@@ -4,13 +4,11 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('customerJobData', __name__, url_prefix='/customers')
 @front.route('/<customerID>/jobs', methods=['GET'])
 @tokenVerify
-@makeResponse
 def customerJobData(customerID):
     accessToken = g.get('accessToken')
 
@@ -26,5 +24,6 @@ def customerJobData(customerID):
     customerData = data.get('customerData')
     jobData = data.get('jobData')
 
-    result = render_template('customer-data.html', customerData=customerData,customerID=customerID,  jobData=jobData)
+    result = g.get('response')
+    result.response = render_template('customer-data.html', customerData=customerData,customerID=customerID,  jobData=jobData)
     return result

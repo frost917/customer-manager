@@ -3,13 +3,11 @@ import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('updateReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['POST'])
 @tokenVerify
-@makeResponse
 def updateReserveData(reserveID):
     accessToken = g.get('accessToken')
 
@@ -33,5 +31,6 @@ def updateReserveData(reserveID):
         return parseStatusCode(req=req)
 
     # 업데이트 후 데이터 열람 페이지로 이동
-    result = redirect('/reserves/' + reserveID)
+    result = g.get('response')
+    result.response = redirect('/reserves/' + reserveID)
     return result

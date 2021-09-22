@@ -1,20 +1,19 @@
-﻿from functools import wraps
-from datetime import timedelta
+﻿# from functools import wraps
+# from datetime import timedelta
 
-from flask import g, make_response
+# from flask import g, make_response
 
-def makeResponse(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        template = func(*args, **kwargs)
-        print(type(template))
-        
-        accessToken = g.get('accessToken')
-        refreshToken = g.get('refreshToken')
+# def makeResponse(func):
+#     @wraps(func)
+#     def wrapper(*args, **kwargs):
+#         template = func(*args, **kwargs)
 
-        result = make_response(template)
-        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-        result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
-        return result
+#         accessToken = g.get('accessToken')
+#         refreshToken = g.get('refreshToken')
 
-    return wrapper
+#         result = make_response(template).
+#         result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+#         result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+#         return result
+
+#     return wrapper

@@ -5,13 +5,11 @@ from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
-from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('getJobData', __name__, url_prefix='/jobs')
 @front.route('/<jobID>', methods=['GET'])
 @tokenVerify
-@makeResponse
 def getJobData(jobID):
     accessToken = g.get('accessToken')
 
@@ -28,5 +26,6 @@ def getJobData(jobID):
 
     customerID = customerData.get('customerID')
 
-    result = render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID)
+    result = g.get('response')
+    result.response = render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID)
     return result

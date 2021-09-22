@@ -1,7 +1,8 @@
-﻿from flask import request, g, redirect
+﻿from flask import request, g, redirect, make_response
 
 import requests
 from functools import wraps
+from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from getNewTokens import getAccessToken, getRefreshToken
@@ -14,6 +15,7 @@ def tokenVerify(func):
         # 토큰을 g 변수로 넘겨서 로그인 토큰 파기된 경우에 대처하기
         accessToken = request.cookies.get('accessToken')
         refreshToken = request.cookies.get('refreshToken')
+        result = make_response()
 
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
@@ -48,6 +50,11 @@ def tokenVerify(func):
         # 검증 끝나면 g 변수로 넘김
         g.accessToken = accessToken
         g.refreshToken = refreshToken
+
+        # 쿠키 설정
+        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+        result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+        g.response = result
 
         return func(*args, **kwargs)
     return wrapper
