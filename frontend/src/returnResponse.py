@@ -7,7 +7,8 @@ def makeResponse(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         template = func(*args, **kwargs)
-
+        print(type(template))
+        
         accessToken = g.get('accessToken')
         refreshToken = g.get('refreshToken')
 
