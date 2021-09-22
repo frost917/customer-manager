@@ -44,7 +44,7 @@ def tokenVerify(func):
             req = requests.post(url=refreshUrl, headers=headers, verify=False)
 
             if req.status_code != 200:
-                return parseStatusCode(req.status_code)
+                return parseStatusCode(req)
             
             loginData = json.loads(req.text)
             accessToken = loginData.get('accessToken')
@@ -63,7 +63,7 @@ def tokenVerify(func):
             req = requests.post(url=refreshUrl, headers=headers, verify=False)
 
             if req.status_code != 200:
-                return parseStatusCode(req.status_code)
+                return parseStatusCode(req)
 
             loginResult = make_response("""<script>
             history.go(-1);

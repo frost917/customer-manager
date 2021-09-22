@@ -19,7 +19,7 @@ def customerSelect():
     req = requests.get(url=customerUrl, headers=headers, verify=False)
 
     if req.status_code != 200:
-       return parseStatusCode(req.status_code)
+       return parseStatusCode(req)
 
     data = json.loads(req.text)
     customerData = data.get('customerData')

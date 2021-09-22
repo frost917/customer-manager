@@ -18,7 +18,7 @@ def addNewJobPage(customerID):
     req = requests.get(url=url, headers=headers, verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
@@ -54,7 +54,7 @@ def addNewJob(customerID):
     req = requests.post(url=jobAddUrl, headers=headers, data=json.dumps(data), verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     # 반환받은 jobID를 통해 시술 내역 불러오기
     data = json.loads(req.text)

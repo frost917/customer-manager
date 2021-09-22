@@ -32,7 +32,7 @@ def updateReserveData(reserveID):
     req = requests.put(url=url, headers=headers, data=json.dumps(payload), verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req=req)
 
     # 업데이트 후 데이터 열람 페이지로 이동
     temp = make_response(redirect('/reserves/' + reserveID))

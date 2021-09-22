@@ -20,7 +20,7 @@ def getReserveData(reserveID):
     reserveReq = requests.get(url=reserveUrl, headers=headers, verify=False)
 
     if reserveReq.status_code != 200:
-        return parseStatusCode(reserveReq.status_code)
+        return parseStatusCode(req=reserveReq)
 
     data = json.loads(reserveReq.text)
     reserveData = data.get('reserveData')[0]
@@ -34,7 +34,7 @@ def getReserveData(reserveID):
     customerReq = requests.get(url=customerUrl, headers=headers, verify=False)
 
     if customerReq.status_code != 200:
-        return parseStatusCode(customerReq.status_code)
+        return parseStatusCode(req=customerReq)
 
     data = json.loads(customerReq.text)
     customerData = data.get('customerData')[0]

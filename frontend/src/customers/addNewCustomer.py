@@ -34,7 +34,7 @@ def addNewCustomer():
     req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
 

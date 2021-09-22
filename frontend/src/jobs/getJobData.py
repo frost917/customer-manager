@@ -18,7 +18,7 @@ def getJobData(jobID):
     req = requests.get(url=url, headers=headers, verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]

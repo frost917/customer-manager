@@ -61,7 +61,7 @@ def index():
     reserveReq = requests.get(url=reserveUrl, headers=headers, verify=False)
 
     if reserveReq.status_code != 200:
-        return parseStatusCode(reserveReq.status_code)
+        return parseStatusCode(req=reserveReq)
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 

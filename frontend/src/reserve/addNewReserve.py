@@ -18,7 +18,7 @@ def addNewReservePage(customerID):
     req = requests.get(url=url, headers=headers, verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     # 손님 id는 url에서 받음
     data = json.loads(req.text)
@@ -50,7 +50,7 @@ def addNewJob(customerID):
     req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=False)
 
     if req.status_code != 200:
-        return parseStatusCode(req.status_code)
+        return parseStatusCode(req)
 
     reserveID = json.loads(req.text).get('reserveData')[0].get('reserveID')
 
