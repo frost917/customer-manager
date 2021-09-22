@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, g
+﻿from flask import Blueprint, render_template, g, make_response
 import json
 import requests
 from datetime import timedelta
@@ -26,6 +26,7 @@ def getJobData(jobID):
 
     customerID = customerData.get('customerID')
 
-    result = g.get('response')
-    result.response = render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID)
+    result = make_response(render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result

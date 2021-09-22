@@ -45,6 +45,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests
 import json
+from datetime import timedelta
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 from statusCodeParse import parseStatusCode
@@ -55,7 +56,7 @@ from config.backendData import backendData
 @tokenVerify
 def index():
     accessToken = g.get('accessToken')
-
+    
     url = backendData['ADDR']
     reserveUrl = url + '/reserves'
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
@@ -66,8 +67,10 @@ def index():
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 
-    result = g.get('response')
-    result.response = render_template('index.html', reserveData=reserveData)
+    result = render_template('index.html', reserveData=reserveData)
+    # 쿠키 설정
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result
 
 import ssl

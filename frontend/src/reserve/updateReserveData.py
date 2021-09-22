@@ -1,6 +1,8 @@
 ﻿from flask import Blueprint, request, g, redirect
 import json, requests
 
+from datetime import timedelta
+
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
@@ -31,6 +33,7 @@ def updateReserveData(reserveID):
         return parseStatusCode(req=req)
 
     # 업데이트 후 데이터 열람 페이지로 이동
-    result = g.get('response')
-    result.response = redirect('/reserves/' + reserveID)
+    result = redirect('/reserves/' + reserveID)
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result

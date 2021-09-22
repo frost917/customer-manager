@@ -1,6 +1,7 @@
-﻿from flask import render_template, g, Blueprint
+﻿from flask import render_template, g, Blueprint, make_response
 
 import json, requests
+from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -23,6 +24,7 @@ def customerSelect():
     data = json.loads(req.text)
     customerData = data.get('customerData')
 
-    result = g.get('response')
-    result.response = render_template('select-customer.html', customerData=customerData)
+    result = make_response(render_template('select-customer.html', customerData=customerData))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result

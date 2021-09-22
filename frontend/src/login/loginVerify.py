@@ -51,11 +51,6 @@ def tokenVerify(func):
         g.accessToken = accessToken
         g.refreshToken = refreshToken
 
-        # 쿠키 설정
-        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-        result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
-        g.response = result
-
         return func(*args, **kwargs)
     return wrapper
 

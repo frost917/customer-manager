@@ -1,5 +1,4 @@
-﻿from flask import (g, Blueprint, 
-                    render_template, request, redirect)
+﻿from flask import (g, Blueprint, render_template, request, redirect, make_response)
 from datetime import timedelta
 
 import json, requests
@@ -12,7 +11,9 @@ front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])
 @tokenVerify
 def addNewCustomerPage():
-    result = render_template('customer-add.html')
+    result = make_response(render_template('customer-add.html'))
+    result.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result
 
 @front.route('/create', methods=['POST'])
@@ -35,6 +36,7 @@ def addNewCustomer():
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
 
-    result = g.get('response')
-    result.response = redirect('/customers/' + customerID + '/jobs')
+    result = make_response(redirect('/customers/' + customerID + '/jobs'))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result

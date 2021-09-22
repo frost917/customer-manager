@@ -1,5 +1,7 @@
-﻿from flask import Blueprint, render_template, redirect, request, g
+﻿from flask import Blueprint, render_template, redirect, make_response, request, g
 import json, requests
+
+from datetime import timedelta  
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -22,8 +24,9 @@ def addNewReservePage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    result = g.get('response')
-    result.response = render_template('reserve-add.html', customerData=customerData, customerID=customerID)
+    result = make_response(render_template('reserve-add.html', customerData=customerData, customerID=customerID))
+    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
