@@ -1,15 +1,15 @@
-﻿from flask import Blueprint, render_template, make_response, g
-import json
-import requests
-from datetime import timedelta
+﻿from flask import Blueprint, render_template, g
+import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['GET'])
 @tokenVerify
+@makeResponse
 def getReserveData(reserveID):
     accessToken = g.get('accessToken')
 
@@ -40,14 +40,11 @@ def getReserveData(reserveID):
     customerData = data.get('customerData')[0]
     customerID = customerData.get('customerID')
 
-    result = make_response(
-        render_template('reserve-data.html', 
+    result = render_template('reserve-data.html', 
             customerData=customerData, 
             reserveData=reserveData,
             reserveDate=reserveDate,
             reserveTime=reserveTime, 
             customerID=customerID)
-    )
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
 
     return result

@@ -5,11 +5,13 @@ from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
+@makeResponse
 def addNewJobPage(customerID):
     accessToken = g.get('accessToken')
 
@@ -23,12 +25,12 @@ def addNewJobPage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    temp = make_response(render_template('job-add.html', customerData=customerData, customerID=customerID))
-    temp.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    return temp
+    result = render_template('job-add.html', customerData=customerData, customerID=customerID)
+    return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
+@makeResponse
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
     data = dict()
@@ -61,7 +63,5 @@ def addNewJob(customerID):
     jobData = data.get('jobData')[0]
     jobID = jobData.get('jobID')
 
-    result = make_response(redirect('/jobs/'+ jobID, code=302))
-    result.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
-
+    result = redirect('/jobs/'+ jobID, code=302)
     return result

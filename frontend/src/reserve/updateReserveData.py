@@ -1,17 +1,15 @@
-﻿from flask import Blueprint, render_template, make_response, request, g
-import json
-import requests
-from datetime import timedelta
-
-from werkzeug.utils import redirect
+﻿from flask import Blueprint, request, g, redirect
+import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('updateReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['POST'])
 @tokenVerify
+@makeResponse
 def updateReserveData(reserveID):
     accessToken = g.get('accessToken')
 
@@ -35,6 +33,5 @@ def updateReserveData(reserveID):
         return parseStatusCode(req=req)
 
     # 업데이트 후 데이터 열람 페이지로 이동
-    temp = make_response(redirect('/reserves/' + reserveID))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
-    return temp
+    result = redirect('/reserves/' + reserveID)
+    return result

@@ -47,11 +47,14 @@ import requests
 import json
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
-from login.loginVerify import tokenVerify
-from config.backendData import backendData
 from statusCodeParse import parseStatusCode
+from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
+from config.backendData import backendData
+
 @app.route('/')
 @tokenVerify
+@makeResponse
 def index():
     accessToken = g.get('accessToken')
 
@@ -65,7 +68,8 @@ def index():
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 
-    return render_template('index.html', reserveData=reserveData)
+    result = render_template('index.html', reserveData=reserveData)
+    return result
 
 import ssl
 if __name__ == "__main__":

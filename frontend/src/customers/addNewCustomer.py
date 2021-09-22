@@ -5,18 +5,17 @@ from datetime import timedelta
 import json, requests
 
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])
 @tokenVerify
+@makeResponse
 def addNewCustomerPage():
-    accessToken = g.get('accessToken')
-
-    temp = make_response(render_template('customer-add.html'))
-    temp.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    return temp
+    result = render_template('customer-add.html')
+    return result
 
 @front.route('/create', methods=['POST'])
 @tokenVerify
@@ -38,6 +37,5 @@ def addNewCustomer():
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
 
-    result = make_response(redirect('/customers/' + customerID + '/jobs'))
-    result.set_cookie('accessToken', accessToken, httponly=True)
+    result = redirect('/customers/' + customerID + '/jobs')
     return result

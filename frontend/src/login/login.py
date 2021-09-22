@@ -1,15 +1,15 @@
-﻿from datetime import timedelta
-from flask import request, make_response, Blueprint
+﻿from flask import request, make_response, Blueprint
 
-import requests
-import json
+import json, requests
 
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
+from returnResponse import makeResponse
 
 front = Blueprint('login', __name__, url_prefix='/login')
 
 @front.route('', methods=['POST'])
+@makeResponse
 def login():
     userID = request.form.get('userID')
     passwd = request.form.get('passwd')
@@ -37,13 +37,11 @@ def login():
             location.href="/login";
             </script>"""
 
-        loginResult = make_response("""<script>
+        result = make_response("""<script>
         location.href="/"
         </script>""")
-        loginResult.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-        loginResult.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
 
-        return loginResult
+        return result
 
     else:
         print(json.loads(req.text))

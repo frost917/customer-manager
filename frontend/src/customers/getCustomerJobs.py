@@ -1,15 +1,16 @@
-﻿from datetime import timedelta
-from flask import render_template, g, Blueprint
+﻿from flask import render_template, g, Blueprint
+
 import json, requests
-from flask.helpers import make_response
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('customerJobData', __name__, url_prefix='/customers')
 @front.route('/<customerID>/jobs', methods=['GET'])
 @tokenVerify
+@makeResponse
 def customerJobData(customerID):
     accessToken = g.get('accessToken')
 
@@ -25,6 +26,5 @@ def customerJobData(customerID):
     customerData = data.get('customerData')
     jobData = data.get('jobData')
 
-    result = make_response(render_template('customer-data.html', customerData=customerData,customerID=customerID,  jobData=jobData))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+    result = render_template('customer-data.html', customerData=customerData,customerID=customerID,  jobData=jobData)
     return result

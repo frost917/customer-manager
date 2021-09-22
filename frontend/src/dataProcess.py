@@ -1,7 +1,6 @@
-﻿import json
-from functools import wraps
+﻿from functools import wraps
 
-from flask import Response, g, request
+from flask import g, request
 
 # json 데이터 분해 및 별도 저장
 def dataParsing(func):
@@ -10,7 +9,7 @@ def dataParsing(func):
         if request.is_json == False:
             return """<script>
             alert('내부 에러');
-            history.go(-2);
+            history.back();
             </script>"""
 
         try:
@@ -18,7 +17,7 @@ def dataParsing(func):
         except:
             return """<script>
             alert('내부 에러');
-            history.go(-2);
+            history.back();
             </script>"""
 
         # 손님 리스트

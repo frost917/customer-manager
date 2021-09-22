@@ -1,15 +1,15 @@
-﻿from flask import Blueprint, render_template, make_response, redirect, request, g
-import json
-import requests
-from datetime import timedelta
+﻿from flask import Blueprint, render_template, redirect, request, g
+import json, requests
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
+from returnResponse import makeResponse
 from config.backendData import backendData
 
 front = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
 @front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
+@makeResponse
 def addNewReservePage(customerID):
     accessToken = g.get('accessToken')
 
@@ -24,12 +24,12 @@ def addNewReservePage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    temp = make_response(render_template('reserve-add.html', customerData=customerData, customerID=customerID))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
-    return temp
+    result = render_template('reserve-add.html', customerData=customerData, customerID=customerID)
+    return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
+@makeResponse
 def addNewJob(customerID):
     accessToken = g.get('accessToken')
 
@@ -54,6 +54,5 @@ def addNewJob(customerID):
 
     reserveID = json.loads(req.text).get('reserveData')[0].get('reserveID')
 
-    temp = make_response(redirect('/reserves/'+ reserveID))
-    temp.set_cookie('accessToken', g.get('accessToken'), max_age=timedelta(hours=3), httponly=True)
-    return temp
+    result = redirect('/reserves/'+ reserveID)
+    return result
