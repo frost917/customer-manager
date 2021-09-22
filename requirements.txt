@@ -4,6 +4,5 @@ bcrypt
 redis
 PyJWT[crypto]
 python-dateutil
-
-# debug
+pyOpenSSL
 requests
