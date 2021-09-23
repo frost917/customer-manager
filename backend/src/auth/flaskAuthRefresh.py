@@ -8,8 +8,8 @@ def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
 
-    if refreshToken is None or 'None' in refreshToken or 'null' in refreshToken:
-        refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
+    print(accessToken)
+    print(refreshToken)
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
@@ -26,7 +26,7 @@ def tokenRefresh():
 
     # 토큰이 둘 다 파기된 경우
     elif isAccessTokenExpired and isRefreshTokenExpired:
-        refreshResult = Response(tokenInvalid(), status=401)
+        refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
     # access token만 파기된 경우 재발급
     elif isAccessTokenExpired:
@@ -68,6 +68,8 @@ def tokenRefresh():
     token = dict()
     token['accessToken'] = accessToken
     token['refreshToken'] = refreshToken
+
+    print(token)
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
     refreshResult = Response(json.dumps(token), status=200, content_type="application/json; charset=UTF-8") 

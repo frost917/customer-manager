@@ -66,9 +66,6 @@ def index():
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 
-    print(accessToken)
-    print(g.get('refreshToken'))
-
     result = make_response(render_template('index.html', reserveData=reserveData))
     # 쿠키 설정
     result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
