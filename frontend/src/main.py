@@ -72,7 +72,7 @@ def index():
     result = make_response(render_template('index.html', reserveData=reserveData))
     # 쿠키 설정
     result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    result.set_cookie('refreshToken', str(g.get('refreshToken')), max_age=timedelta(hours=4320), httponly=True)
+    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
     return result
 
 import ssl
