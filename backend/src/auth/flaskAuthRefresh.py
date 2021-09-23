@@ -8,7 +8,7 @@ def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
 
-    if refreshToken is None:
+    if refreshToken is None or 'None' in refreshToken or 'null' in refreshToken:
         refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
     # 각각 토큰이 멀쩡한지 검사함
