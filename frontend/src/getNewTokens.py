@@ -2,9 +2,9 @@
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
-def getAccessToken(accessToken):
+def getAccessToken(refreshToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
-    headers = {'accessToken': accessToken}
+    headers = {'refreshToken': refreshToken}
     req = requests.get(url=refreshUrl, headers=headers, verify=False)
 
     if req.status_code != 200:
@@ -15,9 +15,9 @@ def getAccessToken(accessToken):
 
     return accessToken
 
-def getRefreshToken(refreshToken):
+def getRefreshToken(accessToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
-    headers = {'refreshToken': refreshToken}
+    headers = {'accessToken': accessToken}
     req = requests.get(url=refreshUrl, headers=headers, verify=False)
 
     if req.status_code != 200:

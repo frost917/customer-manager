@@ -42,8 +42,7 @@ app.register_blueprint(updateReserveData.front)
 
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
-import requests
-import json
+import requests, json
 from datetime import timedelta
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
@@ -54,6 +53,7 @@ from config.backendData import backendData
 @app.route('/')
 @tokenVerify
 def index():
+    #TODO response 생성에 사용되는 변수에서 뭔가 문제가 있는듯
     accessToken = g.get('accessToken')
     
     url = backendData['ADDR']
@@ -66,14 +66,19 @@ def index():
 
     reserveData = json.loads(reserveReq.text).get('reserveData')
 
+    print(accessToken)
+    print(g.get('refreshToken'))
+
     result = make_response(render_template('index.html', reserveData=reserveData))
     # 쿠키 설정
     result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+    result.set_cookie('refreshToken', str(g.get('refreshToken')), max_age=timedelta(hours=4320), httponly=True)
     return result
 
 import ssl
 if __name__ == "__main__":
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    ssl_context.load_cert_chain(certfile='/customer-manager/cert/tls.crt', keyfile='/customer-manager/cert/tls.key')
-    app.run(host="0.0.0.0", port=443, ssl_context=ssl_context)  
+    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    # ssl_context.load_cert_chain(certfile='/customer-manager/cert/tls.crt', keyfile='/customer-manager/cert/tls.key')
+    # app.run(host="0.0.0.0", port=443, ssl_context=ssl_context)
+    app.debug = True
+    app.run(host="0.0.0.0", port=5000)  

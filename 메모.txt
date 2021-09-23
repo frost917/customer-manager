@@ -1,0 +1,20 @@
+﻿페이지 플로우
+사용자 접속->쿠키 받아옴->tokenVerify에서 /로 접근해 검증->없으면 401->401이 뜰 경우 /auth/refresh에서 갱신->갱신된 토큰으로 접속한 페이지의 함수로 받아옴->사용자한테 표시
+
+에러 내용
+사용자 접속->쿠키 받아옴->tokenVerify에서 /로 접근해 검증->파기되어 401->/auth/refresh에서 갱신->성공->원래 페이지 접근->401 실패->사용자 500
+
+기존의 토큰을 가지고 있는 경우 500에러 발생
+새로 로그인 하는 경우 발생하지 않음
+원래 페이지에서 갱신된 토큰을 못받아오는 것?
+
+토큰 전달 방식
+tokenVerify에서 /로 접근해 검증->재발급시 getAccessToken으로 받아옴->accessToken을 g.accessToken으로 넘김->원래 페이지에서 g.get('accessToken')으로 받아옴
+
+accessToken이 없는 경우 500에러 발생
+/auth/refresh 접근 성공 후 원래 페이지 로드 단계에서 401 발생
+
+에러 발견
+새 accessToken을 받아오는 과정에서 refreshToken이 아니라 accessToken이 전달되고 있었음
+백엔드 에러
+전달받은 토큰이 None인데 200 반환
