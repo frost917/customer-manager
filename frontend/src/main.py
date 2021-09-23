@@ -44,7 +44,6 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests, json
 from datetime import timedelta
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
