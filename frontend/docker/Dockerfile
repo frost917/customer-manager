@@ -9,10 +9,6 @@ ENV LC_CTYPE=ko_KR.UTF-8 \
     LANG=ko_KR.UTF-8 \
     LANGUAGE=ko_KR.UTF-8
 
-RUN apt update && apt install -y locales \
-    && locale-gen \
-    && dpkg-reconfigure locales
-
 COPY --from=clone /customer-manager/frontend /customer-manager
 
 WORKDIR /customer-manager
