@@ -77,8 +77,10 @@ def index():
 
 import ssl
 if __name__ == "__main__":
-    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    # ssl_context.load_cert_chain(certfile='/customer-manager/cert/tls.crt', keyfile='/customer-manager/cert/tls.key')
-    # app.run(host="0.0.0.0", port=443, ssl_context=ssl_context)
-    app.debug = True
-    app.run(host="0.0.0.0", port=5000)  
+    if os.getenv("DEBUG") == 'True':
+        app.debug = True
+        app.run(host="0.0.0.0", port=5000)  
+    else:
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        ssl_context.load_cert_chain(certfile='/customer-manager/cert/tls.crt', keyfile='/customer-manager/cert/tls.key')
+        app.run(host="0.0.0.0", port=443, ssl_context=ssl_context)
