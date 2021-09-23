@@ -38,7 +38,7 @@ def tokenVerify(func):
         # refreshToken이 없는 경우 accessToken을 이용해
         # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
-            refreshToken = getRefreshToken(refreshToken=refreshToken)
+            refreshToken = getRefreshToken(accessToken=accessToken)
 
         # 둘 다 없으면 로그인 페이지로 넘김
         elif accessToken is None and refreshToken is None:
