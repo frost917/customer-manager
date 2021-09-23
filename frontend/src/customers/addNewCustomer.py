@@ -29,7 +29,7 @@ def addNewCustomer():
 
     url = backendData['ADDR'] + '/customers'
     headers = {'content-type': 'application/json; charset=UTF-8', 'Authorization': accessToken}
-    req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=False)
+    req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)

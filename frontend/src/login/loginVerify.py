@@ -19,7 +19,7 @@ def tokenVerify(func):
         if accessToken is not None and refreshToken is not None:
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
-            req = requests.get(url=url, headers=headers, verify=False)
+            req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
         
             if 200 <= req.status_code and req.status_code <= 299:
                 pass

@@ -23,7 +23,7 @@ def login():
     url = backendData['ADDR'] + '/auth'
     headers = {'Content-Type': 'application/json; charset=utf-8'}
     data = json.dumps({'userID': userID, 'passwd': passwd})
-    req = requests.post(url=url, headers=headers, data=data, verify=False)
+    req = requests.post(url=url, headers=headers, data=data, verify=backendData['CA_CERT'])
 
     if 200 <= req.status_code and req.status_code <= 299:
         loginData = json.loads(req.text)

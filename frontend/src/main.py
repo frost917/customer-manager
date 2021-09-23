@@ -59,7 +59,7 @@ def index():
     url = backendData['ADDR']
     reserveUrl = url + '/reserves'
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    reserveReq = requests.get(url=reserveUrl, headers=headers, verify=False)
+    reserveReq = requests.get(url=reserveUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if reserveReq.status_code != 200:
         return parseStatusCode(req=reserveReq)

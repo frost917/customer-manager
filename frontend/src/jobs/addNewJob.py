@@ -15,7 +15,7 @@ def addNewJobPage(customerID):
 
     url = backendData['ADDR'] + '/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
-    req = requests.get(url=url, headers=headers, verify=False)
+    req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)
@@ -52,7 +52,7 @@ def addNewJob(customerID):
     url = backendData['ADDR']
     jobAddUrl = url + '/jobs/' + customerID + '/job'
     headers = {'Content-Type': 'application/json; charset=utf-8', 'Authorization': accessToken}
-    req = requests.post(url=jobAddUrl, headers=headers, data=json.dumps(data), verify=False)
+    req = requests.post(url=jobAddUrl, headers=headers, data=json.dumps(data), verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)

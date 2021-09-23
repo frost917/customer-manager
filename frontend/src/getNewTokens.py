@@ -5,7 +5,7 @@ from statusCodeParse import parseStatusCode
 def getAccessToken(refreshToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
     headers = {'refreshToken': refreshToken}
-    req = requests.get(url=refreshUrl, headers=headers, verify=False)
+    req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)
@@ -18,7 +18,7 @@ def getAccessToken(refreshToken):
 def getRefreshToken(accessToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
     headers = {'accessToken': accessToken}
-    req = requests.get(url=refreshUrl, headers=headers, verify=False)
+    req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)

@@ -16,7 +16,7 @@ def customerJobData(customerID):
     url = backendData['ADDR']
     customerUrl = url + '/jobs/customer/' + customerID
     headers = {'Content-Type': 'charset=utf-8', 'Authorization': accessToken}
-    req = requests.get(url=customerUrl, headers=headers, verify=False)
+    req = requests.get(url=customerUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
         return parseStatusCode(req)
