@@ -26,7 +26,5 @@ def getJobData(jobID):
 
     customerID = customerData.get('customerID')
 
-    result = make_response(render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+    result = render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID)
     return result

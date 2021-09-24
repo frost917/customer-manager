@@ -24,9 +24,7 @@ def addNewReservePage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    result = make_response(render_template('reserve-add.html', customerData=customerData, customerID=customerID))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+    result = render_template('reserve-add.html', customerData=customerData, customerID=customerID)
     return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
@@ -55,6 +53,5 @@ def addNewJob(customerID):
 
     reserveID = json.loads(req.text).get('reserveData')[0].get('reserveID')
     
-    result = g.get('response')
-    result.response = redirect('/reserves/'+ reserveID)
+    result = redirect('/reserves/'+ reserveID)
     return result

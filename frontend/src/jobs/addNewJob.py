@@ -23,9 +23,7 @@ def addNewJobPage(customerID):
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]
 
-    result = make_response(render_template('job-add.html', customerData=customerData, customerID=customerID))
-    result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-    result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+    result = render_template('job-add.html', customerData=customerData, customerID=customerID)
     return result
 
 @front.route('/customer/<customerID>', methods=['POST'])
@@ -62,6 +60,5 @@ def addNewJob(customerID):
     jobData = data.get('jobData')[0]
     jobID = jobData.get('jobID')
 
-    result = g.get('response')
-    result.response = redirect('/jobs/'+ jobID, code=302)
+    result = redirect('/jobs/'+ jobID, code=302)
     return result

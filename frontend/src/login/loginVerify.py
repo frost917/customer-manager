@@ -1,4 +1,4 @@
-﻿from flask import request, g, redirect, make_response
+﻿from flask import request, redirect, make_response
 from functools import wraps
 from datetime import timedelta
 import requests
@@ -30,7 +30,7 @@ def tokenVerify(func):
                 accessToken = getAccessToken(refreshToken=refreshToken)
                 result = make_response("""<script>location.reload();</script>""")
                 result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-                result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+                result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
                 return result
 
             else:
@@ -41,7 +41,7 @@ def tokenVerify(func):
             accessToken = getAccessToken(refreshToken=refreshToken)
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-            result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
             return result
 
         # refreshToken이 없는 경우 accessToken을 이용해
@@ -50,7 +50,7 @@ def tokenVerify(func):
             refreshToken = getRefreshToken(accessToken=accessToken)
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-            result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
             return result
 
         # 둘 다 없으면 로그인 페이지로 넘김
