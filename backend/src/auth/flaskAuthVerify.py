@@ -16,13 +16,10 @@ def tokenVerify(func):
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
 
-        if type(userID) is str and type(UUID) is str:
+        if type(UUID) is str and len(UUID) == 36:
             g.userID = userID
             g.UUID = UUID
-        elif userID is Response or UUID is Response:
-            from msg.jsonMsg import tokenInvalid
-            return Response(tokenInvalid, status=401, content_type='application/json; charset=UTF-8')
-        elif userID is None or UUID is None:
+        else:
             return Response(status=401)
 
         return func(*args, **kwargs)
