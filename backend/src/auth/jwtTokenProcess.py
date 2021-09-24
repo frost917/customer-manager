@@ -54,26 +54,18 @@ def isAccessTokenValid(accessToken):
 def isRefreshTokenValid(refreshToken):
     isRefreshTokenExpired = False
 
-    try:
-        jwt.decode(refreshToken, JWTSecret, algorithms=['HS256'])
-    except jwt.InvalidTokenError:
-        return None
-    except jwt.InvalidSignatureError:
-        # 시그니쳐 에러가 발생한 경우
-        # refresh token이 위변조 된 것으로 간주
-        from redisCustom import redisToken
-        redisToken.delRefreshToken(refreshToken=refreshToken)
-        return None
-    except jwt.ExpiredSignatureError:
+    # redis에 토큰 데이터 없으면 그냥 파기된거로
+    import redisCustom
+    redis = redisCustom.redisToken()
+    if redis.getUserID(refreshToken) is None:
         isRefreshTokenExpired = True
-    except jwt.DecodeError:
+    if redis.getUUID(refreshToken) is None:
         isRefreshTokenExpired = True
 
     return isRefreshTokenExpired
 
 def tokenGetUserID(accessToken):
     from flask import Response
-    import json
     # 토큰 디코딩 후 에러 발생시
     # None 반환
     try:
