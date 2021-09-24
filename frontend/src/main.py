@@ -54,7 +54,6 @@ from config.backendData import backendData
 def index():
     #TODO response 생성에 사용되는 변수에서 뭔가 문제가 있는듯
     accessToken = g.get('accessToken')
-    print(accessToken)
 
     url = backendData['ADDR']
     reserveUrl = url + '/reserves'

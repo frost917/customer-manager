@@ -1,5 +1,6 @@
-﻿from flask import request, g, redirect
+﻿from flask import request, g, redirect, make_response
 from functools import wraps
+from datetime import timedelta
 import requests
 
 from statusCodeParse import parseStatusCode
@@ -27,6 +28,10 @@ def tokenVerify(func):
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
                 accessToken = getAccessToken(refreshToken=refreshToken)
+                result = make_response("""<script>location.reload();</script>""")
+                result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+                result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+                return result
 
             else:
                 return parseStatusCode(req)
@@ -34,22 +39,23 @@ def tokenVerify(func):
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:
             accessToken = getAccessToken(refreshToken=refreshToken)
+            result = make_response("""<script>location.reload();</script>""")
+            result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+            result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+            return result
 
         # refreshToken이 없는 경우 accessToken을 이용해
         # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
             refreshToken = getRefreshToken(accessToken=accessToken)
+            result = make_response("""<script>location.reload();</script>""")
+            result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+            result.set_cookie('refreshToken', g.get('refreshToken'), max_age=timedelta(hours=4320), httponly=True)
+            return result
 
         # 둘 다 없으면 로그인 페이지로 넘김
         elif accessToken is None and refreshToken is None:
             return redirect('/login')
-
-        # 검증 끝나면 g 변수로 넘김
-        g.accessToken = accessToken
-        g.refreshToken = refreshToken
-
-        print(g.get('accessToken'))
-        print(g.get('refreshToken'))
 
         return func(*args, **kwargs)
     return wrapper
