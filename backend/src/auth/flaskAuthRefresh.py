@@ -51,7 +51,7 @@ def tokenRefresh():
         result = redisData.delRefreshToken(refreshToken=refreshToken)
         # 토큰 설정에 실패한 경우(redis가 죽어서)
         if result == False:
-            refreshResult = Response(status=500)
+            return Response(status=500)
 
         refreshToken = createRefreshToken()
 
@@ -62,6 +62,10 @@ def tokenRefresh():
         # 이곳에서 redis에 저장된 데이터를 처리
         userID = tokenGetUserID(accessToken=accessToken)
         UUID = tokenGetUUID(accessToken=accessToken)
+
+        if userID == None or UUID == None:
+            return Response(status=401)
+
         result = redisData.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
 
         # 토큰 설정에 실패한 경우(redis가 죽어서)

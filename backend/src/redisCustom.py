@@ -32,9 +32,13 @@ class redisToken(metaclass=Singleton):
     def setRefreshToken(self, refreshToken, userID, UUID):
         from datetime import timedelta
         # JWT Refresh Token
-        self.redisConn.hset(refreshToken, "userID", userID)
-        self.redisConn.hset(refreshToken, "UUID", UUID)
-        self.redisConn.expire(refreshToken, timedelta(hours=4320))
+        try:
+            self.redisConn.hset(refreshToken, "userID", userID)
+            self.redisConn.hset(refreshToken, "UUID", UUID)
+            self.redisConn.expire(refreshToken, timedelta(hours=4320))
+        except redis.RedisError as err:
+            print(err)
+            return False
 
         # 인증 토큰은 api 응답에 보내야 해서 반환
         return True

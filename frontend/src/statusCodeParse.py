@@ -2,7 +2,7 @@
 import json
 
 def parseStatusCode(req):
-    if 400 == req.status_code:
+    if req.status_code == 400:
         print(json.loads(req.text))
         return """<script>
         alert("데이터가 잘못되었습니다");
@@ -13,7 +13,7 @@ def parseStatusCode(req):
         result.delete_cookie('accessToken')
         result.delete_cookie('refreshToken')
         return result
-    elif 404 == req.status_code:
+    elif req.status_code == 404:
         print(json.loads(req.text))
         return """<script>
         alert("해당 데이터가 없습니다.");
