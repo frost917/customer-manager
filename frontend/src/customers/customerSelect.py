@@ -1,4 +1,4 @@
-﻿from flask import render_template, g, Blueprint, make_response
+﻿from flask import render_template, Blueprint, request
 
 import json, requests
 from datetime import timedelta
@@ -11,7 +11,7 @@ front = Blueprint('customerSelect', __name__, url_prefix='/customers')
 @front.route('', methods=['GET'])
 @tokenVerify
 def customerSelect():
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     url = backendData['ADDR']
     customerUrl = url + '/customers'

@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, g, make_response
+﻿from flask import Blueprint, render_template, request
 import json, requests
 
 from datetime import timedelta
@@ -11,7 +11,7 @@ front = Blueprint('getReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['GET'])
 @tokenVerify
 def getReserveData(reserveID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     # 예약 id로 데이터 불러오기
     url = backendData['ADDR']

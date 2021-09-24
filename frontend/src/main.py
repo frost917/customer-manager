@@ -1,6 +1,6 @@
 ﻿import os
 
-from flask import Flask, g, render_template, make_response
+from flask import Flask, request, render_template
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
@@ -43,7 +43,6 @@ app.register_blueprint(updateReserveData.front)
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests, json
-from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -53,7 +52,7 @@ from config.backendData import backendData
 @tokenVerify
 def index():
     #TODO response 생성에 사용되는 변수에서 뭔가 문제가 있는듯
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     url = backendData['ADDR']
     reserveUrl = url + '/reserves'

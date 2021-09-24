@@ -1,7 +1,5 @@
-﻿from flask import Blueprint, request, g, redirect
+﻿from flask import Blueprint, request, redirect
 import json, requests
-
-from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -11,7 +9,7 @@ front = Blueprint('updateReserveData', __name__, url_prefix='/reserves')
 @front.route('/<reserveID>', methods=['POST'])
 @tokenVerify
 def updateReserveData(reserveID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     reserveType = request.form.getlist('reserveType')    
     reserveDate = request.form.get('reserveDate')

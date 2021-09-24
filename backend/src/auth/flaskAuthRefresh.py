@@ -8,9 +8,6 @@ def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
 
-    print(accessToken)
-    print(refreshToken)
-
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
                                       isAccessTokenValid, isRefreshTokenValid)

@@ -1,4 +1,4 @@
-﻿from flask import (g, Blueprint, render_template, request, redirect, make_response)
+﻿from flask import (g, Blueprint, render_template, request, redirect)
 from datetime import timedelta
 
 import json, requests
@@ -17,7 +17,7 @@ def addNewCustomerPage():
 @front.route('/create', methods=['POST'])
 @tokenVerify
 def addNewCustomer():
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     customerName = request.form.get('customerName')
     phoneNumber = request.form.get('phoneNumber')

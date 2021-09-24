@@ -1,7 +1,5 @@
-﻿from flask import Blueprint, render_template, redirect, make_response, request, g
+﻿from flask import Blueprint, render_template, redirect, make_response, request
 import json, requests
-
-from datetime import timedelta  
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -11,7 +9,7 @@ front = Blueprint('addNewReserve', __name__, url_prefix='/reserves')
 @front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
 def addNewReservePage(customerID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     url = backendData['ADDR'] + '/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
@@ -30,7 +28,7 @@ def addNewReservePage(customerID):
 @front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
 def addNewJob(customerID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     reserveType = request.form.getlist('reserveType')    
     reserveDate = request.form.get('reserveDate')

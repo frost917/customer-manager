@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, make_response, request, g, redirect
+﻿from flask import Blueprint, render_template, request, redirect
 import json
 import requests
 from datetime import timedelta
@@ -11,7 +11,7 @@ front = Blueprint('addNewJob', __name__, url_prefix='/jobs')
 @front.route('/customer/<customerID>', methods=['GET'])
 @tokenVerify
 def addNewJobPage(customerID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     url = backendData['ADDR'] + '/customers/' + customerID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
@@ -29,7 +29,7 @@ def addNewJobPage(customerID):
 @front.route('/customer/<customerID>', methods=['POST'])
 @tokenVerify
 def addNewJob(customerID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
     data = dict()
 
     # 시술 데이터 불러오기

@@ -1,7 +1,6 @@
-﻿from flask import Blueprint, render_template, g, make_response
+﻿from flask import Blueprint, render_template, request
 import json
 import requests
-from datetime import timedelta
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -11,7 +10,7 @@ front = Blueprint('getJobData', __name__, url_prefix='/jobs')
 @front.route('/<jobID>', methods=['GET'])
 @tokenVerify
 def getJobData(jobID):
-    accessToken = g.get('accessToken')
+    accessToken = request.cookies.get('accessToken')
 
     url = backendData['ADDR'] + '/jobs/' + jobID
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
