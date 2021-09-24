@@ -3,13 +3,11 @@ from flask import Response, g, request
 
 from auth.jwtTokenProcess import tokenGetUserID, tokenGetUUID
 
-
 # 로그인 여부 확인하는 함수
 def tokenVerify(func):
     @wraps(func)
     def verification(*args, **kwargs):
         accessToken = request.headers.get('Authorization')
-        print(accessToken)
 
         if accessToken is None:
             import json

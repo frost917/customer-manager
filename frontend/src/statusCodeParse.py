@@ -1,4 +1,5 @@
-﻿import json
+﻿from flask import make_response, redirect
+import json
 
 def parseStatusCode(req):
     if 400 == req.status_code:
@@ -7,6 +8,11 @@ def parseStatusCode(req):
         alert("데이터가 잘못되었습니다");
         history.back();
         </script>"""
+    elif req.status_code == 401:
+        result = make_response(redirect('/login'))
+        result.delete_cookie('accessToken')
+        result.delete_cookie('refreshToken')
+        return result
     elif 404 == req.status_code:
         print(json.loads(req.text))
         return """<script>
