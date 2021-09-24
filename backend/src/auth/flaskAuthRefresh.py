@@ -19,11 +19,11 @@ def tokenRefresh():
 
     # 토큰이 잘못된 경우
     if isAccessTokenExpired is None or isRefreshTokenExpired is None:
-        refreshResult = Response(tokenInvalid(), status=400)
+        return Response(tokenInvalid(), status=400)
 
     # 토큰이 둘 다 파기된 경우
     elif isAccessTokenExpired and isRefreshTokenExpired:
-        refreshResult = Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
+        return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
     # access token만 파기된 경우 재발급
     elif isAccessTokenExpired:
@@ -34,6 +34,9 @@ def tokenRefresh():
         redisData = redisToken()
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
+
+        if 'None' in userID or 'Null' in userID or 'null' in userID:
+            return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
         accessToken = createAccessToken(userID=userID, UUID=UUID)
         

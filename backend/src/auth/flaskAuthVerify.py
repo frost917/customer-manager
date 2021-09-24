@@ -1,5 +1,4 @@
 ﻿from functools import wraps
-
 from flask import Response, g, request
 
 from auth.jwtTokenProcess import tokenGetUserID, tokenGetUUID
@@ -10,6 +9,7 @@ def tokenVerify(func):
     @wraps(func)
     def verification(*args, **kwargs):
         accessToken = request.headers.get('Authorization')
+        print(accessToken)
 
         if accessToken is None:
             import json
