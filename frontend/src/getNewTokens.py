@@ -9,7 +9,7 @@ def getAccessToken(accessToken, refreshToken):
     req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
-        return parseStatusCode(req)
+        return False
 
     loginData = json.loads(req.text)
     accessToken = loginData.get('accessToken')
@@ -22,7 +22,7 @@ def getRefreshToken(accessToken, refreshToken):
     req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
-        return parseStatusCode(req)
+        return False
 
     loginData = json.loads(req.text)
     refreshToken = loginData.get('refreshToken')

@@ -28,6 +28,13 @@ def tokenVerify(func):
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
                 accessToken = getAccessToken(accessToken, refreshToken)
+
+                if accessToken is False:
+                    result = make_response(redirect('/login'))
+                    result.delete_cookie('accessToken')
+                    result.delete_cookie('refreshToken')
+                    return result
+
                 result = make_response("""<script>location.reload();</script>""")
                 result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
                 result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
@@ -39,6 +46,13 @@ def tokenVerify(func):
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:
             accessToken = getAccessToken(accessToken, refreshToken)
+
+            if accessToken is False:
+                result = make_response(redirect('/login'))
+                result.delete_cookie('accessToken')
+                result.delete_cookie('refreshToken')
+                return result
+
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
             result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
@@ -48,6 +62,13 @@ def tokenVerify(func):
         # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
             refreshToken = getRefreshToken(accessToken, refreshToken)
+
+            if refreshToken is False:
+                result = make_response(redirect('/login'))
+                result.delete_cookie('accessToken')
+                result.delete_cookie('refreshToken')
+                return result
+
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
             result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
