@@ -35,7 +35,7 @@ class redisToken(metaclass=Singleton):
         self.redisConn.hset(refreshToken, "userID", userID)
         self.redisConn.hset(refreshToken, "UUID", UUID)
         self.redisConn.expire(refreshToken, timedelta(hours=4320))
-        
+
         # 인증 토큰은 api 응답에 보내야 해서 반환
         return True
     

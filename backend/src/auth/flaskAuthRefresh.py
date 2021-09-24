@@ -35,7 +35,7 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
-        if 'None' in userID or 'Null' in userID or 'null' in userID:
+        if userID is None or UUID is None:
             return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
 
         accessToken = createAccessToken(userID=userID, UUID=UUID)
