@@ -36,9 +36,9 @@ def tokenRefresh():
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
         # 받아온 UUID의 길이가 잘못된 경우 레디스에 토큰이 없는 것으로 판단
-        if len(UUID) != 36:
+        if type(UUID) is not str or len(UUID) is not 36:
             return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
-            
+
         accessToken = createAccessToken(userID=userID, UUID=UUID)
         
     # refresh token만 파기된 경우
@@ -69,8 +69,6 @@ def tokenRefresh():
     token = dict()
     token['accessToken'] = accessToken
     token['refreshToken'] = refreshToken
-
-    print(token)
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
     refreshResult = Response(json.dumps(token), status=200, content_type="application/json; charset=UTF-8") 
