@@ -1,7 +1,7 @@
 ﻿from flask import request, make_response, Blueprint
 
 import json, requests
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
@@ -36,11 +36,15 @@ def login():
             location.href="/login";
             </script>"""
 
+        # 로그인시 인증용 토큰과 갱신용 토큰 생성
+        # 군대 이슈 때문에 자동 로그인을 위한 refreshToken 재발급을 위한
+        # 로그인 일자 생성
         result = make_response("""<script>
         location.href="/"
         </script>""")
         result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
         result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+        result.set_cookie('tokenTime', str(datetime.now()), httponly=True)
 
         return result
 
