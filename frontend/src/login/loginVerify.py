@@ -1,7 +1,8 @@
 ﻿from flask import request, redirect, make_response
 from functools import wraps
-from datetime import timedelta
-import requests
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+import requests, json
 
 from statusCodeParse import parseStatusCode
 from getNewTokens import getAccessToken, getRefreshToken
@@ -14,6 +15,7 @@ def tokenVerify(func):
         # 토큰을 g 변수로 넘겨서 로그인 토큰 파기된 경우에 대처하기
         accessToken = request.cookies.get('accessToken')
         refreshToken = request.cookies.get('refreshToken')
+        tokenTime = request.cookies.get('tokenTime')
 
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
@@ -77,6 +79,23 @@ def tokenVerify(func):
         # 둘 다 없으면 로그인 페이지로 넘김
         elif accessToken is None and refreshToken is None:
             return redirect('/login')
+
+        # 군대 이슈 회피를 위한 refreshToken 갱신
+        # 로그인 일자로부터 3개월 이상 지났으면 자동 갱신
+        if datetime(tokenTime) < ( datetime.now() - relativedelta(months=3) ):
+            headers = {'accessToken': accessToken}
+            refUrl = url + '/auth/refresh'
+            req = requests.get(url=refUrl, headers=headers)
+
+            if req.status_code != 200:
+                return parseStatusCode(req)
+
+            refreshToken = json.loads(req.text).get('refreshToken')
+            result = make_response("""<script>location.reload();</script>""")
+            result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+            result.set_cookie('tokenTime', str(datetime.now()), httponly=True)
+            return result
 
         return func(*args, **kwargs)
     return wrapper
