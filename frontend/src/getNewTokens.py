@@ -1,13 +1,11 @@
-﻿from flask.helpers import make_response
-import requests, json
+﻿import requests, json
 
-from werkzeug.utils import redirect
 from config.backendData import backendData
 from statusCodeParse import parseStatusCode
 
-def getAccessToken(refreshToken):
+def getAccessToken(accessToken, refreshToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
-    headers = {'refreshToken': refreshToken}
+    headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
     req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
@@ -18,9 +16,9 @@ def getAccessToken(refreshToken):
 
     return accessToken
 
-def getRefreshToken(accessToken):
+def getRefreshToken(accessToken, refreshToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
-    headers = {'accessToken': accessToken}
+    headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
     req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:

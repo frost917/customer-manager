@@ -27,7 +27,7 @@ def tokenVerify(func):
 
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
-                accessToken = getAccessToken(refreshToken=refreshToken)
+                accessToken = getAccessToken(accessToken, refreshToken)
                 result = make_response("""<script>location.reload();</script>""")
                 result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
                 result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
@@ -38,7 +38,7 @@ def tokenVerify(func):
 
         # refreshToken이 있으면 accessToken만 따로 생성
         elif accessToken is None and refreshToken is not None:
-            accessToken = getAccessToken(refreshToken=refreshToken)
+            accessToken = getAccessToken(accessToken, refreshToken)
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
             result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
@@ -47,7 +47,7 @@ def tokenVerify(func):
         # refreshToken이 없는 경우 accessToken을 이용해
         # refreshToken을 재생성
         elif accessToken is not None and refreshToken is None:
-            refreshToken = getRefreshToken(accessToken=accessToken)
+            refreshToken = getRefreshToken(accessToken, refreshToken)
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
             result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
