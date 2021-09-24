@@ -35,12 +35,16 @@ def tokenRefresh():
         userID = redisData.getUserID(refreshToken=refreshToken)
         UUID = redisData.getUUID(refreshToken=refreshToken)
 
+        print('userID is {}'.format(userID))
+        print('UUID is {}'.format(UUID))
+
         # 받아온 UUID의 길이가 잘못된 경우 레디스에 토큰이 없는 것으로 판단
-        if type(UUID) is not str or len(UUID) != 36:
+        if type(UUID) != str or len(UUID) != 36:
             return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
-        elif userID is None or UUID is None:
+        elif userID == None or UUID == None:
             return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
-        accessToken = createAccessToken(userID=userID, UUID=UUID)
+        elif userID != None and UUID != None and len(UUID) == 36:
+            accessToken = createAccessToken(userID=userID, UUID=UUID)
         
     # refresh token만 파기된 경우
     elif isRefreshTokenExpired:
