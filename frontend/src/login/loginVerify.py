@@ -48,6 +48,9 @@ def tokenVerify(func):
         g.accessToken = accessToken
         g.refreshToken = refreshToken
 
+        print(g.get('accessToken'))
+        print(g.get('refreshToken'))
+
         return func(*args, **kwargs)
     return wrapper
 
