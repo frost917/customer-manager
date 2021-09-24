@@ -86,9 +86,6 @@ def tokenGetUserID(accessToken):
         return None
     
     result = decode.get('userID')
-    if 'None' in result or 'Null' in result or 'null' in result:
-            result = None
-
     return result
 
 # return UUID
@@ -106,7 +103,4 @@ def tokenGetUUID(accessToken):
         return None
     
     result = decode.get('UUID')
-    if 'None' in result or 'Null' in result or 'null' in result:
-            result = None
-
     return result
