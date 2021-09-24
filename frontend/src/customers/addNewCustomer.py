@@ -1,5 +1,4 @@
-﻿from flask import (g, Blueprint, render_template, request, redirect)
-from datetime import timedelta
+﻿from flask import (Blueprint, render_template, request, redirect)
 
 import json, requests
 

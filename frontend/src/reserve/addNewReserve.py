@@ -1,4 +1,4 @@
-﻿from flask import Blueprint, render_template, redirect, make_response, request
+﻿from flask import Blueprint, render_template, redirect, request
 import json, requests
 
 from statusCodeParse import parseStatusCode
