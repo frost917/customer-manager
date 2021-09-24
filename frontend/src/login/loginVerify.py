@@ -94,6 +94,7 @@ def tokenVerify(func):
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
             result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+            result.set_cookie('tokenTime', str(datetime.now()), httponly=True)
             return result
 
         return func(*args, **kwargs)
