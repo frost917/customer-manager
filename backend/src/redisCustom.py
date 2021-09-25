@@ -28,10 +28,11 @@ class redisToken(metaclass=Singleton):
             port=port, 
             db=db, 
             password=password,
-            ssl=True,
+            connection_class=redis.SSLConnection,
+            ssl_cert_reqs='required',
             ssl_ca_certs='/certs/ca.crt')
 
-        self.redisConn = redis.Redis(connection_pool=pool)
+        self.redisConn = redis.StrictRedis(connection_pool=pool)
 
     
     def __del__(self):
