@@ -54,8 +54,7 @@ class redisToken(metaclass=Singleton):
     
     def delRefreshToken(self, refreshToken):
         # try:
-        for hlen in range(self.redisConn.hlen(refreshToken)):
-            self.redisConn.hdel(refreshToken, hlen)
+        self.redisConn.delete(refreshToken)
         # except redis.RedisError as err:
         #     print(err)
             # 레디스 에러나면 False 반환하고 
