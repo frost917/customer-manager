@@ -1,6 +1,6 @@
 ﻿import psycopg2
 import psycopg2.extras
-
+from psycopg2 import pool
 
 class Singleton(type):
     _instances = {}
@@ -33,13 +33,15 @@ class PostgresControll(metaclass=Singleton):
         user = dbData['DB_USER']
         passwd = dbData['DB_PASSWD']
 
-        self.dbconn = psycopg2.connect(
-            database=database, 
+        self.dbconn = pool.ThreadedConnectionPool(1, 5, database=database, 
             host=host, 
             port=port, 
             user=user, 
-            password=passwd)
-        self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            password=passwd,
+            sslmode='require',
+            sslrootcert='/certs/ca.crt')
+            
+        self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     def __del__(self):
         self.dbconn.commit()
