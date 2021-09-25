@@ -8,7 +8,7 @@ podman build \
     --pull \
     --no-cache \
     --platform=linux/arm64/v8,linux/amd64 \
-    -t ${REGISTRY}/$serviceName:frontend
+    -t ${REGISTRY}/$serviceName:frontend \
     ./
 
 podman image push \
