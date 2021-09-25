@@ -40,12 +40,11 @@ class PostgresControll(metaclass=Singleton):
             password=passwd,
             sslmode='require',
             sslrootcert='/certs/ca.crt')
-            
+
         self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     def __del__(self):
-        self.dbconn.commit()
-        self.dbconn.close()
+        self.dbconn.closeall()
         self.cur.close()
 
     # customer table
