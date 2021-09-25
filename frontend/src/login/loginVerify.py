@@ -82,7 +82,8 @@ def tokenVerify(func):
 
         # 군대 이슈 회피를 위한 refreshToken 갱신
         # 로그인 일자로부터 3개월 이상 지났으면 자동 갱신
-        if datetime(tokenTime) < ( datetime.now() - relativedelta(months=3) ):
+        originTime = datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f') + relativedelta(months=3)
+        if originTime > ( datetime.now() - relativedelta(months=1) ) :
             headers = {'accessToken': accessToken}
             refUrl = url + '/auth/refresh'
             req = requests.get(url=refUrl, headers=headers)
