@@ -22,17 +22,16 @@ class redisToken(metaclass=Singleton):
         host = redisData.get("REDIS_HOST")
         port = redisData.get("REDIS_PORT")
         password = redisData.get("REDIS_PASSWD")
+        db = 0
 
-        # pool = redis.ConnectionPool(host=host,
-        #     port=port, 
-        #     db=db, 
-        #     password=password,
-        #     connection_class=redis.SSLConnection,
-        #     ssl_cert_reqs='required',
-        #     ssl_ca_certs='/certs/ca.crt')
-
-        url = 'rediss://h:' + password +'@' + host +':' + port +'?ssl_cert_reqs=required&ssl_ca_certs=/certs/ca.crt&ssl_certfile=/certs/tls.crt&ssl_keyfile=/certs/tls.key'
-        pool = redis.ConnectionPool().from_url(url=url)
+        pool = redis.ConnectionPool(max_connections=5,
+            host=host,
+            port=port, 
+            db=db, 
+            password=password,
+            connection_class=redis.SSLConnection,
+            ssl_cert_reqs='required',
+            ssl_ca_certs='/certs/ca.crt')
 
         self.redisConn = redis.StrictRedis(connection_pool=pool)
 
