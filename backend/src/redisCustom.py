@@ -24,15 +24,23 @@ class redisToken(metaclass=Singleton):
         port = redisData.get("REDIS_PORT")
         password = redisData.get("REDIS_PASSWD")
 
-        pool = redis.ConnectionPool(host=host,
+        # pool = redis.ConnectionPool(host=host,
+        #     port=port, 
+        #     db=db, 
+        #     password=password,
+        #     connection_class=redis.SSLConnection,
+        #     ssl_cert_reqs='required',
+        #     ssl_ca_certs='/certs/ca.crt')
+
+        self.redisConn = redis.StrictRedis(host=host,
             port=port, 
             db=db, 
             password=password,
-            connection_class=redis.SSLConnection,
+            ssl=True,
             ssl_cert_reqs='required',
-            ssl_ca_certs='/certs/ca.crt')
-
-        self.redisConn = redis.StrictRedis(connection_pool=pool)
+            ssl_ca_certs='/certs/ca.crt',
+            ssl_certfile='/certs/tls.crt',
+            ssl_keyfile='/certs/tls.key')
 
     
     def __del__(self):
