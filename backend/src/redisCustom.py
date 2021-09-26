@@ -31,7 +31,9 @@ class redisToken(metaclass=Singleton):
             password=password,
             connection_class=redis.SSLConnection,
             ssl_cert_reqs='required',
-            ssl_ca_certs='/certs/ca.crt')
+            ssl_ca_certs='/certs/ca.crt',
+            ssl_certfile='/certs/tls.crt',
+            ssl_keyfile='/certs/tls.key')
 
         self.redisConn = redis.StrictRedis(connection_pool=pool)
 
