@@ -18,7 +18,6 @@ class redisToken(metaclass=Singleton):
         # host = getenv("REDIS_HOST") if getenv("REDIS_HOST") is not None else 'localhost'
         # port = getenv("REDIS_PORT") if getenv("REDIS_PORT") is not None else '6432'
         # password = getenv("REDIS_PASSWD") if getenv("REDIS_PASSWD") is not None else ''
-        db = 0
 
         host = redisData.get("REDIS_HOST")
         port = redisData.get("REDIS_PORT")
@@ -32,15 +31,10 @@ class redisToken(metaclass=Singleton):
         #     ssl_cert_reqs='required',
         #     ssl_ca_certs='/certs/ca.crt')
 
-        self.redisConn = redis.StrictRedis(host=host,
-            port=port, 
-            db=db, 
-            password=password,
-            ssl=True,
-            ssl_cert_reqs='required',
-            ssl_ca_certs='/certs/ca.crt',
-            ssl_certfile='/certs/tls.crt',
-            ssl_keyfile='/certs/tls.key')
+        url = 'rediss://h:' + password +'@' + host +':' + port +'?ssl_cert_reqs=required&ssl_ca_certs=/certs/ca.crt&ssl_certfile=/certs/tls.crt&ssl_keyfile=/certs/tls.key'
+        pool = redis.ConnectionPool().from_url(url=url)
+
+        self.redisConn = redis.StrictRedis(connection_pool=pool)
 
     
     def __del__(self):
