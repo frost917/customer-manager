@@ -69,7 +69,7 @@ def tokenVerify(func):
             tokenData = getRefreshToken(accessToken, refreshToken)
             refreshToken = tokenData.get('refreshToken')
             tokenTime = tokenData.get('tokenTime')
-            expireTime = int(round(datetime.strftime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f')))
+            expireTime = int(round(tokenData.get('expireTime')))
 
             if tokenData is False:
                 result = make_response(redirect('/login'))
