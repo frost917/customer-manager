@@ -57,6 +57,10 @@ app.register_blueprint(reserve.flaskGetReserveData.manager)
 app.register_blueprint(reserve.flaskGetReserveSpec.manager)
 app.register_blueprint(reserve.flaskUpdateReserveData.manager)
 
+# 파드 생존 확인을 위한 라우팅
+import liveness
+app.register_blueprint(liveness.manager)
+
 # JSON 한글 깨짐 방지를 위해
 app.config['JSON_AS_ASCII'] = False
 

@@ -39,6 +39,10 @@ app.register_blueprint(addNewReserve.front)
 app.register_blueprint(getReserveData.front)
 app.register_blueprint(updateReserveData.front)
 
+# 파드 생존 확인을 위한 라우팅
+import liveness
+app.register_blueprint(liveness.manager)
+
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 import requests, json
