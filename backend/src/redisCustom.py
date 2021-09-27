@@ -65,22 +65,22 @@ class redisToken(metaclass=Singleton):
             # return False
 
     def getUserID(self, refreshToken):
-        # try:
-        userID = self.redisConn.hget(refreshToken, "userID")
-        # except redis.RedisError as err:
-        #     print(err)
-        #     return None
+        try:
+            userID = self.redisConn.hget(refreshToken, "userID")
+        except redis.RedisError as err:
+            print(err)
+            return None
 
         if userID is not None:
             userID = userID.decode('utf-8')
         return userID
 
     def getUUID(self, refreshToken):
-        # try:
-        UUID = self.redisConn.hget(refreshToken, "UUID")
-        # except redis.RedisError as err:
-        #     print(err)
-        #     return None
+        try:
+            UUID = self.redisConn.hget(refreshToken, "UUID")
+        except redis.RedisError as err:
+            print(err)
+            return None
 
         if UUID is not None:
             UUID = UUID.decode('utf-8')

@@ -104,7 +104,7 @@ def tokenVerify(func):
             refreshToken = tokenData.get('refreshToken')
             tokenTime = tokenData.get('tokenTime')
             expireTime = int(datetime.strftime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f'))
-            
+
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
             result.set_cookie('tokenTime', tokenTime, max_age=expireTime, httponly=True)

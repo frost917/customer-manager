@@ -55,7 +55,7 @@ def isRefreshTokenValid(refreshToken):
     if redis.getUserID(refreshToken) is None:
         isRefreshTokenExpired = True
     if redis.getUUID(refreshToken) is None:
-        isRefreshTokenExpired = True
+        isRefreshTokenExpired = True 
 
     return isRefreshTokenExpired
 
