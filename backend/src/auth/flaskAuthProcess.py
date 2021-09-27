@@ -1,4 +1,6 @@
-﻿from flask import Response, request, Blueprint
+﻿from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from flask import Response, request, Blueprint
 
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 
@@ -53,15 +55,19 @@ def login():
 
         UUID = database.getUUID(userData=userData).get('user_id')
 
+        refTime = datetime.now()
+
         from auth.jwtTokenProcess import createAccessToken, createRefreshToken
-        accessToken = createAccessToken(userID=userID, UUID=UUID)
-        refreshToken = createRefreshToken()
+        accessToken = createAccessToken(userID=userID, UUID=UUID, refTime=refTime)
+        refreshToken = createRefreshToken(refTime=refTime)
 
         # 인증 성공시 인증 토큰 반환
         payload = dict()
         payload['userID'] = userID
         payload['accessToken'] = accessToken
         payload['refreshToken'] = refreshToken
+        payload['tokenTime'] = refTime.strftime('%Y-%m-%d %H:%M:%S.%f')
+        payload['expireTime'] = (refTime +  relativedelta(months=3)).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         from redisCustom import redisToken
         redisData = redisToken()

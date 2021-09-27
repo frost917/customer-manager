@@ -1,7 +1,6 @@
 ﻿import requests, json
 
 from config.backendData import backendData
-from statusCodeParse import parseStatusCode
 
 def getAccessToken(accessToken, refreshToken):
     refreshUrl = backendData['ADDR'] + '/auth/refresh'
@@ -25,6 +24,6 @@ def getRefreshToken(accessToken, refreshToken):
         return False
 
     loginData = json.loads(req.text)
-    refreshToken = loginData.get('refreshToken')
+    refreshToken = { 'refreshToken': loginData.get('refreshToken'), 'tokenTime': loginData.get('tokenTime'), 'expireTime': loginData.get('expireTime') }
 
     return refreshToken

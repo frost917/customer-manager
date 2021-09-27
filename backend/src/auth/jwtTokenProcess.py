@@ -1,17 +1,14 @@
-﻿from datetime import datetime, timedelta
+﻿from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 import jwt
 from config.secret import JWTSecret
 
 # return Access token
-def createAccessToken(userID: str, UUID: str):
+def createAccessToken(userID: str, UUID: str, refTime = datetime.now()):
     payload = dict()
     payload['userID'] = userID
     payload['UUID'] = UUID
-
-    # 토큰 생성의 기준이 되는 시간
-    refTime = datetime.now()
 
     payload["exp"] = refTime + timedelta(hours=3)
     payload["iat"] = refTime
@@ -24,10 +21,8 @@ def createAccessToken(userID: str, UUID: str):
 # return RefreshToken
 # To save redis
 # refreshToken은 발급 후 3개월 뒤 파기
-def createRefreshToken():
+def createRefreshToken(refTime = datetime.now()):
     payload = dict()
-    # 토큰 생성의 기준이 되는 시간
-    refTime = datetime.now()
 
     payload["exp"] = refTime + relativedelta(months=3)
     payload["iat"] = refTime

@@ -1,4 +1,6 @@
-﻿from flask import Blueprint, Response, request
+﻿from dateutil.relativedelta import relativedelta
+from flask import Blueprint, Response, request
+from datetime import datetime
 import json
 
 manager = Blueprint("refresh", __name__, url_prefix='/auth')
@@ -7,6 +9,8 @@ manager = Blueprint("refresh", __name__, url_prefix='/auth')
 def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
+
+    refTime = datetime.now()
 
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
@@ -41,7 +45,7 @@ def tokenRefresh():
         elif userID == None or UUID == None:
             return Response('Unauthorized', status=401, content_type="text/html; charset=UTF-8")
        
-        accessToken = createAccessToken(userID=userID, UUID=UUID)
+        accessToken = createAccessToken(userID=userID, UUID=UUID, refTime=refTime)
         
     # refresh token만 파기된 경우
     elif isRefreshTokenExpired:
@@ -53,7 +57,7 @@ def tokenRefresh():
         if result == False:
             return Response(status=500)
 
-        refreshToken = createRefreshToken()
+        refreshToken = createRefreshToken(refTime=refTime)
 
         # access token을 이용해 접속자 정보 받아옴
         from auth.jwtTokenProcess import tokenGetUserID, tokenGetUUID
@@ -75,6 +79,9 @@ def tokenRefresh():
     token = dict()
     token['accessToken'] = accessToken
     token['refreshToken'] = refreshToken
+    token['tokenTime'] = refTime.strftime('%Y-%m-%d %H:%M:%S.%f')
+    token['expireTime'] = (refTime +  relativedelta(months=3)).strftime('%Y-%m-%d %H:%M:%S.%f')
+
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
     refreshResult = Response(json.dumps(token), status=200, content_type="application/json; charset=UTF-8") 

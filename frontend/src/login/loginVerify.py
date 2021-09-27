@@ -17,9 +17,13 @@ def tokenVerify(func):
         refreshToken = request.cookies.get('refreshToken')
         tokenTime = request.cookies.get('tokenTime')
 
+        # refreshToken 갱신 시간을 알 수 없으면 다시 받아오기
+        if tokenTime is None:
+            refreshToken = None
+
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
-        if accessToken is not None and refreshToken is not None:
+        if accessToken != None and refreshToken != None:
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
             req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
@@ -35,18 +39,18 @@ def tokenVerify(func):
                     result = make_response(redirect('/login'))
                     result.delete_cookie('accessToken')
                     result.delete_cookie('refreshToken')
+                    result.delete_cookie('tokenTime')
                     return result
 
                 result = make_response("""<script>location.reload();</script>""")
                 result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-                result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
                 return result
 
             else:
                 return parseStatusCode(req)
 
         # refreshToken이 있으면 accessToken만 따로 생성
-        elif accessToken is None and refreshToken is not None:
+        elif accessToken == None and refreshToken != None:
             accessToken = getAccessToken(accessToken, refreshToken)
 
             if accessToken is False:
@@ -57,27 +61,31 @@ def tokenVerify(func):
 
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
             return result
 
         # refreshToken이 없는 경우 accessToken을 이용해
         # refreshToken을 재생성
-        elif accessToken is not None and refreshToken is None:
-            refreshToken = getRefreshToken(accessToken, refreshToken)
+        elif accessToken != None and refreshToken == None:
+            tokenData = getRefreshToken(accessToken, refreshToken)
+            refreshToken = tokenData.get('refreshToken')
+            tokenTime = tokenData.get('tokenTime')
 
-            if refreshToken is False:
+            if tokenData is False:
                 result = make_response(redirect('/login'))
                 result.delete_cookie('accessToken')
                 result.delete_cookie('refreshToken')
+                result.delete_cookie('tokenTime')
                 return result
 
+            tokenTime = int(datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f'))
+
             result = make_response("""<script>location.reload();</script>""")
-            result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=tokenTime, httponly=True)
+            result.set_cookie('tokenTime', tokenTime, max_age=tokenTime, httponly=True)
             return result
 
         # 둘 다 없으면 로그인 페이지로 넘김
-        elif accessToken is None and refreshToken is None:
+        elif accessToken == None and refreshToken == None and tokenTime == None:
             return redirect('/login')
 
         # 군대 이슈 회피를 위한 refreshToken 갱신
@@ -91,11 +99,15 @@ def tokenVerify(func):
             if req.status_code != 200:
                 return parseStatusCode(req)
 
-            refreshToken = json.loads(req.text).get('refreshToken')
+            tokenData = getRefreshToken(accessToken, refreshToken)
+
+            refreshToken = tokenData.get('refreshToken')
+            tokenTime = tokenData.get('tokenTime')
+            expireTime = int(datetime.strftime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f'))
+            
             result = make_response("""<script>location.reload();</script>""")
-            result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-            result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
-            result.set_cookie('tokenTime', str(datetime.now()), httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
+            result.set_cookie('tokenTime', tokenTime, max_age=expireTime, httponly=True)
             return result
 
         return func(*args, **kwargs)
