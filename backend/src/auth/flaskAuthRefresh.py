@@ -53,9 +53,6 @@ def tokenRefresh():
         from redisCustom import redisToken
         redisData = redisToken()
         result = redisData.delRefreshToken(refreshToken=refreshToken)
-        # 토큰 설정에 실패한 경우(redis가 죽어서)
-        if result == False:
-            return Response(status=500)
 
         refreshToken = createRefreshToken(refTime=refTime)
 

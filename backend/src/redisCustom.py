@@ -56,13 +56,13 @@ class redisToken(metaclass=Singleton):
         return True
     
     def delRefreshToken(self, refreshToken):
-        # try:
-        self.redisConn.delete(refreshToken)
-        # except redis.RedisError as err:
-        #     print(err)
+        try:
+            self.redisConn.delete(refreshToken)
+        except redis.RedisError as err:
+            print(err)
             # 레디스 에러나면 False 반환하고 
             # api 구현에서 500 반환
-            # return False
+            return False
 
     def getUserID(self, refreshToken):
         try:
