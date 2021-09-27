@@ -69,7 +69,7 @@ def tokenVerify(func):
             tokenData = getRefreshToken(accessToken, refreshToken)
             refreshToken = tokenData.get('refreshToken')
             tokenTime = tokenData.get('tokenTime')
-            expireTime = int(round(tokenData.get('expireTime')))
+            expireTime = int(round(datetime.strptime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f')))
 
             if tokenData is False:
                 result = make_response(redirect('/login'))
@@ -102,7 +102,7 @@ def tokenVerify(func):
 
             refreshToken = tokenData.get('refreshToken')
             tokenTime = tokenData.get('tokenTime')
-            expireTime = int(round(datetime.strftime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f')))
+            expireTime = int(round(datetime.strptime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f')))
 
             result = make_response("""<script>location.reload();</script>""")
             result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
