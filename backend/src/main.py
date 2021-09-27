@@ -79,6 +79,20 @@ def index():
     helloUser = dumps(convDict)
     return Response(helloUser, status=200, mimetype="application/json")
     
+from werkzeug import serving
+
+parent_log_request = serving.WSGIRequestHandler.log_request
+
+def log_request(self, *args, **kwargs):
+    if self.path == '/healthcheck':
+        return
+
+    parent_log_request(self, *args, **kwargs)
+
+
+def filter_healthcheck_logs():
+    serving.WSGIRequestHandler.log_request = log_request
+
 import ssl
 if __name__ == "__main__":
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)

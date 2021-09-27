@@ -70,6 +70,20 @@ def index():
     result = render_template('index.html', reserveData=reserveData)
     return result
 
+from werkzeug import serving
+
+parent_log_request = serving.WSGIRequestHandler.log_request
+
+def log_request(self, *args, **kwargs):
+    if self.path == '/healthcheck':
+        return
+
+    parent_log_request(self, *args, **kwargs)
+
+
+def filter_healthcheck_logs():
+    serving.WSGIRequestHandler.log_request = log_request
+
 import ssl
 if __name__ == "__main__":
     if os.getenv("DEBUG") == 'True':
