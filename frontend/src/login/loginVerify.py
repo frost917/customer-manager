@@ -69,6 +69,7 @@ def tokenVerify(func):
             tokenData = getRefreshToken(accessToken, refreshToken)
             refreshToken = tokenData.get('refreshToken')
             tokenTime = tokenData.get('tokenTime')
+            expireTime = int(round(datetime.strftime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f')))
 
             if tokenData is False:
                 result = make_response(redirect('/login'))
@@ -77,11 +78,9 @@ def tokenVerify(func):
                 result.delete_cookie('tokenTime')
                 return result
 
-            tokenTime = int(datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f'))
-
             result = make_response("""<script>location.reload();</script>""")
-            result.set_cookie('refreshToken', refreshToken, max_age=tokenTime, httponly=True)
-            result.set_cookie('tokenTime', tokenTime, max_age=tokenTime, httponly=True)
+            result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
+            result.set_cookie('tokenTime', tokenTime, max_age=expireTime, httponly=True)
             return result
 
         # 둘 다 없으면 로그인 페이지로 넘김
