@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask, Response, g
+from flask.logging import logging
+
 app = Flask(__name__)
 app.secret_key = os.urandom(20)
 
@@ -78,20 +80,11 @@ def index():
     from json import dumps
     helloUser = dumps(convDict)
     return Response(helloUser, status=200, mimetype="application/json")
-    
-from werkzeug import serving
+class NoHealth(logging.Filter):
+    def filter(self, record):
+        return 'GET /ping' not in record.getMessage()
 
-parent_log_request = serving.WSGIRequestHandler.log_request
-
-def log_request(self, *args, **kwargs):
-    if self.path == '/healthcheck':
-        return
-
-    parent_log_request(self, *args, **kwargs)
-
-
-def filter_healthcheck_logs():
-    serving.WSGIRequestHandler.log_request = log_request
+logging.getLogger("werkzeug").addFilter(NoHealth())
 
 import ssl
 if __name__ == "__main__":
