@@ -77,8 +77,7 @@ def tokenRefresh():
     token['accessToken'] = accessToken
     token['refreshToken'] = refreshToken
     token['tokenTime'] = refTime.strftime('%Y-%m-%d %H:%M:%S.%f')
-    token['expireTime'] = (refTime +  relativedelta(months=3)).strftime('%Y-%m-%d %H:%M:%S.%f')
-
+    token['expireTime'] = (refTime +  relativedelta(months=1)).strftime('%Y-%m-%d %H:%M:%S.%f')
 
     # 새로 생성된 토큰은 json으로 변경해서 전달
     refreshResult = Response(json.dumps(token), status=200, content_type="application/json; charset=UTF-8") 

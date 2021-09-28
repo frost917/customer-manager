@@ -80,6 +80,8 @@ def index():
     from json import dumps
     helloUser = dumps(convDict)
     return Response(helloUser, status=200, mimetype="application/json")
+
+# healthcheck용 로그 삭제
 class NoHealth(logging.Filter):
     def filter(self, record):
         return 'GET /ping' not in record.getMessage()

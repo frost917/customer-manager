@@ -20,11 +20,11 @@ def createAccessToken(userID: str, UUID: str, refTime = datetime.now()):
 
 # return RefreshToken
 # To save redis
-# refreshToken은 발급 후 3개월 뒤 파기
+# refreshToken은 발급 후 1개월 뒤 파기
 def createRefreshToken(refTime = datetime.now()):
     payload = dict()
 
-    payload["exp"] = refTime + relativedelta(months=3)
+    payload["exp"] = refTime + relativedelta(months=1)
     payload["iat"] = refTime
     payload["sub"] = "refresh token"
 

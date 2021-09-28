@@ -47,7 +47,7 @@ class redisToken(metaclass=Singleton):
         try:
             self.redisConn.hset(refreshToken, "userID", userID)
             self.redisConn.hset(refreshToken, "UUID", UUID)
-            self.redisConn.expire(refreshToken, timedelta(hours=4320))
+            self.redisConn.expire(refreshToken, timedelta(hours=720))
         except redis.RedisError as err:
             print(err)
             return False

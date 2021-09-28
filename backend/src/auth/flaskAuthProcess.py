@@ -67,7 +67,7 @@ def login():
         payload['accessToken'] = accessToken
         payload['refreshToken'] = refreshToken
         payload['tokenTime'] = refTime.strftime('%Y-%m-%d %H:%M:%S.%f')
-        payload['expireTime'] = (refTime +  relativedelta(months=3)).strftime('%Y-%m-%d %H:%M:%S.%f')
+        payload['expireTime'] = (refTime +  relativedelta(months=1)).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         from redisCustom import redisToken
         redisData = redisToken()

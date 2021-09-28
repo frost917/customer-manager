@@ -29,6 +29,8 @@ def login():
         loginData = json.loads(req.text)
         accessToken = loginData.get('accessToken')
         refreshToken = loginData.get('refreshToken')
+        tokenTime = loginData.get('tokenTime')
+        expireTime = int(datetime.strptime(loginData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f').timestamp())
 
         if accessToken is None or refreshToken is None:
             return """<script>
@@ -42,9 +44,9 @@ def login():
         result = make_response("""<script>
         location.href="/"
         </script>""")
-        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-        result.set_cookie('refreshToken', refreshToken, max_age=timedelta(hours=4320), httponly=True)
-        result.set_cookie('tokenTime', str(datetime.now()), httponly=True)
+        result.set_cookie('accessToken', accessToken, max_age=tokenTime + timedelta(hours=3), httponly=True)
+        result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
+        result.set_cookie('tokenTime', tokenTime, httponly=True)
 
         return result
 
