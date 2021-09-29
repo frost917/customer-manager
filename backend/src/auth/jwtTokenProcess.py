@@ -1,4 +1,4 @@
-﻿from datetime import date, datetime, timedelta
+﻿from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 import jwt
@@ -16,7 +16,7 @@ def createAccessToken(userID: str, UUID: str, refTime = datetime.now()):
     # payload["aud"] = userID
 
     token = jwt.encode(payload=payload, key=JWTSecret)
-    return str(token)
+    return token
 
 # return RefreshToken
 # To save redis
@@ -29,7 +29,7 @@ def createRefreshToken(refTime = datetime.now()):
     payload["sub"] = "refresh token"
 
     token = jwt.encode(payload=payload, key=JWTSecret)
-    return str(token)
+    return token
 
 # 토큰의 유효성을 검사함.
 # access token이나 refresh token 둘 다 만료되거나
@@ -72,7 +72,7 @@ def tokenGetUserID(accessToken):
     except jwt.InvalidTokenError:
         return None
     
-    result = decode.get('userID')
+    result: str = decode.get('userID')
     return result
 
 # return UUID
@@ -89,5 +89,5 @@ def tokenGetUUID(accessToken):
     except jwt.InvalidTokenError:
         return None
     
-    result = decode.get('UUID')
+    result: str = decode.get('UUID')
     return result
