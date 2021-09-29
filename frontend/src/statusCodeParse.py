@@ -1,7 +1,9 @@
-﻿from flask import make_response, redirect
+﻿from typing import Literal
+from flask import make_response, redirect
+import requests
 import json
 
-def parseStatusCode(req):
+def parseStatusCode(req: requests.Response) -> Literal:
     if req.status_code == 400:
         errMsg: str = json.loads(req.text).get('failed').get('error')
         if errMsg == 'AuthFailed':
@@ -35,7 +37,6 @@ def parseStatusCode(req):
         history.back();
         </script>"""
     elif 500 <= req.status_code and req.status_code <= 599:
-        print(json.loads(req.text))
         return """<script>
         alert("서버 에러");
         history.back();
