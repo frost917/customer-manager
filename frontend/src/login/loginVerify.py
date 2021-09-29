@@ -8,6 +8,7 @@ import requests
 from statusCodeParse import parseStatusCode
 from getNewTokens import tokenRefreshing
 from config.backendData import backendData
+from login.cookiePackage import setAccessTokenCookie, setRefreshTokenCookie, destroyCookie
 
 # 토큰 살아있는지 확인
 def tokenVerify(func):
@@ -34,42 +35,24 @@ def tokenVerify(func):
                 if compTime < datetime.now():
                     tokenData = tokenRefreshing(accessToken, refreshToken=None)
 
-                    refreshToken = tokenData.get('refreshToken')
-                    tokenTime = tokenData.get('tokenTime')
-                    expireTime = tokenData.get('expireTime')
-
-                    result.set_cookie(
-                        'refreshToken', refreshToken,
-                        max_age=expireTime, 
-                        httponly=True, secure=True)
-                    result.set_cookie(
-                        'tokenTime', tokenTime,
-                        max_age=expireTime,
-                        httponly=True, secure=True)
+                    result = setRefreshTokenCookie(result=result, tokenData=tokenData)
 
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
                 tokenData = tokenRefreshing(accessToken=None, refreshToken=refreshToken)
+                
+                if tokenData is False:
+                    from login.cookiePackage import destroyCookie
+                    result = destroyCookie(result=result)
 
                 # tokenData가 dict일 경우 올바른 응답이므로
                 # 그대로 쿠키에 토큰 등록하고 리로딩
-                if tokenData is dict:
-                    accessToken = tokenData.get('accessToken')
-                    result.set_cookie(
-                        'accessToken', accessToken, 
-                        max_age=timedelta(hours=3), 
-                        httponly=True, secure=True)
-                    return result
-                
-                # Literal로 반환되었을 경우 잘못된 값임
+                elif tokenData is dict:
+                    result = setAccessTokenCookie(result=result, tokenData=tokenData)
+
+                # Literal로 반환되었을 경우 백엔드 에러
                 elif tokenData is Literal:
                     return tokenData            
-
-                elif tokenData is False:
-                    result.response = redirect('/login')
-                    result.delete_cookie('accessToken')
-                    result.delete_cookie('refreshToken')
-                    result.delete_cookie('tokenTime')
                 
                 return result
 
@@ -82,23 +65,16 @@ def tokenVerify(func):
 
             # accessToken은 dict형식으로 반환함
             if tokenData is False:
-                result.response = redirect('/login')
-                result.delete_cookie('accessToken')
-                result.delete_cookie('refreshToken')
-                result.delete_cookie('tokenTime')
+                result = destroyCookie(result=result)
             
-            # Literal로 반환되었을 경우 잘못된 값임
-            elif tokenData is Literal:
-                result.response = tokenData      
-
             # tokenData가 dict일 경우 올바른 응답이므로
             # 그대로 쿠키에 토큰 등록하고 리로딩
             elif tokenData is dict:
-                accessToken = tokenData.get('accessToken')
-                result.set_cookie(
-                    'accessToken', accessToken, 
-                    max_age=timedelta(hours=3), 
-                    httponly=True, secure=True)
+                result = setAccessTokenCookie(result=result, tokenData=tokenData)
+
+            # Literal로 반환되었을 경우 잘못된 값임
+            elif tokenData is Literal:
+                result.response = tokenData      
 
             return result
 
@@ -109,10 +85,7 @@ def tokenVerify(func):
 
             # accessToken은 dict형식으로 반환함
             if tokenData is False:
-                result.response = redirect('/login')
-                result.delete_cookie('accessToken')
-                result.delete_cookie('refreshToken')
-                result.delete_cookie('tokenTime')
+                result = destroyCookie(result=result)
             
             # Literal로 반환되었을 경우 잘못된 값임
             elif tokenData is Literal:
@@ -120,18 +93,7 @@ def tokenVerify(func):
 
             # 반환값이 dict인 경우
             elif tokenData is dict:
-                refreshToken = tokenData.get('refreshToken')
-                tokenTime = tokenData.get('tokenTime')
-                expireTime = tokenData.get('expireTime')
-
-                result.set_cookie(
-                    'refreshToken', refreshToken, 
-                    max_age=expireTime, 
-                    httponly=True, secure=True)
-                result.set_cookie(
-                    'tokenTime', tokenTime, 
-                    max_age=expireTime, 
-                    httponly=True, secure=True)
+                result = setRefreshTokenCookie(result=result, tokenData=tokenData)
 
             return result
 
@@ -143,10 +105,7 @@ def tokenVerify(func):
 
             # accessToken은 dict형식으로 반환함
             if tokenData is False:
-                result.response = redirect('/login')
-                result.delete_cookie('accessToken')
-                result.delete_cookie('refreshToken')
-                result.delete_cookie('tokenTime')
+                result = destroyCookie(result=result)
             
             # Literal로 반환되었을 경우 잘못된 값임
             elif tokenData is Literal:
@@ -154,18 +113,7 @@ def tokenVerify(func):
 
             # 반환값이 dict인 경우
             elif tokenData is dict:
-                refreshToken = tokenData.get('refreshToken')
-                tokenTime = tokenData.get('tokenTime')
-                expireTime = tokenData.get('expireTime')
-
-                result.set_cookie(
-                    'refreshToken', refreshToken, 
-                    max_age=expireTime, 
-                    httponly=True, secure=True)
-                result.set_cookie(
-                    'tokenTime', tokenTime, 
-                    max_age=expireTime, 
-                    httponly=True, secure=True)
+                result = setRefreshTokenCookie(result=result, tokenData=tokenData)
 
             return result
 
@@ -176,6 +124,3 @@ def tokenVerify(func):
 
         return func(*args, **kwargs)
     return wrapper
-
-# def tokenSaving(func):
-#     result = 
