@@ -7,11 +7,18 @@ def getAccessToken(accessToken, refreshToken):
     headers = {'accessToken': accessToken, 'refreshToken': refreshToken}
     req = requests.get(url=refreshUrl, headers=headers, verify=backendData['CA_CERT'])
 
-    if req.status_code != 200:
+    # http 코드에 따라 결과 변동
+    if req.status_code == 200:
+        loginData = json.loads(req.text)
+        accessToken = loginData.get('accessToken')
+    
+    else: 
         return False
 
-    loginData = json.loads(req.text)
-    accessToken = loginData.get('accessToken')
+    # elif req.status_code == 400:
+        
+    # elif req.status_code == 500:
+
 
     return accessToken
 

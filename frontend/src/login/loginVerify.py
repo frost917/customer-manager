@@ -49,14 +49,17 @@ def tokenVerify(func):
             else:
                 return parseStatusCode(req)
 
-        # refreshToken이 있으면 accessToken만 따로 생성
+        # accessToken이 만료되었을 경우 재발급
+        # getAccessToken의 결과값에 따라 
         elif accessToken == None and refreshToken != None:
             accessToken = getAccessToken(accessToken, refreshToken)
 
+            # 
             if accessToken is False:
                 result = make_response(redirect('/login'))
                 result.delete_cookie('accessToken')
                 result.delete_cookie('refreshToken')
+                result.delete_cookie('tokenTime')
                 return result
 
             result = make_response("""<script>location.reload();</script>""")

@@ -44,7 +44,7 @@ def login():
         result = make_response("""<script>
         location.href="/"
         </script>""")
-        result.set_cookie('accessToken', accessToken, max_age=tokenTime + timedelta(hours=3), httponly=True)
+        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
         result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
         result.set_cookie('tokenTime', tokenTime, httponly=True)
 
