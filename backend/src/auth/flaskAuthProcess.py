@@ -1,6 +1,7 @@
 ﻿from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Response, request, Blueprint
+import json
 
 manager = Blueprint("auth", __name__, url_prefix='/auth')
 
@@ -18,8 +19,8 @@ def login():
         from msg.jsonMsg import dataMissingJson
         return Response(dataMissingJson(), status=400, content_type="application/json; charset=UTF-8")
 
-    userID = data['userID']
-    passwd = data['passwd']
+    userID: str = data['userID']
+    passwd: str = data['passwd']
 
     # 메소드에 상관 없이 id, pw가 없으면 400 반환
     if userID is None or passwd is None:
@@ -36,7 +37,7 @@ def login():
         from msg.jsonMsg import databaseIsGone
         return Response(databaseIsGone(), status=500, content_type="application/json; charset=UTF-8")
 
-    originPassword = str(originPasswordDict.get("passwd"))
+    originPassword = originPasswordDict.get("passwd")
 
     # 쿼리한 비밀번호 값이 없을 경우 로그인 실패
     if originPassword is None:
@@ -67,7 +68,6 @@ def login():
         payload['accessToken'] = accessToken
         payload['refreshToken'] = refreshToken
         payload['tokenTime'] = refTime.strftime('%Y-%m-%d %H:%M:%S.%f')
-        payload['expireTime'] = (refTime +  relativedelta(months=1)).strftime('%Y-%m-%d %H:%M:%S.%f')
 
         from redisCustom import redisToken
         redisData = redisToken()
@@ -76,8 +76,6 @@ def login():
         # 토큰 설정에 실패한 경우(redis가 죽어서)
         if result == False:
             loginReturn = Response(status=500)
-
-        import json
         loginReturn = Response(json.dumps(payload), status=200, content_type="application/json; charset=UTF-8")
 
     else:

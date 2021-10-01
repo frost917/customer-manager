@@ -1,5 +1,6 @@
-﻿from typing import Literal
-from datetime import datetime
+﻿from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from statusCodeParse import parseStatusCode
 import requests, json
 
@@ -20,13 +21,13 @@ def tokenRefreshing(accessToken: str, refreshToken: str):
         accessToken = tokenData.get('accessToken')
         refreshToken = tokenData.get('refreshToken')
         tokenTime = tokenData.get('tokenTime')
-        expireTime = int(
-            datetime.strptime(tokenData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f').timestamp())
+        expireTime = datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f') + relativedelta(months=1)
+        expireInt = int(expireTime.timestamp())
 
         tokenParsed = { 'accessToken': accessToken,
         'refreshToken': refreshToken,
         'tokenTime': tokenTime,
-        'expireTime': expireTime
+        'expireTime': expireInt
         }
         
         return tokenParsed
