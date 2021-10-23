@@ -1,5 +1,5 @@
 ﻿from dateutil.relativedelta import relativedelta
-from flask import Blueprint, Response, request
+from flask import Blueprint, Response, request, make_response
 from datetime import datetime
 import json
 
@@ -10,8 +10,6 @@ def tokenRefresh():
     accessToken = request.headers.get("accessToken")
     refreshToken = request.headers.get("refreshToken")
 
-    refTime = datetime.now()
-
     # 각각 토큰이 멀쩡한지 검사함
     from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
                                       isAccessTokenValid, isRefreshTokenValid)
@@ -20,6 +18,7 @@ def tokenRefresh():
     isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
 
     from msg.jsonMsg import tokenInvalid
+    refTime = datetime.now()
 
     # 토큰이 잘못된 경우
     if isAccessTokenExpired is None or isRefreshTokenExpired is None:
@@ -66,11 +65,13 @@ def tokenRefresh():
 
         if userID == None or UUID == None:
             return Response(status=401)
-
-        result = redisData.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
+        elif userID is Response or UUID is Response:
+            return Response(status=401)
+        else:
+            redisResult = redisData.setRefreshToken(refreshToken=refreshToken, userID=userID, UUID=UUID)
 
         # 토큰 설정에 실패한 경우(redis가 죽어서)
-        if result == False:
+        if redisResult == False:
             refreshResult = Response(status=500)
 
     token = dict()

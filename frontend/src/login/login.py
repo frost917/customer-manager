@@ -1,4 +1,5 @@
-﻿from flask import request, make_response, Blueprint
+﻿from dateutil.relativedelta import relativedelta
+from flask import request, make_response, Blueprint
 
 import json, requests
 from datetime import datetime, timedelta
@@ -30,7 +31,8 @@ def login():
         accessToken = loginData.get('accessToken')
         refreshToken = loginData.get('refreshToken')
         tokenTime = loginData.get('tokenTime')
-        expireTime = int(datetime.strptime(loginData.get('expireTime'), '%Y-%m-%d %H:%M:%S.%f').timestamp())
+        expireTime = datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f') + relativedelta(months=1)
+        expireInt = int(expireTime.timestamp())
 
         if accessToken is None or refreshToken is None:
             return """<script>
@@ -44,11 +46,18 @@ def login():
         result = make_response("""<script>
         location.href="/"
         </script>""")
-        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True)
-        result.set_cookie('refreshToken', refreshToken, max_age=expireTime, httponly=True)
-        result.set_cookie('tokenTime', tokenTime, httponly=True)
+        result.set_cookie('accessToken', accessToken, max_age=timedelta(hours=3), httponly=True, secure=True)
+        result.set_cookie('refreshToken', refreshToken, max_age=expireInt, httponly=True, secure=True)
+        result.set_cookie('tokenTime', tokenTime, max_age=expireInt, httponly=True, secure=True)
 
         return result
+
+    # 401 반환시 로그인 할 데이터 없는 것
+    elif req.status_code == 401:
+        return """<script>
+        alert("아이디 혹은 비밀번호가 잘못되었습니다");
+        location.href="/login";
+        </script>"""
 
     else:
         print(json.loads(req.text))

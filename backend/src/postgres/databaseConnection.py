@@ -39,7 +39,9 @@ class PostgresControll(metaclass=Singleton):
             user=user, 
             password=passwd,
             sslmode='require',
-            sslrootcert='/certs/ca.crt')
+            sslrootcert='/certs/ca.crt',
+            sslcert='/certs/tls.crt',
+            sslkey='/certs/tls.key')
 
         self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
