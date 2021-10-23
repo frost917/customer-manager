@@ -26,8 +26,8 @@ def setAccessTokenCookie(result: make_response, tokenData: dict):
 
     return result
 
-def destroyCookie(result: make_response):
-    result.response = redirect('/login')
+def destroyCookie():
+    result = make_response(redirect('/login'))
     result.delete_cookie('accessToken')
     result.delete_cookie('refreshToken')
     result.delete_cookie('tokenTime')

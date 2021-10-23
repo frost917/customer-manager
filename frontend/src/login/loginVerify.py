@@ -1,7 +1,7 @@
 ﻿from typing import Literal
 from flask import request, redirect, make_response
 from functools import wraps
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import requests
 
@@ -19,23 +19,27 @@ def tokenVerify(func):
         refreshToken = request.cookies.get('refreshToken')
         tokenTime = request.cookies.get('tokenTime')
 
-        result = make_response("""<script>location.reload();</script>""")
+        # 둘 다 없으면 로그인 페이지로 넘김
+        if accessToken is None and refreshToken is None and tokenTime is None:
+            result = redirect('/login')
+            return result
 
         # 토큰 파기됐을 경우 이곳으로 데이터를 넘겨서
         # 다시 토큰을 받아올 수 있게끔 유도
-        if accessToken is not None and refreshToken is not None:
+        elif accessToken is not None and refreshToken is not None:
             url = backendData['ADDR']
             headers = {'Authorization': accessToken}
             req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
         
             if 200 <= req.status_code and req.status_code <= 299:
-            # 군대 이슈 회피를 위한 refreshToken 갱신
-            # 로그인 일자로부터 2주 이상 지났으면 자동 갱신
+                # 군대 이슈 회피를 위한 refreshToken 갱신
+                # 로그인 일자로부터 2주 이상 지났으면 자동 갱신
                 compTime = datetime.strptime(tokenTime, '%Y-%m-%d %H:%M:%S.%f') + relativedelta(weeks=2)
                 if compTime < datetime.now():
                     tokenData = tokenRefreshing(accessToken, refreshToken=None)
 
-                    result = setRefreshTokenCookie(result=result, tokenData=tokenData)
+                    result = setRefreshTokenCookie(tokenData=tokenData)
+                    return result
 
             # 토큰 파기된 경우 재생성 후 원래 가려던 곳으로 이동
             elif req.status_code == 401:
@@ -43,21 +47,22 @@ def tokenVerify(func):
                 
                 if tokenData is False:
                     from login.cookiePackage import destroyCookie
-                    result = destroyCookie(result=result)
+                    result = destroyCookie()
 
                 # tokenData가 dict일 경우 올바른 응답이므로
                 # 그대로 쿠키에 토큰 등록하고 리로딩
                 elif tokenData is dict:
-                    result = setAccessTokenCookie(result=result, tokenData=tokenData)
+                    result = setAccessTokenCookie(tokenData=tokenData)
 
                 # Literal로 반환되었을 경우 백엔드 에러
                 elif tokenData is Literal:
-                    return tokenData            
+                    result = tokenData            
                 
                 return result
 
             else:
-                return parseStatusCode(req)
+                result =  parseStatusCode(req)
+                return result
 
         # accessToken이 만료되었을 경우 재발급
         elif accessToken is None and refreshToken is not None:
@@ -65,16 +70,16 @@ def tokenVerify(func):
 
             # accessToken은 dict형식으로 반환함
             if tokenData is False:
-                result = destroyCookie(result=result)
+                result = destroyCookie()
             
             # tokenData가 dict일 경우 올바른 응답이므로
             # 그대로 쿠키에 토큰 등록하고 리로딩
             elif tokenData is dict:
-                result = setAccessTokenCookie(result=result, tokenData=tokenData)
+                result = setAccessTokenCookie(tokenData=tokenData)
 
             # Literal로 반환되었을 경우 잘못된 값임
             elif tokenData is Literal:
-                result.response = tokenData      
+                result = tokenData      
 
             return result
 
@@ -85,15 +90,15 @@ def tokenVerify(func):
 
             # accessToken은 dict형식으로 반환함
             if tokenData is False:
-                result = destroyCookie(result=result)
+                result = destroyCookie()
             
             # Literal로 반환되었을 경우 잘못된 값임
             elif tokenData is Literal:
-                result.response = tokenData   
+                result = tokenData   
 
             # 반환값이 dict인 경우
             elif tokenData is dict:
-                result = setRefreshTokenCookie(result=result, tokenData=tokenData)
+                result = setRefreshTokenCookie(tokenData=tokenData)
 
             return result
 
@@ -103,23 +108,18 @@ def tokenVerify(func):
         elif tokenTime is None:
             tokenData = tokenRefreshing(accessToken, refreshToken=None)
 
+            # 반환값이 dict인 경우
+            if tokenData is dict:
+                result = setRefreshTokenCookie(tokenData=tokenData)
+
             # accessToken은 dict형식으로 반환함
-            if tokenData is False:
-                result = destroyCookie(result=result)
+            elif tokenData is False:
+                result = destroyCookie()
             
             # Literal로 반환되었을 경우 잘못된 값임
             elif tokenData is Literal:
-                result.response = tokenData   
+                result = tokenData
 
-            # 반환값이 dict인 경우
-            elif tokenData is dict:
-                result = setRefreshTokenCookie(result=result, tokenData=tokenData)
-
-            return result
-
-        # 둘 다 없으면 로그인 페이지로 넘김
-        elif accessToken is None and refreshToken is None and tokenTime is None:
-            result.response = redirect('/login')
             return result
 
         return func(*args, **kwargs)
