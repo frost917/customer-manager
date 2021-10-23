@@ -33,17 +33,27 @@ class PostgresControll(metaclass=Singleton):
         user = dbData['DB_USER']
         passwd = dbData['DB_PASSWD']
 
-        self.dbconn = pool.ThreadedConnectionPool(1, 5, database=database, 
+        # self.dbconn = pool.ThreadedConnectionPool(1, 5, database=database, 
+        #     host=host, 
+        #     port=port, 
+        #     user=user, 
+        #     password=passwd,
+        #     sslmode='veryfi-ca',
+        #     sslrootcert='/certs/ca.crt',
+        #     sslcert='/certs/tls.crt',
+        #     sslkey='/certs/tls.key')
+        self.dbconn = psycopg2.connect(database=database, 
             host=host, 
             port=port, 
             user=user, 
             password=passwd,
-            sslmode='veryfi-ca',
+            sslmode='required',
             sslrootcert='/certs/ca.crt',
             sslcert='/certs/tls.crt',
             sslkey='/certs/tls.key')
 
-        self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        # self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     def __del__(self):
         self.dbconn.closeall()
