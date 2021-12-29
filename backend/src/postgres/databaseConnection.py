@@ -17,43 +17,41 @@ class PostgresControll(metaclass=Singleton):
         from config.secret import dbData
 
         # # DB HOST
-        # host = os.getenv("DB_HOST")
-        # database = os.getenv("DB_DATABASE")
-        # # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
-        # port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
+        import os
+        host = os.getenv("DB_HOST")
+        database = os.getenv("DB_DATABASE")
+        # DB_PORT 환경변수가 없는 경우 기본값 5432 부여
+        port = 5432 if os.getenv("DB_PORT") is None else os.getenv("DB_PORT")
 
-        host = dbData['DB_HOST']
-        database = dbData['DB_DATABASE']
-        port = dbData['DB_PORT']
+        # host = dbData['DB_HOST']
+        # database = dbData['DB_DATABASE']
+        # port = dbData['DB_PORT']
 
         # # DB USER
-        # user = os.getenv("DB_USER")
-        # passwd = os.getenv("DB_PASSWD")
+        user = os.getenv("DB_USER")
+        passwd = os.getenv("DB_PASSWD")
 
-        user = dbData['DB_USER']
-        passwd = dbData['DB_PASSWD']
+        # user = dbData['DB_USER']
+        # passwd = dbData['DB_PASSWD']
 
-        # self.dbconn = pool.ThreadedConnectionPool(1, 5, database=database, 
+        self.dbconn = pool.ThreadedConnectionPool(1, 5, database=database, 
+            host=host, 
+            port=port, 
+            user=user, 
+            password=passwd)
+        #     sslkey='/certs/tls.key')
+        # self.dbconn = psycopg2.connect(database=database, 
         #     host=host, 
         #     port=port, 
         #     user=user, 
         #     password=passwd,
-        #     sslmode='veryfi-ca',
+        #     sslmode='required',
         #     sslrootcert='/certs/ca.crt',
         #     sslcert='/certs/tls.crt',
         #     sslkey='/certs/tls.key')
-        self.dbconn = psycopg2.connect(database=database, 
-            host=host, 
-            port=port, 
-            user=user, 
-            password=passwd,
-            sslmode='required',
-            sslrootcert='/certs/ca.crt',
-            sslcert='/certs/tls.crt',
-            sslkey='/certs/tls.key')
 
-        # self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        self.cur = self.dbconn.getconn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        # self.cur = self.dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     def __del__(self):
         self.dbconn.closeall()

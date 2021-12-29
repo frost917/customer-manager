@@ -11,14 +11,18 @@ def tokenRefresh():
     refreshToken = request.headers.get("refreshToken")
 
     # 각각 토큰이 멀쩡한지 검사함
-    from auth.jwtTokenProcess import (createAccessToken, createRefreshToken,
-                                      isAccessTokenValid, isRefreshTokenValid)
-    
+    from auth.jwtTokenProcess import (
+    createAccessToken, 
+    createRefreshToken,
+    isAccessTokenValid, 
+    isRefreshTokenValid
+    )
     isAccessTokenExpired = isAccessTokenValid(accessToken=accessToken)
     isRefreshTokenExpired = isRefreshTokenValid(refreshToken=refreshToken)
 
     from msg.jsonMsg import tokenInvalid
     refTime = datetime.now()
+
 
     # 토큰이 잘못된 경우
     if isAccessTokenExpired is None or isRefreshTokenExpired is None:
