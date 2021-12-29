@@ -40,15 +40,13 @@ def getUserPasswd(self, userID):
         return None
 
 # UUID 불러오기
-def getUUID(self, userData):
-    userID = userData.get("userID")
-    passwd = userData.get("passwd")
+def getUUID(self, userID):
     try:
         self.cur.execute("""
             SELECT user_id 
             FROM login
-            WHERE username = %s AND passwd = %s""",
-            (userID, passwd,))
+            WHERE username = %s""",
+            (userID, ))
         result = self.cur.fetchone()
         if result is None:
             result = dict()

@@ -103,5 +103,19 @@ def databaseIsGone():
 
     return json.dumps(payload)
 
+def redisIsGone():
+    payload = dict()
+    convDict = dict()
+    convList = list()
+
+    convDict['error'] = "redisIsGone"
+    convDict['msg'] = "redis is dead!"
+    convDict['queryDate'] = datetime.now().strftime('%Y-%m-%d')
+    convList.append(convDict)
+
+    payload['failed'] = convList
+
+    return json.dumps(payload)
+
 def queryingResult(data: dict):
     payload = dict()
