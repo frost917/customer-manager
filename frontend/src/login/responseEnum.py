@@ -5,9 +5,14 @@ class ResponseType(Enum):
     TOKENEXPIRE = auto()
     REFRESH = auto()
 
-    CUSTOMERS = auto()
-    JOBS = auto()
-    TASKS = auto()
+    ADDCUSTOMERS = auto()
+    GETCUSTOMERS = auto()
+
+    ADDJOBS = auto()
+    GETJOBS = auto()
+    
+    SETTASKS = auto()
+    GETTASKS = auto()
 
     ERROR = auto()
     ACCOUNTERROR = auto()

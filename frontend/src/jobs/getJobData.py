@@ -1,6 +1,8 @@
 ﻿from flask import Blueprint, render_template, request
 import json
 import requests
+from frontend.src.login.responseBuilder import buildResponse
+from frontend.src.login.responseEnum import ResponseType
 
 from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
@@ -17,13 +19,13 @@ def getJobData(jobID):
     req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
-        return parseStatusCode(req)
+        responseType = ResponseType.ERROR
 
     data = json.loads(req.text)
-    customerData = data.get('customerData')[0]
-    jobData = data.get('jobData')
 
-    customerID = customerData.get('customerID')
+    responseType    = ResponseType.GETJOBS
+    customerData    = data.get('customerData')[0]
+    customerID      = customerData.get('customerID')
+    jobData         = data.get('jobData')
 
-    result = render_template('job-data.html', customerData=customerData, jobData=jobData, customerID=customerID)
-    return result
+    return buildResponse(responseType, customerData=customerData, customerID=customerID, jobData=jobData)

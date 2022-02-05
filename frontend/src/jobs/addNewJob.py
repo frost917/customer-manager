@@ -1,8 +1,9 @@
-﻿from flask import Blueprint, render_template, request, redirect
+﻿from urllib import response
+from flask import Blueprint, Response, render_template, request, redirect
 import json
 import requests
+from frontend.src.login.responseEnum import ResponseType
 
-from statusCodeParse import parseStatusCode
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
 
@@ -16,8 +17,10 @@ def addNewJobPage(customerID):
     headers = {'content-type': 'charset=UTF-8', 'Authorization': accessToken}
     req = requests.get(url=url, headers=headers, verify=backendData['CA_CERT'])
 
+    if req.status_code == 401:
+        responseType = ResponseType.TOKENEXPIRE
     if req.status_code != 200:
-        return parseStatusCode(req)
+        responseType = ResponseType.ERROR
 
     data = json.loads(req.text)
     customerData = data.get('customerData')[0]

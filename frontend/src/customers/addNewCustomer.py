@@ -4,7 +4,8 @@ import json, requests
 
 from login.loginVerify import tokenVerify
 from config.backendData import backendData
-from statusCodeParse import parseStatusCode
+from login.responseBuilder import buildResponse
+from login.responseEnum import ResponseType
 
 front = Blueprint('addNewCustomer', __name__, url_prefix='/customers')
 @front.route('/create', methods=['GET'])
@@ -29,9 +30,8 @@ def addNewCustomer():
     req = requests.post(url=url, headers=headers, data=json.dumps(payload), verify=backendData['CA_CERT'])
 
     if req.status_code != 200:
-        return parseStatusCode(req)
+        responseType = ResponseType.ERROR
 
     customerID = json.loads(req.text).get('customerData')[0].get('customerID')
-
-    result = redirect('/customers/' + customerID + '/jobs')
-    return result
+    responseType = ResponseType.ADDCUSTOMERS
+    return buildResponse(responseType, customerID=customerID)

@@ -2,24 +2,20 @@
 
 from flask import g, request
 
+from login.responseBuilder import buildResponse
+from login.responseEnum import ResponseType
+
 # json 데이터 분해 및 별도 저장
 def dataParsing(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if request.is_json == False:
-            return """<script>
-            alert('내부 에러');
-            history.back();
-            </script>"""
+            return buildResponse(None, ResponseType.ERROR)
 
         try:
             data = request.get_json()
         except:
-            return """<script>
-            alert('내부 에러');
-            history.back();
-            </script>"""
-
+            return buildResponse(None, ResponseType.ERROR)
         # 손님 리스트
         g.customers = data.get('customerData')
 

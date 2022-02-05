@@ -1,7 +1,6 @@
 ﻿from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from statusCodeParse import parseStatusCode
 import requests, json
 
 from config.backendData import backendData
@@ -20,9 +19,11 @@ def tokenRefreshing(accessToken: str, refreshToken: str):
         tokenData = json.loads(req.text)
         accessToken = tokenData.get('accessToken')
         refreshToken = tokenData.get('refreshToken')
+        tokenTime = tokenData.get('tokenTime')
 
         tokenParsed = { 'accessToken': accessToken,
-        'refreshToken': refreshToken
+        'refreshToken': refreshToken,
+        'tokenTime': tokenTime
         }
         
         return tokenParsed
